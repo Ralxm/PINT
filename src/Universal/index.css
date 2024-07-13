@@ -329,12 +329,11 @@ footer{
 .notification{
     margin-top: 10px;
     border: 1px solid #DEE2E6;
-    min-height: 20vh;
     border-radius: 20px;
 }
 
 .notification-title{
-    min-height: 25%;
+    height: 25%;
 }
 
 .notification-text{
@@ -344,7 +343,7 @@ footer{
 }
 
 .notification-buttons{
-    min-height: 25%;
+    height: 25%;
     justify-content: right;
     align-items: end;
     display: flex;
