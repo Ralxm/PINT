@@ -30,7 +30,6 @@ export default function LoginInput(){
                     setloading(false);
                 }
                 else{
-                    console.log(res.cargo);
                     if(res.cargo == 1){
                         logLogin(EMAIL)
                         navigate('mainpage');
@@ -56,7 +55,6 @@ export default function LoginInput(){
             if (dd < 10) dd = '0' + dd;
             if (mm < 10) mm = '0' + mm;
             let today = `${yyyy}-${mm}-${dd}`;
-            console.log(today);
             const datapost = {
                 IDCONTA: id,
                 TIPOATIVIDADE: 'Login',

@@ -15,6 +15,7 @@ class AuthService{
     logout() {
         localStorage.removeItem('user');
         localStorage.removeItem('id');
+        localStorage.removeItem('cargo');
     }
     getCurrentUser() {
         return JSON.parse(localStorage.getItem('user'));

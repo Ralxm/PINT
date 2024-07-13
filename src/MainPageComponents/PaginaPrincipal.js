@@ -283,7 +283,6 @@ export default function Main(){
     
         return Publicacao.map((data, index) => {
             if(Publicacao && data.CIDADE == data.colaborador.CIDADE && data.CIDADE == Utilizador.CIDADE){
-                console.log(data);
                 if(data.aprovacao.APROVADA == 1){
                     if(Filtros.some(data2 => data2.IDSUBCATEGORIA == data.SUBCATEGORIA)){
                         const { categorium, espaco, evento, subcategorium } = data;
@@ -368,7 +367,6 @@ export default function Main(){
     }
 
     function RejeitarApagar(props){
-        console.log(props)
         let token;
         try{
             let user = localStorage.getItem('user');
