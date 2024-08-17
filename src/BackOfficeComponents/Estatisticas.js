@@ -315,17 +315,18 @@ export default function Estatistica(){
                     count++;
                 }
             })
-            console.log(count + ' ' + colaborador.NOME)
-            return(
-                <div className='col-6 showTable'>
-                    <div className='showTableText'>
-                        <a>ID Colaborador: {colaborador.IDCOLABORADOR}</a>
-                        <a>Email: {colaborador.EMAIL}</a>
-                        <a>Nome: {colaborador.NOME}</a>
-                        <a>Publições: {count}</a>
+            if(count > 0){
+                return(
+                    <div className='col-6 showTable'>
+                        <div className='showTableText'>
+                            <a>ID Colaborador: {colaborador.IDCOLABORADOR}</a>
+                            <a>Email: {colaborador.EMAIL}</a>
+                            <a>Nome: {colaborador.NOME}</a>
+                            <a>Publições: {count}</a>
+                        </div>
                     </div>
-                </div>
-            )
+                )
+            }
         })
     }
 }

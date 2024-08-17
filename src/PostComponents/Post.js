@@ -8,8 +8,13 @@ import Profile from '../MainPageComponents/Profile'
 export default function Post() {
     const { id } = useParams();
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
+    const urlComentarios = "https://pint-backend-8vxk.onrender.com/comentario/";
+    const urlCriarAprovacao = 'https://pint-backend-8vxk.onrender.com/aprovacao/create';
+    const urlAprovacao = "https://pint-backend-8vxk.onrender.com/aprovacao/";
 
     const [Publicacao, setPublicacao] = useState("");
+    const [Comentarios, setComentarios] = useState([]);
+    const [Aprovacao, setAprovacao] = useState("")
 
     useEffect(()=>{
         loadPost();
@@ -17,7 +22,7 @@ export default function Post() {
     }, [])
 
     useEffect(() => {
-
+        loadComentarios();
     }, [Publicacao]);
 
     function loadPost(){
@@ -37,7 +42,27 @@ export default function Post() {
         })
     }
 
+    function loadComentarios(){
+        let url = urlComentarios + 'listByPost/' + id;
+        axios.get(url)
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setComentarios(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(err =>{
+            alert("Erro a carregar os comentários");
+        })
+    }
+
     function Page(){
+        useEffect(()=>{
+
+        }, [Comentarios])
         if(Publicacao[0]){
             const base64 = Buffer.from(Publicacao[0].IMAGEM.data, "binary" ).toString("base64");
             const base64Image = 'data:image/jpeg;base64,' + base64;
@@ -47,17 +72,35 @@ export default function Post() {
             const diffTime = Math.abs(ultimaatividade - hoje);
             let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
+            let rating = 0;
+            let count = 0;
+            Comentarios.map((data) =>{
+                console.log(data);
+                if(data.IDPOST == Publicacao[0].IDPUBLICACAO){
+                    count++;
+                    rating += data.AVALIACAO;
+                }
+            })
+
+            let ratingFinal;
+            if(rating == 0){
+                ratingFinal = 0;
+            }
+            else{
+                ratingFinal = (rating / count).toFixed(1);
+            }
+
             return(
-                <div className='col-9 post-box'>
+                <div className='col-9 post-box' style={{maxHeight:"60vh", overflowY:'scroll'}}>
                     <div className='col-1'>
                         &nbsp;
                     </div>
         
-                    <div className='col-10 main-post-box'>
+                    <div className='col-10 main-post-box' style={{overflowY:'scroll'}}>
                         <div className='post-nav-bar'>
                             <div className='post-main-info col-11'>
                                 <a>{Publicacao[0].TITULO}&nbsp;</a>
-                                <a>&nbsp;- Avaliação: {Publicacao[0].RATING}</a>
+                                <a>&nbsp;- Avaliação: {ratingFinal}</a>
                                 </div>
                                     <div style={{backgroundColor: 'red', marginLeft: '-20px', marginRight: '10px', color: 'white'}}>
                                         {Publicacao[0].EVENTO == 1 && diffDays >= 15 && <a>Espaço Inativo</a>}
@@ -103,8 +146,13 @@ export default function Post() {
                                     </div>
                                 )
                         }
+
+                        <div className='comentario-box' style={{marginTop: "20px"}}>
+                            <Comentario></Comentario>   
+                        </div>
                     </div>
-        
+
+
                     <div className='col-1'>
                         &nbsp;
                     </div>
@@ -119,8 +167,198 @@ export default function Post() {
             <Page></Page>
             <div className="col-3 pe-0 g-0">
                 <Profile></Profile>
+                <CriarComentario></CriarComentario>
             </div>
         </div>
     )
+
+    async function Comentar() {
+        let rating = 0;
+        let idAprovacao;
+        const st5 = document.getElementById("st5").checked;
+        const st4 = document.getElementById("st4").checked;
+        const st3 = document.getElementById("st3").checked;
+        const st2 = document.getElementById("st2").checked;
+        const st1 = document.getElementById("st1").checked;
+    
+        if (st5) {
+            rating = 5;
+        } else if (st4) {
+            rating = 4;
+        } else if (st3) {
+            rating = 3;
+        } else if (st2) {
+            rating = 2;
+        } else if (st1) {
+            rating = 1;
+        } else {
+            rating = 0;
+        }
+    
+        const mensagem = document.getElementById("msg").value;
+    
+        const now = new Date();
+        let dd = now.getDate();
+        let mm = now.getMonth() + 1;
+        const yyyy = now.getFullYear();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        const today = `${yyyy}-${mm}-${dd}`;
+    
+        const datapostAprovacao = {
+            IDCOLABORADOR: 0,
+            DATAAPROVACAO: today,
+            APROVADA: 0,
+        };
+    
+        try {
+            const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao);
+    
+            if (resAprovacao.data.success) {
+                idAprovacao = resAprovacao.data.data.IDAPROVACAO;
+            } else {
+                alert(resAprovacao.data.message);
+                return;
+            }
+            const datapost = {
+                IDPOST: id,
+                IDAPROVACAO: idAprovacao,
+                IDCOLABORADOR: JSON.parse(localStorage.getItem("id")),
+                DATACOMENTARIO: today,
+                AVALIACAO: rating,
+                TEXTO: mensagem
+            };
+    
+            const resComentario = await axios.post(urlComentarios + 'create', datapost);
+    
+            if (resComentario.data.success) {
+            } else {
+                alert(resComentario.data.message);
+                return;
+            }
+            alert("O seu comentário foi criado com sucesso. Este será mostrado após aprovação por parte da administração")
+        } catch (error) {
+            console.error("An error occurred: ", error);
+            alert("An error occurred while processing your request. Please try again.");
+        }
+    }
+
+    function CriarComentario(){
+        return(
+            <div className='container-fluid comentario-create-box' style={{height: '60vh'}}>
+                <div>
+                    <form id="algin-form d-flex">
+                        <div className="form-group">
+                            <h4>Comentar</h4>
+                            <div className="container">
+                                <div className="container__items">
+                                    <input type="radio" name="stars" id="st5"/>
+                                    <label for="st5">
+                                    <div className="star-stroke">
+                                        <div className="star-fill"></div>
+                                    </div>
+                                    <div className="label-description" data-content="Excellent"></div>
+                                    </label>
+                                    <input type="radio" name="stars" id="st4"/>
+                                    <label for="st4">
+                                    <div className="star-stroke">
+                                        <div className="star-fill"></div>
+                                    </div>
+                                    <div className="label-description" data-content="Good"></div>
+                                    </label>
+                                    <input type="radio" name="stars" id="st3"/>
+                                    <label for="st3">
+                                    <div className="star-stroke">
+                                        <div className="star-fill"></div>
+                                    </div>
+                                    <div className="label-description" data-content="OK"></div>
+                                    </label>
+                                    <input type="radio" name="stars" id="st2"/>
+                                    <label for="st2">
+                                    <div className="star-stroke">
+                                        <div className="star-fill"></div>
+                                    </div>
+                                    <div className="label-description" data-content="Bad"></div>
+                                    </label>
+                                    <input type="radio" name="stars" id="st1"/>
+                                    <label for="st1">
+                                    <div className="star-stroke">
+                                        <div className="star-fill"></div>
+                                    </div>
+                                    
+                                    <div className="label-description" data-content="Terrible"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <label for="message">Mensagem</label>
+                            <textarea name="msg" id="msg" cols="30" rows="5" className="form-control" style={{resize: "none"}}></textarea>
+                        </div>
+                        <div className="form-group d-flex" style={{justifyContent: "center", marginTop: "20px"}}>
+                            <button type="button" id="post" className="btn btn-outline-info" onClick={Comentar}>Post Comment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        )
+
+    }
+
+    function Comentario(){
+        return Comentarios.map((data) =>{
+            let date = new Date(data.DATACOMENTARIO);
+            let formattedDate = date.getDate().toString().padStart(2, '0') + '/' +
+                    (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
+                    date.getFullYear();
+            return(
+                <div class="card p-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="user d-flex flex-row align-items-center">
+                            <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"/>
+                            <span style={{marginLeft: "10px"}}>
+                                <small class="font-weight-bold text-primary">{data.colaborador.NOME}</small>
+                                <small style={{marginLeft: "5px"}} class="font-weight-bold">{data.TEXTO}</small>
+                            </span>
+                        </div>
+                        <div>
+                            <small>Avaliação: {data.AVALIACAO}</small>
+                            <small>&nbsp;&nbsp;&nbsp;&nbsp;</small>
+                            <small>{formattedDate}</small>
+                        </div>
+                        
+                    </div>
+                    <div class="action d-flex justify-content-between mt-2 align-items-center">
+                        <div class="reply px-4">
+                            <button className='btn btn-outline' onClick={() => apagarComentario(data)}>Apagar</button>
+                        </div>
+                    </div>
+                </div>
+            )
+        })
+    }
+
+    async function apagarComentario(props){
+        await axios.put(urlComentarios + 'delete/' + props.IDCOMENTARIO)
+            .then(function(data){
+                if(data.data.success === true){
+                    loadComentarios()
+                }
+                else{
+                }
+            })
+            .catch(err =>{
+                console.log("Erro");
+            })
+
+        await axios.put(urlAprovacao + 'delete/' + props.aprovacao.IDAPROVACAO)
+        .then(function(data){
+            if(data.data.success === true){
+            }
+            else{
+            }
+        })
+        .catch(err =>{
+            console.log("Erro");
+        })
+    }
 }
 

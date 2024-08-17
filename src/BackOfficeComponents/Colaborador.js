@@ -22,6 +22,8 @@ export default function Cidade(){
     const [NomeCidade, setNomeCidade] = useState([]);
     const [NomeCargo, setNomeCargo] = useState([]);
     const [ColaboradorCargo, setColaboradorCargo] = useState([]);
+
+    const [Filtro, setFiltro] = useState("");
     
     useEffect(() => {
         document.title = 'Mostrar Colaboradores';
@@ -114,6 +116,13 @@ export default function Cidade(){
             <div className='side-bar col-4' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option'>
                     Listagem Colaboradores
+                </div>
+                <div className='col-lg-12 d-flex' style={{justifyContent: "center"}}>
+                    <nav class="navbar navbar-light bg-light">
+                        <form class="form-inline d-flex">
+                            <input onChange={(value) => setFiltro(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id='filtrarColaboradores'/>
+                        </form>
+                    </nav>
                 </div>
                 <div className='col-lg-12 showTable-list'>
                     <ListTables></ListTables>
@@ -365,53 +374,71 @@ export default function Cidade(){
         })
     }
 
-    function ListTables(){
-        return Colaborador.map((data, index) => {
-            let cargo;
-            ColaboradorCargo.map((data2) =>{
-                if(data2.IDCOLABORADOR == data.IDCOLABORADOR){
-                    NomeCargo.map((data3) =>{
-                        if(data3.IDCARGO == data2.IDCARGO){
-                            cargo = data3.NOME;
-                        }
-                    })
-                }
-            })
-            let cidade;
-            NomeCidade.map((data2) =>{
-                if(data2.IDCIDADE == data.CIDADE){
-                    cidade = data2.NOME
-                }
-            })
-            return(
-                <div className='col-12 showTable'>
-                    <div className='showTableText'>
-                        <a>ID Colaborador: {data.IDCOLABORADOR}</a>
-                        <br></br>
-                        <a>Email: {data.EMAIL}</a>
-                        <br></br>
-                        <a>Nome: {data.NOME}</a>
-                        <br></br>
-                        <a>Telemovel: {data.TELEMOVEL}</a>
-                        <br></br>
-                        <a>Cargo: {cargo}</a>
-                        <br></br>
-                        <a>Cidade: {cidade}</a>
-                        <br></br>
-                        <a>Data de nascimento: {data.DATANASCIMENTO}</a>
-                        <br></br>
-                        <a>Data de registo: {data.DATAREGISTO}</a>
-                        <br></br>
-                        <a>Data do último login: {data.ULTIMOLOGIN}</a>
-                    </div>
-                    <div className='showTableButtons'>
-                        <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                        <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
-                    </div>
+    
+function ListTables() {
+    const [filteredColaboradores, setFilteredColaboradores] = useState(Colaborador);
+
+    useEffect(() => {
+        if (Filtro === "") {
+            setFilteredColaboradores(Colaborador);
+        } else {
+            const lowercasedFiltro = Filtro.toLowerCase();
+            const filtered = Colaborador.filter(data =>
+                data.NOME.toLowerCase().includes(lowercasedFiltro) || 
+                data.TELEMOVEL.includes(Filtro)
+            );
+            setFilteredColaboradores(filtered);
+        }
+    }, [Filtro, Colaborador]);
+
+    return filteredColaboradores.map((data, index) => {
+        let cargo;
+        ColaboradorCargo.forEach((data2) => {
+            if (data2.IDCOLABORADOR === data.IDCOLABORADOR) {
+                NomeCargo.forEach((data3) => {
+                    if (data3.IDCARGO === data2.IDCARGO) {
+                        cargo = data3.NOME;
+                    }
+                });
+            }
+        });
+
+        let cidade;
+        NomeCidade.forEach((data2) => {
+            if (data2.IDCIDADE === data.CIDADE) {
+                cidade = data2.NOME;
+            }
+        });
+
+        return (
+            <div key={index} className='col-12 showTable'>
+                <div className='showTableText'>
+                    <a>ID Colaborador: {data.IDCOLABORADOR}</a>
+                    <br></br>
+                    <a>Email: {data.EMAIL}</a>
+                    <br></br>
+                    <a>Nome: {data.NOME}</a>
+                    <br></br>
+                    <a>Telemovel: {data.TELEMOVEL}</a>
+                    <br></br>
+                    <a>Cargo: {cargo}</a>
+                    <br></br>
+                    <a>Cidade: {cidade}</a>
+                    <br></br>
+                    <a>Data de nascimento: {data.DATANASCIMENTO}</a>
+                    <br></br>
+                    <a>Data de registo: {data.DATAREGISTO}</a>
+                    <br></br>
+                    <a>Data do último login: {data.ULTIMOLOGIN}</a>
                 </div>
-            )
-        })
-    }
+                <div className='showTableButtons'>
+                    <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
+                    <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                </div>
+            </div>
+        );
+    });
+}
 
     async function ApagarColuna(data){
         try{

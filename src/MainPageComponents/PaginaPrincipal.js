@@ -13,6 +13,7 @@ export default function Main(){
     const urlEspaco = "https://pint-backend-8vxk.onrender.com/post/";
     const urlEvento = "https://pint-backend-8vxk.onrender.com/aprovacao/";
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
+    const urlComentario = "https://pint-backend-8vxk.onrender.com/comentario/";
     let checked = 0;
 
     const [Categoria, setCategoria] = useState([]);
@@ -21,6 +22,7 @@ export default function Main(){
     const [Espaco, setEspaco] = useState([]);
     const [Evento, setEvento] = useState([]);
     const [Colaborador, setColaborador] = useState([]);
+    const [Comentario, setComentario] = useState([]);
 
     const [Utilizador, setUtilizador] = useState([]);
 
@@ -133,6 +135,20 @@ export default function Main(){
             if (res.data.success === true){
                 const data = res.data.data;
                 setEvento(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: " + error)
+        })
+
+        axios.get(urlComentario + 'list')
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setComentario(data);
             }
             else {
                 alert("Erro Web Service");
@@ -316,27 +332,62 @@ export default function Main(){
         })
     }
 
-    function Notification(){
-        return Publicacao.map((data, index) => {
-            if(data.aprovacao.APROVADA == 0 && data.CIDADE == Utilizador.CIDADE){
-                return (
-                    <div className='container-fluid col-lg-12 notification'>
-                        <a href={window.location.pathname + '#/post/' + data.IDPUBLICACAO} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
-                            <div className='col-lg-12 notification-title'>
-                                <h4>{data.TITULO}</h4>
+    function Notification() {
+        return (
+            <>
+                {Publicacao.map((data, index) => {
+                    if (data.aprovacao.APROVADA == 0 && data.CIDADE == Utilizador.CIDADE) {
+                        return (
+                            <div className='container-fluid col-lg-12 notification'>
+                                <a href={window.location.pathname + '#/post/' + data.IDPUBLICACAO} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
+                                    <div className='col-lg-12 notification-title'>
+                                        <h4>{data.TITULO}</h4>
+                                    </div>
+                                    <div className='col-lg-12 notification-text'>
+                                        <p>{data.TEXTO}</p>
+                                    </div>
+                                </a>
+                                <div className='col-lg-12 notification-buttons'>
+                                    <Aceitar pub={data}></Aceitar>
+                                    <Rejeitar pub={data}></Rejeitar>
+                                </div>
                             </div>
-                            <div className='col-lg-12 notification-text'>
-                                <p>{data.TEXTO}</p>
+                        );
+                    }
+                    return null; // Ensure nothing is rendered if the condition is not met
+                })}
+                
+                {Comentario.map((comment, index) => {
+                    let id = JSON.parse(localStorage.getItem('id'))
+                    let col;
+                    Colaborador.map((data) =>{
+                        if(data.IDCOLABORADOR == id){
+                            col = data.CIDADE;
+                        }
+                    })
+                    
+                    if (comment.aprovacao.APROVADA == 0) {
+                        return (
+                            <div className='container-fluid col-lg-12 notification'>
+                                <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
+                                    <div className='col-lg-12 notification-title'>
+                                        <h4>{comment.IDCOMENTARIO}</h4>
+                                    </div>
+                                    <div className='col-lg-12 notification-text'>
+                                        <p>{comment.TEXTO}</p>
+                                    </div>
+                                </a>
+                                <div className='col-lg-12 notification-buttons'>
+                                    <Aceitar pub={comment}></Aceitar>
+                                    <Rejeitar pub={comment}></Rejeitar>
+                                </div>
                             </div>
-                        </a>
-                        <div className='col-lg-12 notification-buttons'>
-                            <Aceitar pub={data}></Aceitar>
-                            <Rejeitar pub={data}></Rejeitar>
-                        </div>
-                    </div>
-                )
-            }
-        })
+                        );
+                    }
+                    return null; // Ensure nothing is rendered if the condition is not met
+                })}
+            </>
+        );
     }
 
     function Aprovar(props){
@@ -367,31 +418,40 @@ export default function Main(){
     }
 
     function RejeitarApagar(props){
-        let token;
-        try{
-            let user = localStorage.getItem('user');
-            let userData = JSON.parse(user);
-            token = userData.token;
-        }
-        catch{
-            console.log("Erro a ir buscar o token");
-        }
         const { pub } = props;
         const { aprovacao } = pub;
 
-        axios.put(urlPost + 'delete/' + pub.IDPUBLICACAO, {headers: { 'Authorization' : 'Bearer ' + token } })
-        .then(function(data){
-            if(data.data.success === true){
-                console.log("fixe");
-                loadTables();
-            }
-            else{
-                console.log("não fixe");
-            }
-        })
-        .catch(err =>{
-            console.log("Erro");
-        })
+        if(pub.IDPUBLICACAO){
+            axios.put(urlPost + 'delete/' + pub.IDPUBLICACAO)
+            .then(function(data){
+                if(data.data.success === true){
+                    console.log("fixe");
+                    loadTables();
+                }
+                else{
+                    console.log("não fixe");
+                }
+            })
+            .catch(err =>{
+                console.log("Erro");
+            })
+        }
+        else if(pub.IDCOMENTARIO){
+            axios.put(urlComentario + 'delete/' + pub.IDCOMENTARIO)
+            .then(function(data){
+                if(data.data.success === true){
+                    console.log("fixe");
+                    loadTables();
+                }
+                else{
+                    console.log("não fixe");
+                }
+            })
+            .catch(err =>{
+                console.log("Erro");
+            })
+        }
+        
         axios.put(urlAprovacao + 'delete/' + aprovacao.IDAPROVACAO)
         .then(function(data){
             if(data.data.success === true){
@@ -416,7 +476,6 @@ export default function Main(){
             </button>
         )
     }
-    
     
     function Rejeitar(props){
         return(
