@@ -293,6 +293,98 @@ export default function Post() {
 
     function Survey(){
         let idcol = JSON.parse(localStorage.getItem("id"));
+        let Votos = [];
+        let pessoaJaVotou = 0;
+        let emQualVotou;
+        OpcoesEscolha.map((data, index) =>{
+            Voto.map((voto) => {
+                if(voto.IDOPCOESESCOLHA == data.IDOPCAO){
+                    Votos.push(voto);
+                }
+            })
+        })
+        let votosTotais = Votos.length;
+        
+        
+        return OpcoesEscolha.map((data, index) =>{
+            let totalVotosOpcao = 0;
+            let votosRelevantes = [];
+            Votos.map((voto) => {
+                if(voto.IDOPCOESESCOLHA == data.IDOPCAO){
+                    totalVotosOpcao++;
+                    votosRelevantes.push(voto);
+                }
+                if(pessoaJaVotou == 0 && voto.IDCOLABORADOR == idcol){
+                    pessoaJaVotou = 1;
+                    emQualVotou = voto.IDOPCOESESCOLHA;
+                }
+            })
+
+            let res;
+            if(votosTotais == 0){
+                res = 0;
+            }
+            else{
+                res = (totalVotosOpcao/votosTotais).toFixed(1) * 100;
+            }
+            if(pessoaJaVotou == 0){
+                return(
+                    <div className="progress" style={{ marginTop: "10px", height: "30px", cursor: "pointer", position: "relative" }} onClick={() => Votar(data)}>
+                        <span style={{ position: "absolute", left: "10px", color: "black", zIndex: 1 , top: "20%"}}>
+                            {data.NOME}
+                        </span>
+                        <div className="progress-bar" role="progressbar" style={{ width: res + "%" }} aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                )
+            }
+            else{
+                if(data.IDOPCAO == emQualVotou){
+                    return(
+                        <div className='d-flex' style={{alignItems: "center"}}>
+                            <div style={{width: "80%"}}>
+                                <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                    <span style={{ position: "absolute", left: "10px", color: "black", zIndex: 1 , top: "20%"}}>
+                                        {data.NOME}
+                                    </span>
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">
+                                        {data.NOME}&nbsp;&#10003;
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                    Ver votantes
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+                else{
+                    return(
+                        <div className='d-flex' style={{alignItems: "center"}}>
+                            <div style={{width: "80%"}}>
+                                <span style={{ position: "absolute", left: "10px", color: "black", zIndex: 1 , top: "20%"}}>
+                                    {data.NOME}
+                                </span>
+                                <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                    Ver votantes
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+                
+            }
+        })
+    }
+
+    /*function Survey(){
+        let idcol = JSON.parse(localStorage.getItem("id"));
         let votosTotais = 0;
         OpcoesEscolha.map((data, index) =>{
             Voto.map((voto) => {
@@ -310,6 +402,7 @@ export default function Post() {
                 if(voto.IDOPCOESESCOLHA == data.IDOPCAO){
                     totalVotosOpcao++;
                     votosRelevantes.push(voto);
+                    console.log(data)
                 }
                 if(voto.IDCOLABORADOR == idcol){
                     pessoaJaVotou = 1;
@@ -368,7 +461,7 @@ export default function Post() {
                 
             }
         })
-    }
+    }*/
 
     async function handleVerVotos(props){
         let votos = votosRelevantes;
