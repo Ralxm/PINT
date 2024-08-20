@@ -311,7 +311,7 @@ export default function Post() {
                     totalVotosOpcao++;
                     votosRelevantes.push(voto);
                 }
-                if(voto.IDOPCOESESCOLHA == data.IDOPCAO && voto.IDCOLABORADOR == idcol){
+                if(voto.IDCOLABORADOR == idcol){
                     pessoaJaVotou = 1;
                     emQualVotou = voto.IDOPCOESESCOLHA;
                 }
