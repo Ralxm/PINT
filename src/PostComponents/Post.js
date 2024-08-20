@@ -293,10 +293,17 @@ export default function Post() {
 
     function Survey(){
         let idcol = JSON.parse(localStorage.getItem("id"));
-        let totalVotos = Voto.length;
+        let votosTotais = 0;
+        OpcoesEscolha.map((data, index) =>{
+            Voto.map((voto) => {
+                if(voto.IDOPCOESESCOLHA == data.IDOPCAO){
+                    votosTotais++;
+                }
+            })
+        })
         let pessoaJaVotou = 0;
         let emQualVotou;
-        return OpcoesEscolha.map((data) =>{
+        return OpcoesEscolha.map((data, index) =>{
             let totalVotosOpcao = 0;
             let votosRelevantes = [];
             Voto.map((voto) => {
@@ -304,16 +311,22 @@ export default function Post() {
                     totalVotosOpcao++;
                     votosRelevantes.push(voto);
                 }
-                if(voto.IDCOLABORADOR == idcol){
+                if(voto.IDOPCOESESCOLHA == data.IDOPCAO && voto.IDCOLABORADOR == idcol){
                     pessoaJaVotou = 1;
                     emQualVotou = voto.IDOPCOESESCOLHA;
                 }
             })
-            let res = (totalVotosOpcao/totalVotos).toFixed(1) * 100;
-            if(!pessoaJaVotou){
+            let res;
+            if(votosTotais == 0){
+                res = 0;
+            }
+            else{
+                res = (totalVotosOpcao/votosTotais).toFixed(1) * 100;
+            }
+            if(pessoaJaVotou == 0){
                 return(
                     <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}} onClick={() => Votar(data)}>
-                        <div className="progress-bar" role="progressbar" style={{width: res + "%"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
+                        <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
                     </div>
                 )
             }
@@ -323,7 +336,7 @@ export default function Post() {
                         <div className='d-flex' style={{alignItems: "center"}}>
                             <div style={{width: "80%"}}>
                                 <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
-                                    <div className="progress-bar" role="progressbar" style={{width: res + "%"}} aria-valuemin="0" aria-valuemax="100">
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">
                                         {data.NOME}&nbsp;&#10003;
                                     </div>
                                 </div>
@@ -341,7 +354,7 @@ export default function Post() {
                         <div className='d-flex' style={{alignItems: "center"}}>
                             <div style={{width: "80%"}}>
                                 <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
-                                    <div className="progress-bar" role="progressbar" style={{width: res + "%"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
                                 </div>
                             </div>
                             <div>
