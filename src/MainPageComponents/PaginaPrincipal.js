@@ -302,14 +302,17 @@ export default function Main(){
                 if(data.aprovacao.APROVADA == 1){
                     if(Filtros.some(data2 => data2.IDSUBCATEGORIA == data.SUBCATEGORIA)){
                         const { categorium, espaco, evento, subcategorium } = data;
-                        if(evento.IDEVENTO == 1){ //RETURN DE UM ESPAÇO POIS O EVENTO É O DEFAULT
-                            const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
-                            const base64Image = 'data:image/jpeg;base64,' + base64;
+                        if(evento.IDEVENTO == 1 || espaco.IDESPACO == 1){ //RETURN DE UM ESPAÇO POIS O EVENTO É O DEFAULT
+                            let base64Image;
+                            if(data.IMAGEM){
+                                const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
+                                base64Image = 'data:image/jpeg;base64,' + base64;
+                            }
                             return(
                                 <div className='card mb-3 post' style={{cursor: 'pointer'}} onClick={() => window.location = "#/post/" + data.IDPUBLICACAO}>
                                     <div className="row g-0">
                                         <div className="col-md-4 post-img-box">
-                                            <img className="img-fluid rounded-start post-img" src={base64Image}></img>
+                                            {data.IMAGEM && <img className="img-fluid rounded-start post-img" src={base64Image}></img>}
                                         </div>
                                         <div className="col-md-8 post-info-box position-relative">
                                             <div className="card-body">

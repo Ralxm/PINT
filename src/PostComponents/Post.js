@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton} from 'react-share';
 import { useParams } from 'react-router-dom';
 import { Buffer } from 'buffer';
 import '../Universal/index.css';
@@ -11,10 +12,22 @@ export default function Post() {
     const urlComentarios = "https://pint-backend-8vxk.onrender.com/comentario/";
     const urlCriarAprovacao = 'https://pint-backend-8vxk.onrender.com/aprovacao/create';
     const urlAprovacao = "https://pint-backend-8vxk.onrender.com/aprovacao/";
+    const urlQuestionario = "https://pint-backend-8vxk.onrender.com/questionario/";
+    const urlOpcoesEscolha = "https://pint-backend-8vxk.onrender.com/opcoes_escolha/";
+    const urlVoto = "https://pint-backend-8vxk.onrender.com/voto/";
+    const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
 
     const [Publicacao, setPublicacao] = useState("");
     const [Comentarios, setComentarios] = useState([]);
     const [Aprovacao, setAprovacao] = useState("")
+    const [Questionario, setQuestionario] = useState([]);
+    const [OpcoesEscolha, setOpcoesEscolha] = useState([]);
+    const [Voto, setVoto] = useState([]);
+    const [Colaborador, setColaborador] = useState([]);
+
+    const [votosRelevantes, setVotosRelevantes] = useState([]);
+
+    const [QuestionarioString, setQuestionarioString] = useState("")
 
     useEffect(()=>{
         loadPost();
@@ -22,33 +35,96 @@ export default function Post() {
     }, [])
 
     useEffect(() => {
-        loadComentarios();
+        if (Publicacao) {
+            loadComentarios();
+            if (QuestionarioString) {
+                loadQuestionario();
+                if(Questionario){
+                    loadOpcoesEscolha();
+                    if(OpcoesEscolha){
+                        loadVotos();
+                    }
+                }
+            }
+        }
     }, [Publicacao]);
 
-    function loadPost(){
-        let url = urlPost + 'get/' + id;
-        axios.get(url)
+    async function loadPost() {
+        let url = `${urlPost}get/${id}`;
+        try {
+            const res = await axios.get(url);
+            if (res.data.success === true) {
+                const data = res.data.data;
+                setPublicacao(data);
+                setQuestionarioString(data[0].evento.IDQUESTIONARIO)
+                
+            } else {
+                alert("Erro Web Service");
+            }
+        } catch (err) {
+            alert("Erro a ir buscar o post");
+            console.error(err);
+        }
+    }
+
+    async function loadComentarios(){ 
+        let url = urlComentarios + 'listByPost/' + id;
+        await axios.get(url)
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
-                setPublicacao(data);
+                setComentarios(data);
             }
             else {
                 alert("Erro Web Service");
             }
         })
         .catch(err =>{
-            alert("Erro a ir buscar o post");
+            alert("Erro a carregar os comentários");
         })
     }
 
-    function loadComentarios(){
-        let url = urlComentarios + 'listByPost/' + id;
-        axios.get(url)
+    async function loadQuestionario(){
+        let url = urlQuestionario + 'get/' + QuestionarioString;
+        await axios.get(url)
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
-                setComentarios(data);
+                setQuestionario(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(err =>{
+            alert("Erro a carregar os comentários");
+        })
+    }
+
+    async function loadOpcoesEscolha(){
+        let url = urlOpcoesEscolha + 'listByQuestionario/' + QuestionarioString;
+        await axios.get(url)
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setOpcoesEscolha(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(err =>{
+            alert("Erro a carregar os comentários");
+        })
+    }
+
+    async function loadVotos(){
+        let url = urlVoto + 'list';
+        await axios.get(url)
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setVoto(data);
             }
             else {
                 alert("Erro Web Service");
@@ -64,8 +140,12 @@ export default function Post() {
 
         }, [Comentarios])
         if(Publicacao[0]){
-            const base64 = Buffer.from(Publicacao[0].IMAGEM.data, "binary" ).toString("base64");
-            const base64Image = 'data:image/jpeg;base64,' + base64;
+            let base64Image;
+            if(Publicacao[0].IMAGEM){
+                const base64 = Buffer.from(Publicacao[0].IMAGEM.data, "binary" ).toString("base64");
+                base64Image = 'data:image/jpeg;base64,' + base64;
+            }
+            
 
             let hoje = new Date();
             let ultimaatividade = new Date(Publicacao[0].ULTIMAATIVIDADE)
@@ -75,7 +155,6 @@ export default function Post() {
             let rating = 0;
             let count = 0;
             Comentarios.map((data) =>{
-                console.log(data);
                 if(data.IDPOST == Publicacao[0].IDPUBLICACAO){
                     count++;
                     rating += data.AVALIACAO;
@@ -98,23 +177,30 @@ export default function Post() {
         
                     <div className='col-10 main-post-box' style={{overflowY:'scroll'}}>
                         <div className='post-nav-bar'>
-                            <div className='post-main-info col-11'>
+                            <div className='post-main-info col-10'>
                                 <a>{Publicacao[0].TITULO}&nbsp;</a>
                                 <a>&nbsp;- Avaliação: {ratingFinal}</a>
+
                                 </div>
                                     <div style={{backgroundColor: 'red', marginLeft: '-20px', marginRight: '10px', color: 'white'}}>
                                         {Publicacao[0].EVENTO == 1 && diffDays >= 15 && <a>Espaço Inativo</a>}
                                         {Publicacao[0].aprovacao.APROVADA == 0 && <a>Publicação não aprovada</a>}
                                     </div>
-                                    <div className='post-main-buttons col-1'>
+                                    <div className='post-main-buttons col-2'>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
                                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                                         </svg>
                                         <div style={{ width: "25%" }}>
                                         </div>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-send" viewBox="0 0 16 16">
-                                            <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576zm6.787-8.201L1.591 6.602l4.339 2.76z"/>
-                                        </svg>
+                                        <FacebookShareButton url={window.location.href}>
+                                        <FacebookIcon size='32'></FacebookIcon>
+                                        </FacebookShareButton>
+                                        <TwitterShareButton url={window.location.href}>
+                                            <TwitterIcon size='32'></TwitterIcon>
+                                        </TwitterShareButton>
+                                        <WhatsappShareButton url={window.location.href}>
+                                            <WhatsappIcon size='32'></WhatsappIcon>
+                                        </WhatsappShareButton>
                                     </div>
                                 </div>
         
@@ -135,19 +221,42 @@ export default function Post() {
                                             <a style={{ color: "rgba(0,0,0,0.5)" }}>Website:&nbsp;</a>
                                             <a style={{ color: "rgba(0,0,0,0.5)" }} href={Publicacao[0].espaco.WEBSITE} target='_blank'>{Publicacao[0].espaco.WEBSITE}</a>
                                             <div className='row col-12 imagem-post-info d-flex align-items-center justify-content-center'>
-                                                <img src={base64Image} className='img-fluid rounded-start' alt="Não foi possível carregar a imagem" style={{ maxWidth: '100%', height: 'auto', width: '40%' }} />
+                                                {Publicacao[0].IMAGEM && <img src={base64Image} className='img-fluid rounded-start' alt="Não foi possível carregar a imagem" style={{ maxWidth: '100%', height: 'auto', width: '40%' }} />}
                                             </div>
                                         </div>
                                     </div>
                                     
                                 ) : (
-                                    <div className='row col-12'>
-
+                                    <div>
+                                    <div className='post-subcategory-info col-12'>
+                                            <a style={{ color: "rgba(0,0,0,0.5)" }}>{"asd"}</a>
+                                            <Survey></Survey>
+                                            <div className='row col-12 imagem-post-info d-flex align-items-center justify-content-center'>
+                                                {Publicacao[0].IMAGEM && <img src={base64Image} className='img-fluid rounded-start' alt="Não foi possível carregar a imagem" style={{ maxWidth: '100%', height: 'auto', width: '40%' }} />}
+                                            </div>
+                                        </div>
                                     </div>
                                 )
                         }
 
-                        <div className='comentario-box' style={{marginTop: "20px"}}>
+                        <div className='comentario-box' style={{marginTop: "20px"}}>   
+                            <div className="card p-3" style={{display: 'none'}} id='votosRelevantes'>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="user d-flex flex-row align-items-center">
+                                        <span style={{marginLeft: "10px"}}>
+                                        <button className='btn btn-outline-warning' onClick={VerVotos}>Fechar</button>
+                                        { 
+                                            votosRelevantes.map((data) =>{
+                                                return(
+                                                    <small style={{marginLeft: "5px"}} class="font-weight-bold">{"{ " + data.colaborador.NOME + ' ID: ' + data.colaborador.IDCOLABORADOR + " }"}</small>
+                                                )
+                                            })
+                                        }
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <Comentario></Comentario>   
                         </div>
                     </div>
@@ -171,6 +280,126 @@ export default function Post() {
             </div>
         </div>
     )
+
+    function VerVotos(){
+        if(document.getElementById('votosRelevantes').style.display == "block"){
+            document.getElementById('votosRelevantes').style.display = 'none';
+        }
+        else{
+            document.getElementById('votosRelevantes').style.display = 'block';
+        }
+        
+    }
+
+    function Survey(){
+        let idcol = JSON.parse(localStorage.getItem("id"));
+        let totalVotos = Voto.length;
+        let pessoaJaVotou = 0;
+        let emQualVotou;
+        return OpcoesEscolha.map((data) =>{
+            let totalVotosOpcao = 0;
+            let votosRelevantes = [];
+            Voto.map((voto) => {
+                if(voto.IDOPCOESESCOLHA == data.IDOPCAO){
+                    totalVotosOpcao++;
+                    votosRelevantes.push(voto);
+                }
+                if(voto.IDCOLABORADOR == idcol){
+                    pessoaJaVotou = 1;
+                    emQualVotou = voto.IDOPCOESESCOLHA;
+                }
+            })
+            let res = (totalVotosOpcao/totalVotos).toFixed(1) * 100;
+            if(!pessoaJaVotou){
+                return(
+                    <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}} onClick={() => Votar(data)}>
+                        <div className="progress-bar" role="progressbar" style={{width: res + "%"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
+                    </div>
+                )
+            }
+            else{
+                if(data.IDOPCAO == emQualVotou){
+                    return(
+                        <div className='d-flex' style={{alignItems: "center"}}>
+                            <div style={{width: "80%"}}>
+                                <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%"}} aria-valuemin="0" aria-valuemax="100">
+                                        {data.NOME}&nbsp;&#10003;
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                    Ver votantes
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+                else{
+                    return(
+                        <div className='d-flex' style={{alignItems: "center"}}>
+                            <div style={{width: "80%"}}>
+                                <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
+                                </div>
+                            </div>
+                            <div>
+                                <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                    Ver votantes
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+                
+            }
+        })
+    }
+
+    async function handleVerVotos(props){
+        let votos = votosRelevantes;
+        await setVotosRelevantes(props);
+        if(votos == votosRelevantes){
+            setTimeout(()=>{
+
+            }, 1000)
+            setVotosRelevantes(props)
+        }
+        console.log(votosRelevantes)
+        VerVotos();
+    }
+
+    async function Votar(props){
+        let idcol = JSON.parse(localStorage.getItem('id'));
+        let now = new Date();
+        let dd = now.getDate();
+        let mm = now.getMonth() + 1;
+        let yyyy = now.getFullYear();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        let today = `${yyyy}-${mm}-${dd}`;
+
+        let url = urlVoto + 'create';
+        const datapost = {
+            IDCOLABORADOR : idcol,
+            DATAVOTO : today,
+            IDOPCOESESCOLHA : props.IDOPCAO
+        }
+        await axios.post(urlVoto + 'create', datapost)
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                loadVotos()
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(err =>{
+            alert("Erro a carregar os comentários");
+        })
+    }
 
     async function Comentar() {
         let rating = 0;

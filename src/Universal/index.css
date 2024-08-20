@@ -592,3 +592,7 @@ footer{
   
   transform: rotateY(180deg);
 }
+
+.share-social-media{
+    margin-left: 20px
+}

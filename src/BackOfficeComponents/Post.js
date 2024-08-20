@@ -26,6 +26,7 @@ export default function Post(){
 
     const [NOME, setNOMEQUESTIONARIO] = useState("");
     const [options, setOptions] = useState([{ label: 'Opção 1', value: '' }, { label: 'Opção 2', value: '' }]);
+    const [IDQUESTIONARIO, setIDQUESTIONARIO] = useState("");
 
     const [EVENTO, setEVENTO] = useState("");
     const [DATAPUBLICACAO, setDATAPUBLICACAO] = useState("");
@@ -200,6 +201,7 @@ export default function Post(){
             <div className='side-bar col-4' style={{marginLeft: "10px"}} id={'insertColumn'}>
                 <div className='col-lg-12 backoffice-option'>
                     Inserir Publicação
+                    <button onClick={test}>testar</button>
                 </div>
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
@@ -403,7 +405,13 @@ export default function Post(){
         </div>
     )
 
-async function criarColuna(){
+function test(){
+    options.map((data)=>{
+        console.log(data);
+    })
+}
+
+/*async function criarColuna() {
     const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
     const urlCriarAprovacao = 'https://pint-backend-8vxk.onrender.com/aprovacao/create';
     const urlCriarEspaco = 'https://pint-backend-8vxk.onrender.com/espaco/create';
@@ -414,6 +422,9 @@ async function criarColuna(){
     let idEspaco = null;
     let idEvento = 1;
     let idAprovacao = null;
+    let idQuestionario = null; // Initialize variable here
+    let IDQUESTIONARIO = null; // Initialize variable here
+    let options = []; // Initialize options if it's not already
 
     try {
         if (document.getElementById('checkEspaco').checked) {
@@ -433,9 +444,57 @@ async function criarColuna(){
         }
 
         if (document.getElementById('checkEvento').checked) {
-            // Similar logic for creating evento and setting its ID
-            // ...
+            const datapostQuestionario = {
+                NOME: NOME
+            };
+            const resQuestionario = await axios.post(urlCriarQuestionario, datapostQuestionario);
+            if (resQuestionario.data.success) {
+                idQuestionario = resQuestionario.data.data.IDQUESTIONARIO;
+                setIDQUESTIONARIO(idQuestionario);
+                console.log(idQuestionario);
+            } else {
+                alert(resQuestionario.data.message);
+                return;
+            }
         }
+
+        if (idQuestionario) { 
+            const requests = options.map(option => {
+                const datapostOpcoesEscolha = {
+                    NOME: option.value,
+                    TIPOOPCAO: 1,
+                    IDQUESTIONARIO: idQuestionario
+                };
+                console.log(datapostOpcoesEscolha)
+                return axios.post(url, datapostOpcoesEscolha)
+              });
+              
+              // Execute all requests and handle the responses
+              Promise.all(requests)
+                .then(responses => {
+                  // All requests are successful
+                  console.log('All requests were successful:', responses);
+                })
+                .catch(error => {
+                  // At least one request failed
+                  console.error('One or more requests failed:', error);
+                });
+        } else {
+            console.error("IDQUESTIONARIO is not defined");
+        }
+
+        const datapostEvento = {
+            IDQUESTIONARIO: idQuestionario
+        };
+        const resEvento = await axios.post(urlCriarEvento, datapostEvento);
+        if (resEvento.data.success) {
+            idEvento = resEvento.data.data.IDEVENTO;
+            setEVENTO(idEvento);
+        } else {
+            alert(resEvento.data.message);
+            return;
+        }
+        setESPACO(1);
 
         let now = new Date();
         let dd = now.getDate();
@@ -448,7 +507,7 @@ async function criarColuna(){
         const datapostAprovacao = {
             IDCOLABORADOR: 0,
             DATAAPROVACAO: today,
-            APROVADA: 0,
+            APROVADA: 0
         };
         const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao);
         if (resAprovacao.data.success) {
@@ -479,30 +538,214 @@ async function criarColuna(){
         datapostPost.append('TITULO', TITULO);
         datapostPost.append('TEXTO', TEXTO);
         datapostPost.append('RATING', RATING);
-        if(IMAGEM != ""){
+        if (IMAGEM) {
             datapostPost.append('IMAGEM', IMAGEM);
         }
-        
 
-        axios.post(urlCriarPost, datapostPost, {headers: { 'Content-Type': 'multipart/form-data' }})
-        .then(res =>{
-            if(res.data.success === true){
-                loadTables();
-            }
-            else{
-                alert('Erro');
-            }
-        })
-        .catch(error => { 
-            console.error("Detailed Error: ", error.response ? error.response.data : error.message);
-            alert("Error: fase123 " + (error.response ? error.response.data.message : error.message));
-        });
+        await axios.post(urlCriarPost, datapostPost, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .then(res => {
+                if (res.data.success === true) {
+                    loadTables();
+                } else {
+                    alert('Erro');
+                }
+            })
+            .catch(error => {
+                alert("Error: fase123 " + (error.response ? error.response.data.message : error.message));
+            });
+
+        loadTables();
+    } catch (error) {
+        alert('something');
+        console.error(error);
     }
-    catch{
-        alert('something')
+}*/
+
+async function criarColuna() {
+    const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
+    const urlCriarAprovacao = 'https://pint-backend-8vxk.onrender.com/aprovacao/create';
+    const urlCriarEspaco = 'https://pint-backend-8vxk.onrender.com/espaco/create';
+    const urlCriarEvento = 'https://pint-backend-8vxk.onrender.com/evento/create';
+    const urlCriarQuestionario = 'https://pint-backend-8vxk.onrender.com/questionario/create';
+    const urlCriarOpcoesEscolha = 'https://pint-backend-8vxk.onrender.com/opcoes_escolha/create';
+
+    let idEspaco = 1;
+    let idEvento = 1;
+    let idAprovacao = null;
+    let idQuestionario = null;
+    let options = []; // Ensure this is initialized
+
+    try {
+        if (document.getElementById('checkEspaco').checked) {
+            idEspaco = await criarEspaco();
+            if (!idEspaco) return; // Exit if failed
+            setEVENTO(1);
+        }
+
+        if (document.getElementById('checkEvento').checked) {
+            idQuestionario = await criarQuestionario();
+            if (!idQuestionario) return; // Exit if failed
+            
+
+            idEvento = await criarEvento(idQuestionario);
+            if (!idEvento) return; // Exit if failed
+
+            setESPACO(1);
+        }
+
+        if (idQuestionario) {
+            await criarOpcoesEscolha(idQuestionario);
+        } else {
+            console.error("IDQUESTIONARIO is not defined");
+        }
+
+        idAprovacao = await criarAprovacao();
+        if (!idAprovacao) return; // Exit if failed
+
+        await criarPost(idEspaco, idEvento, idAprovacao);
+        loadTables();
+    } catch (error) {
+        alert('An error occurred');
+        console.error(error);
     }
-    loadTables();
+}
+
+async function criarEspaco() {
+    const urlCriarEspaco = 'https://pint-backend-8vxk.onrender.com/espaco/create';
+    const datapostEspaco = { COORDENADAS, WEBSITE };
+    try {
+        const res = await axios.post(urlCriarEspaco, datapostEspaco);
+        if (res.data.success) {
+            const idEspaco = res.data.data.IDESPACO;
+            setEspaco(idEspaco);
+            return idEspaco;
+        } else {
+            alert(res.data.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Failed to create space', error);
+        return null;
     }
+}
+
+async function criarQuestionario() {
+    const urlCriarQuestionario = 'https://pint-backend-8vxk.onrender.com/questionario/create';
+    const datapostQuestionario = { NOME };
+    try {
+        const res = await axios.post(urlCriarQuestionario, datapostQuestionario);
+        if (res.data.success) {
+            const idQuestionario = res.data.data.IDQUESTIONARIO;
+            setIDQUESTIONARIO(idQuestionario);
+            return idQuestionario;
+        } else {
+            alert(res.data.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Failed to create questionnaire', error);
+        return null;
+    }
+}
+
+async function criarOpcoesEscolha(idQuestionario) {
+    console.log("idquestionario: " + idQuestionario)
+    const urlCriarOpcoesEscolha = 'https://pint-backend-8vxk.onrender.com/opcoes_escolha/create';
+    const requests = options.map(option => {
+        const datapostOpcoesEscolha = {
+            NOME: option.value,
+            TIPOOPCAO: 1,
+            IDQUESTIONARIO: idQuestionario
+        };
+        return axios.post(urlCriarOpcoesEscolha, datapostOpcoesEscolha);
+    });
+
+    try {
+        const responses = await Promise.all(requests);
+        console.log('All requests were successful:', responses);
+    } catch (error) {
+        console.error('One or more requests failed:', error);
+    }
+}
+
+async function criarEvento(idQuestionario) {
+    const urlCriarEvento = 'https://pint-backend-8vxk.onrender.com/evento/create';
+    const datapostEvento = { IDQUESTIONARIO: idQuestionario };
+    try {
+        const res = await axios.post(urlCriarEvento, datapostEvento);
+        if (res.data.success) {
+            const idEvento = res.data.data.IDEVENTO;
+            setEVENTO(idEvento);
+            setESPACO(1)
+            return idEvento;
+        } else {
+            alert(res.data.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Failed to create event', error);
+        return null;
+    }
+}
+
+async function criarAprovacao() {
+    const urlCriarAprovacao = 'https://pint-backend-8vxk.onrender.com/aprovacao/create';
+    const now = new Date();
+    const today = now.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+
+    const datapostAprovacao = {
+        IDCOLABORADOR: 0,
+        DATAAPROVACAO: today,
+        APROVADA: 0
+    };
+
+    try {
+        const res = await axios.post(urlCriarAprovacao, datapostAprovacao);
+        if (res.data.success) {
+            const idAprovacao = res.data.data.IDAPROVACAO;
+            setAprovacao(idAprovacao);
+            return idAprovacao;
+        } else {
+            alert(res.data.message);
+            return null;
+        }
+    } catch (error) {
+        console.error('Failed to create approval', error);
+        return null;
+    }
+}
+
+async function criarPost(idEspaco, idEvento, idAprovacao) {
+    const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
+    const datapostPost = new FormData();
+    datapostPost.append('CIDADE', Cidade.find(data => data.NOME === CIDADE)?.IDCIDADE);
+    datapostPost.append('APROVACAO', idAprovacao);
+    datapostPost.append('COLABORADOR', Colaborador.find(data => data.NOME === COLABORADOR)?.IDCOLABORADOR);
+    datapostPost.append('CATEGORIA', Categoria.find(data => data.NOME === CATEGORIA)?.IDCATEGORIA);
+    datapostPost.append('SUBCATEGORIA', Subcategoria.find(data => data.NOME === SUBCATEGORIA)?.IDSUBCATEGORIA);
+    datapostPost.append('ESPACO', idEspaco);
+    datapostPost.append('EVENTO', idEvento);
+    datapostPost.append('DATAPUBLICACAO', DATAPUBLICACAO);
+    datapostPost.append('DATAULTIMAATIVIDADE', DATAULTIMAATIVIDADE);
+    datapostPost.append('TITULO', TITULO);
+    datapostPost.append('TEXTO', TEXTO);
+    datapostPost.append('RATING', RATING);
+    if (IMAGEM) {
+        datapostPost.append('IMAGEM', IMAGEM);
+    }
+    console.log(datapostPost)
+
+    try {
+        const res = await axios.post(urlCriarPost, datapostPost, { headers: { 'Content-Type': 'multipart/form-data' } });
+        if (res.data.success) {
+            console.log('Post created successfully');
+        } else {
+            alert('Error creating post');
+        }
+    } catch (error) {
+        alert("Error creating post: " + (error.response ? error.response.data.message : error.message));
+    }
+}
 
     function editarColuna(){
         const urlEditar = 'https://pint-backend-8vxk.onrender.com/post/update/' + IDPUBLICACAO;
@@ -545,8 +788,11 @@ async function criarColuna(){
             else{
                 aprovada = 'Não Aprovada';
             }
-            const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
-            const base64Image = 'data:image/jpeg;base64,' + base64;
+            let base64Image;
+            if(data.IMAGEM){
+                const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
+                base64Image = 'data:image/jpeg;base64,' + base64;
+            }
                 return(
                     <div className='col-12 showTable'>
                         <div className='showTableText'>
@@ -562,7 +808,7 @@ async function criarColuna(){
                             <a>Título: {data.TITULO}</a>
                             <a>Texto: {data.TEXTO}</a>
                             <a>Rating: {data.RATING}</a>
-                            <img src={base64Image} alt={'logo192.png'} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>
+                            { data.IMAGEM && <img src={base64Image} alt={'logo192.png'} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
                         </div>
                         <div className='showTableButtons'>
                             <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
