@@ -329,11 +329,15 @@ export default function Post() {
             }
             if(pessoaJaVotou == 0){
                 return(
-                    <div className="progress" style={{ marginTop: "10px", height: "30px", cursor: "pointer", position: "relative" }} onClick={() => Votar(data)}>
-                        <span style={{ position: "absolute", left: "10px", color: "black", zIndex: 1 , top: "20%"}}>
+                    <div className='d-flex' style={{alignItems: "center"}}>
+                        <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
                             {data.NOME}
                         </span>
-                        <div className="progress-bar" role="progressbar" style={{ width: res + "%" }} aria-valuemin="0" aria-valuemax="100"></div>
+                        <div style={{flexGrow: 1}}>
+                            <div className="progress" style={{ marginTop: "10px", height: "30px", cursor: "pointer", position: "relative" }} onClick={() => Votar(data)}>
+                                <div className="progress-bar" role="progressbar" style={{ width: res + "%" }} aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
                     </div>
                 )
             }
@@ -341,13 +345,13 @@ export default function Post() {
                 if(data.IDOPCAO == emQualVotou){
                     return(
                         <div className='d-flex' style={{alignItems: "center"}}>
-                            <div style={{width: "80%"}}>
+                            <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
+                                {data.NOME}
+                            </span>
+                            <div style={{width: "70%"}}>
                                 <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
-                                    <span style={{ position: "absolute", left: "10px", color: "black", zIndex: 1 , top: "20%"}}>
-                                        {data.NOME}
-                                    </span>
                                     <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">
-                                        {data.NOME}&nbsp;&#10003;
+                                        &nbsp;&#10003;
                                     </div>
                                 </div>
                             </div>
@@ -362,12 +366,12 @@ export default function Post() {
                 else{
                     return(
                         <div className='d-flex' style={{alignItems: "center"}}>
-                            <div style={{width: "80%"}}>
-                                <span style={{ position: "absolute", left: "10px", color: "black", zIndex: 1 , top: "20%"}}>
-                                    {data.NOME}
-                                </span>
+                            <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
+                                {data.NOME}
+                            </span>
+                            <div style={{width: "70%"}}>
                                 <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
-                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">{data.NOME}</div>
+                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                             <div>
