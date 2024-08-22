@@ -1,9 +1,11 @@
 import React, {useState, useEffect} from 'react';
+import { Calendar, Badge, Tooltip, Whisper } from 'rsuite';
 import '../Universal/index.css'
 import axios from 'axios';
 import Profile from './Profile'
 import {Buffer} from 'buffer'
 import authService from '../views/auth-service';
+import "rsuite/dist/rsuite-no-reset.min.css"
 
 export default function Main(){
     const urlCategoria = "https://pint-backend-8vxk.onrender.com/categoria/";
@@ -178,7 +180,7 @@ export default function Main(){
 
     function Filtro(){
             return (
-                <div className='col-lg-3 d-md-none d-sm-none d-lg-block d-md-block d-none d-sm-block filtro-box'>
+                <div className='d-md-none d-sm-none d-lg-block d-md-block d-none d-sm-block filtro-box'>
                     <div className='col-lg-1 filtro-text filtro-title'>
                         &nbsp;
                     </div>
@@ -284,6 +286,55 @@ export default function Main(){
         }
     }
 
+    function CalendarioBox(){
+        return(
+            <div className='calendario-box'>
+                <Calendar compact bordered renderCell={renderCell} />
+            </div>
+        )
+    }
+
+    function getTodoList(date) {
+        const eventsOnDate  = [];
+        Publicacao.map((post) =>{
+            if(post.CIDADE == Utilizador.CIDADE && post.aprovacao.APROVADA == 1){
+                if(post.IDEVENTO != 1){
+                    const eventDate = new Date(post.evento.DATAEVENTO);
+                    if (eventDate.getFullYear() === date.getFullYear() && eventDate.getMonth() === date.getMonth() && eventDate.getDate() === date.getDate()) {
+                        eventsOnDate.push({ time: eventDate.toLocaleTimeString(), title: post.TITULO, idpost: post.IDPUBLICACAO});
+                    }
+                }
+            }
+        })
+
+        return eventsOnDate;
+      }
+
+      function renderCell(date) {
+        const list = getTodoList(date);
+      
+        if (list.length > 0) {
+          const tooltip = (
+            <Tooltip>
+              {list.map((item, index) => (
+                <div key={index}>
+                {item.title}
+                </div>
+              ))}
+            </Tooltip>
+          );
+      
+          return (
+            <Whisper placement="top" trigger="hover" speaker={tooltip}>
+              <Badge className="calendar-todo-item-badge" onClick={() => window.location.href = "#/post/" + list[0].idpost} style={{ cursor: 'pointer' }}
+              />
+            </Whisper>
+          );
+        }
+      
+        return null;
+      }
+
     function PostBox({ Filtros }) {
         return(
             <div className='col-6 posts-box'>
@@ -333,64 +384,6 @@ export default function Main(){
             } 
             }
         })
-    }
-
-    function Notification() {
-        return (
-            <>
-                {Publicacao.map((data, index) => {
-                    if (data.aprovacao.APROVADA == 0 && data.CIDADE == Utilizador.CIDADE) {
-                        return (
-                            <div className='container-fluid col-lg-12 notification'>
-                                <a href={window.location.pathname + '#/post/' + data.IDPUBLICACAO} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
-                                    <div className='col-lg-12 notification-title'>
-                                        <h4>{data.TITULO}</h4>
-                                    </div>
-                                    <div className='col-lg-12 notification-text'>
-                                        <p>{data.TEXTO}</p>
-                                    </div>
-                                </a>
-                                <div className='col-lg-12 notification-buttons'>
-                                    <Aceitar pub={data}></Aceitar>
-                                    <Rejeitar pub={data}></Rejeitar>
-                                </div>
-                            </div>
-                        );
-                    }
-                    return null; // Ensure nothing is rendered if the condition is not met
-                })}
-                
-                {Comentario.map((comment, index) => {
-                    let id = JSON.parse(localStorage.getItem('id'))
-                    let col;
-                    Colaborador.map((data) =>{
-                        if(data.IDCOLABORADOR == id){
-                            col = data.CIDADE;
-                        }
-                    })
-                    
-                    if (comment.aprovacao.APROVADA == 0) {
-                        return (
-                            <div className='container-fluid col-lg-12 notification'>
-                                <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
-                                    <div className='col-lg-12 notification-title'>
-                                        <h4>{comment.IDCOMENTARIO}</h4>
-                                    </div>
-                                    <div className='col-lg-12 notification-text'>
-                                        <p>{comment.TEXTO}</p>
-                                    </div>
-                                </a>
-                                <div className='col-lg-12 notification-buttons'>
-                                    <Aceitar pub={comment}></Aceitar>
-                                    <Rejeitar pub={comment}></Rejeitar>
-                                </div>
-                            </div>
-                        );
-                    }
-                    return null; // Ensure nothing is rendered if the condition is not met
-                })}
-            </>
-        );
     }
 
     function Aprovar(props){
@@ -488,21 +481,161 @@ export default function Main(){
         )
     }
     
+    function Notification() {
+        return (
+            <>
+                {Publicacao.map((data, index) => {
+                    if (data.aprovacao.APROVADA == 0 && data.CIDADE == Utilizador.CIDADE) {
+                        return (
+                            <div className='container-fluid col-lg-12 notification'>
+                                <a href={window.location.pathname + '#/post/' + data.IDPUBLICACAO} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
+                                    <div className='col-lg-12 notification-title'>
+                                        <h4>{data.TITULO}</h4>
+                                    </div>
+                                    <div className='col-lg-12 notification-text'>
+                                        <p>{data.TEXTO}</p>
+                                    </div>
+                                </a>
+                                <div className='col-lg-12 notification-buttons'>
+                                    <Aceitar pub={data}></Aceitar>
+                                    <Rejeitar pub={data}></Rejeitar>
+                                </div>
+                            </div>
+                        );
+                    }
+                    return null; // Ensure nothing is rendered if the condition is not met
+                })}
+                
+                {Comentario.map((comment, index) => {
+                    let id = JSON.parse(localStorage.getItem('id'))
+                    let col;
+                    Colaborador.map((data) =>{
+                        if(data.IDCOLABORADOR == id){
+                            col = data.CIDADE;
+                        }
+                    })
+                    
+                    if (comment.aprovacao.APROVADA == 0) {
+                        return (
+                            <div className='container-fluid col-lg-12 notification'>
+                                <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
+                                    <div className='col-lg-12 notification-title'>
+                                        <h4>{comment.IDCOMENTARIO}</h4>
+                                    </div>
+                                    <div className='col-lg-12 notification-text'>
+                                        <p>{comment.TEXTO}</p>
+                                    </div>
+                                </a>
+                                <div className='col-lg-12 notification-buttons'>
+                                    <Aceitar pub={comment}></Aceitar>
+                                    <Rejeitar pub={comment}></Rejeitar>
+                                </div>
+                            </div>
+                        );
+                    }
+                    return null; // Ensure nothing is rendered if the condition is not met
+                })}
+            </>
+        );
+    }
+
+    function Pubs(){
+        return Publicacao.map((data, index) => {
+                if (data.aprovacao.APROVADA == 0 && data.CIDADE == Utilizador.CIDADE) {
+                    return (
+                        <div className='container-fluid col-lg-12 notification'>
+                            <a href={window.location.pathname + '#/post/' + data.IDPUBLICACAO} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
+                                <div className='col-lg-12 notification-title'>
+                                    <h4>{data.TITULO}</h4>
+                                </div>
+                                <div className='col-lg-12 notification-text'>
+                                    <p>{data.TEXTO}</p>
+                                </div>
+                            </a>
+                            <div className='col-lg-12 notification-buttons'>
+                                <Aceitar pub={data}></Aceitar>
+                                <Rejeitar pub={data}></Rejeitar>
+                            </div>
+                        </div>
+                    );
+                }
+                return null;
+            });
+    }
+
+    function Coms(){
+        return Comentario.map((comment, index) => {
+            let id = JSON.parse(localStorage.getItem('id'))
+            let col;
+            Colaborador.map((data) =>{
+                if(data.IDCOLABORADOR == id){
+                    col = data.CIDADE;
+                }
+            })
+            
+            if (comment.aprovacao.APROVADA == 0) {
+                return (
+                    <div className='container-fluid col-lg-12 notification'>
+                        <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
+                            <div className='col-lg-12 notification-title'>
+                                <h4>{comment.IDCOMENTARIO}</h4>
+                            </div>
+                            <div className='col-lg-12 notification-text'>
+                                <p>{comment.TEXTO}</p>
+                            </div>
+                        </a>
+                        <div className='col-lg-12 notification-buttons'>
+                            <Aceitar pub={comment}></Aceitar>
+                            <Rejeitar pub={comment}></Rejeitar>
+                        </div>
+                    </div>
+                );
+            }
+        })
+    }
     
     function Notifications(){
         return(
             <div className='container-fluid notifications-box'>
-                <div className='col-12'>
-                    Publicações por aprovar
+                <div className='d-flex'>
+                    <div className='col-6 d-flex' style={{justifyContent: "center", maxHeight: "3vh", alignItems: "center", marginTop: "10px"}}>
+                        <button className='btn btn-outline-primary' id="btnpubs" onClick={showPubs}>Publicações por aprovar</button>
+                    </div>
+                    <div className='col-6 d-flex' style={{justifyContent: "center", maxHeight: "3vh", alignItems: "center", marginTop: "10px"}}>
+                        <button className='btn btn-outline-primary' id="btncoms" onClick={showComs}>Comentários por aprovar</button>
+                    </div>
                 </div>
-                <Notification></Notification>
-            </div>
+                
+                <div className='container-fluid col-lg-12' id="pubs">
+                    <Pubs></Pubs>
+                </div>
+                <div className='container-fluid col-lg-12' style={{display: "none"}} id="coms">
+                    <Coms></Coms>
+                </div>
+            </div>    
         )
+    }
+
+    function showPubs(){
+        document.getElementById("pubs").style.display = "block";
+        document.getElementById("coms").style.display = "none";
+        document.querySelector("#btnpubs").classList.add('btn-outline-success');
+        document.querySelector("#btncoms").classList.remove('btn-outline-success');
+    }
+
+    function showComs(){
+        document.getElementById("pubs").style.display = "none";
+        document.getElementById("coms").style.display = "block";
+        document.querySelector("#btnpubs").classList.remove('btn-outline-success');
+        document.querySelector("#btncoms").classList.add('btn-outline-success');
     }
 
     return(
         <div className='d-flex'>
-            <Filtro></Filtro>
+            <div>
+                <Filtro></Filtro>
+                <CalendarioBox></CalendarioBox>
+            </div>
             <PostBox Filtros={Filtros}></PostBox>
             <div className="col-lg-3 pe-0 g-0">
                 <Profile></Profile>

@@ -29,6 +29,7 @@ export default function Post(){
     const [IDQUESTIONARIO, setIDQUESTIONARIO] = useState("");
 
     const [EVENTO, setEVENTO] = useState("");
+    const [DATAEVENTO, setDATAEVENTO] = useState("");
     const [DATAPUBLICACAO, setDATAPUBLICACAO] = useState("");
     const [DATAULTIMAATIVIDADE, setDATAULTIMAATIVIDADE] = useState("");
     const [TITULO, setTITULO] = useState("");
@@ -254,6 +255,10 @@ export default function Post(){
                                 <label>Nome do Questionário</label>
                                 <input id='descricao' onChange={(value)=> setNOMEQUESTIONARIO(value.target.value)}></input>
                             </div>
+                            <div className='input-group'>
+                                <label>Data do Evento</label>
+                                <input id='descricao' type='date' onChange={(value)=> setDATAEVENTO(value.target.value)}></input>
+                            </div>
                             {options.map((option, index) => (
                                 <div className='input-group' key={index}>
                                     <label>{option.label}:</label>
@@ -356,6 +361,10 @@ export default function Post(){
                             <div className='input-group'>
                                 <label>Nome do Questionário</label>
                                 <input id='descricao' onChange={(value)=> setNOMEQUESTIONARIO(value.target.value)}></input>
+                            </div>
+                            <div className='input-group'>
+                                <label>Data do Evento</label>
+                                <input id='descricao' type='date' onChange={(value)=> setDATAEVENTO(value.target.value)}></input>
                             </div>
                             {options.map((option, index) => (
                                 <div className='input-group' key={index}>
@@ -670,7 +679,7 @@ async function criarOpcoesEscolha(idQuestionario) {
 
 async function criarEvento(idQuestionario) {
     const urlCriarEvento = 'https://pint-backend-8vxk.onrender.com/evento/create';
-    const datapostEvento = { IDQUESTIONARIO: idQuestionario };
+    const datapostEvento = { IDQUESTIONARIO: idQuestionario, DATAEVENTO };
     try {
         const res = await axios.post(urlCriarEvento, datapostEvento);
         if (res.data.success) {

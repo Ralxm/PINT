@@ -193,7 +193,7 @@ export default function Post() {
                                         <div style={{ width: "25%" }}>
                                         </div>
                                         <FacebookShareButton url={window.location.href}>
-                                        <FacebookIcon size='32'></FacebookIcon>
+                                            <FacebookIcon size='32'></FacebookIcon>
                                         </FacebookShareButton>
                                         <TwitterShareButton url={window.location.href}>
                                             <TwitterIcon size='32'></TwitterIcon>
@@ -228,10 +228,26 @@ export default function Post() {
                                     
                                 ) : (
                                     <div>
-                                    <div className='post-subcategory-info col-12'>
-                                            <a style={{ color: "rgba(0,0,0,0.5)" }}>{"asd"}</a>
+                                        <div className='post-subcategory-info col-12'>
+                                            <a style={{ color: "rgba(0,0,0,0.5)" }}>{Questionario.NOME}</a>
                                             <Survey></Survey>
-                                            <div className='row col-12 imagem-post-info d-flex align-items-center justify-content-center'>
+                                            <div className="card p-3" style={{display: 'none', marginTop: "10px"}} id='votosRelevantes'>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="user d-flex flex-row align-items-center">
+                                                        <span style={{marginLeft: "10px"}}>
+                                                        <button className='btn btn-outline-warning' onClick={VerVotos}>Fechar</button>
+                                                        { 
+                                                            votosRelevantes.map((data) =>{
+                                                                return(
+                                                                    <small style={{marginLeft: "5px"}} class="font-weight-bold">{"{ " + data.colaborador.NOME + ' ID: ' + data.colaborador.IDCOLABORADOR + " }"}</small>
+                                                                )
+                                                            })
+                                                        }
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className='row col-12 imagem-post-info d-flex align-items-center justify-content-center' style={{marginTop:"10px"}}>
                                                 {Publicacao[0].IMAGEM && <img src={base64Image} className='img-fluid rounded-start' alt="Não foi possível carregar a imagem" style={{ maxWidth: '100%', height: 'auto', width: '40%' }} />}
                                             </div>
                                         </div>
@@ -240,23 +256,6 @@ export default function Post() {
                         }
 
                         <div className='comentario-box' style={{marginTop: "20px"}}>   
-                            <div className="card p-3" style={{display: 'none'}} id='votosRelevantes'>
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div class="user d-flex flex-row align-items-center">
-                                        <span style={{marginLeft: "10px"}}>
-                                        <button className='btn btn-outline-warning' onClick={VerVotos}>Fechar</button>
-                                        { 
-                                            votosRelevantes.map((data) =>{
-                                                return(
-                                                    <small style={{marginLeft: "5px"}} class="font-weight-bold">{"{ " + data.colaborador.NOME + ' ID: ' + data.colaborador.IDCOLABORADOR + " }"}</small>
-                                                )
-                                            })
-                                        }
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            
                             <Comentario></Comentario>   
                         </div>
                     </div>
@@ -648,30 +647,32 @@ export default function Post() {
             let formattedDate = date.getDate().toString().padStart(2, '0') + '/' +
                     (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
                     date.getFullYear();
-            return(
-                <div class="card p-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="user d-flex flex-row align-items-center">
-                            <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"/>
-                            <span style={{marginLeft: "10px"}}>
-                                <small class="font-weight-bold text-primary">{data.colaborador.NOME}</small>
-                                <small style={{marginLeft: "5px"}} class="font-weight-bold">{data.TEXTO}</small>
-                            </span>
+            if(data.aprovacao.APROVADA == 1){
+                return(
+                    <div class="card p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="user d-flex flex-row align-items-center">
+                                <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"/>
+                                <span style={{marginLeft: "10px"}}>
+                                    <small class="font-weight-bold text-primary">{data.colaborador.NOME}</small>
+                                    <small style={{marginLeft: "5px"}} class="font-weight-bold">{data.TEXTO}</small>
+                                </span>
+                            </div>
+                            <div>
+                                <small>Avaliação: {data.AVALIACAO}</small>
+                                <small>&nbsp;&nbsp;&nbsp;&nbsp;</small>
+                                <small>{formattedDate}</small>
+                            </div>
+                            
                         </div>
-                        <div>
-                            <small>Avaliação: {data.AVALIACAO}</small>
-                            <small>&nbsp;&nbsp;&nbsp;&nbsp;</small>
-                            <small>{formattedDate}</small>
+                        <div class="action d-flex justify-content-between mt-2 align-items-center">
+                            <div class="reply px-4">
+                                <button className='btn btn-outline' onClick={() => apagarComentario(data)}>Apagar</button>
+                            </div>
                         </div>
-                        
                     </div>
-                    <div class="action d-flex justify-content-between mt-2 align-items-center">
-                        <div class="reply px-4">
-                            <button className='btn btn-outline' onClick={() => apagarComentario(data)}>Apagar</button>
-                        </div>
-                    </div>
-                </div>
-            )
+                )
+            }
         })
     }
 

@@ -4,6 +4,7 @@
     padding-top: 1.5vh;
     padding-bottom: 1.5vh;
 }
+    
 
 .navbar-text{
     font-family: sans-serif;
@@ -209,10 +210,18 @@ footer{
 .filtro-box{
     border: 3px solid #DEE2E6;
     border-radius: 20px;
-    height: 80vh;
+    height: 34vh;
     overflow-y:scroll;
     overflow-x:hidden;
 }
+
+.calendario-box{
+    border: 3px solid #DEE2E6;
+    border-radius: 20px;
+    height: 46vh;
+    overflow-y:scroll;
+    overflow-x:hidden;
+} 
 
 .filtro-text{
     display: flex;
