@@ -180,7 +180,7 @@ export default function Main(){
 
     function Filtro(){
             return (
-                <div className='d-md-none d-sm-none d-lg-block d-md-block d-none d-sm-block filtro-box'>
+                <div className='filtro-box'>
                     <div className='col-lg-1 filtro-text filtro-title'>
                         &nbsp;
                     </div>
