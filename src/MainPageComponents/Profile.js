@@ -56,19 +56,19 @@ export default function Profile(){
 
         return (
             <div className='container-fluid profile-box'>
-                <div className='col-lg-12 profile-info'>
-                    <div className='col-lg-9 col-md-9 col-sm-9 col-xs-9 profile-info-text'>
+                <div className='col-12 profile-info'>
+                    <div className='col-9 profile-info-text'>
                         <div>
                             <h3>Administrador</h3>
                             {Utilizador && <span>{Utilizador.NOME}</span>}
                             {Cidade && <p>{Cidade.NOME}</p> }
                         </div>
                     </div>
-                    <div className='col-lg-3 col-md-3 col-sm-3 col-xs-3 profile-info-image'>
+                    <div className='col-3 profile-info-image'>
                         <img src='./imageminicial.png' className='img-fluid profile-image'></img>
                     </div>
                 </div>
-                <div className='col-lg-12 profile-buttons'>
+                <div className='col-12 profile-buttons'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-graph-up icon" viewBox="0 0 16 16" onClick={() => window.location = "#/backoffice"}>
                         <path fill-rule="evenodd" d="M0 0h1v15h15v1H0zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07"/>
                     </svg>

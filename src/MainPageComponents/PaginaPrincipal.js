@@ -180,7 +180,7 @@ export default function Main(){
 
     function Filtro(){
             return (
-                <div className='filtro-box'>
+                <div className='container-fluid filtro-box'>
                     <div className='col-lg-1 filtro-text filtro-title'>
                         &nbsp;
                     </div>
@@ -598,10 +598,10 @@ export default function Main(){
         return(
             <div className='container-fluid notifications-box'>
                 <div className='d-flex'>
-                    <div className='col-6 d-flex' style={{justifyContent: "center", maxHeight: "3vh", alignItems: "center", marginTop: "10px"}}>
+                    <div className='col-6 d-flex notficiation-button-change' >
                         <button className='btn btn-outline-primary' id="btnpubs" onClick={showPubs}>Publicações por aprovar</button>
                     </div>
-                    <div className='col-6 d-flex' style={{justifyContent: "center", maxHeight: "3vh", alignItems: "center", marginTop: "10px"}}>
+                    <div className='col-6 d-flex notficiation-button-change'>
                         <button className='btn btn-outline-primary' id="btncoms" onClick={showComs}>Comentários por aprovar</button>
                     </div>
                 </div>
@@ -631,7 +631,7 @@ export default function Main(){
     }
 
     return(
-        <div className='d-flex'>
+        <div className='d-flex container-fluid'>
             <div>
                 <Filtro></Filtro>
                 <CalendarioBox></CalendarioBox>

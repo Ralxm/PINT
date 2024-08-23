@@ -320,11 +320,17 @@ footer{
 }
 
 .profile-buttons{
-    margin-top: 40px;
+    margin-top: 20px;
     display: flex;
     justify-content: right;
     align-items: end;
     margin-bottom: 5px;
+}
+
+@media (max-width: 1400px) {
+    .profile-buttons {
+        margin-top: 10px !important; /* Force the margin-top change for mobile */
+    }
 }
 
 .icon{
@@ -335,7 +341,7 @@ footer{
 .notifications-box{
     margin-top: 2px;
     border: 2px solid #DEE2E6;
-    height: 61vh;
+    height: 63vh;
     border-radius: 20px;
     overflow-y:scroll;
     overflow-x:hidden;
@@ -345,6 +351,18 @@ footer{
     margin-top: 10px;
     border: 1px solid #DEE2E6;
     border-radius: 20px;
+}
+
+.notficiation-button-change{
+    justify-content: "center";
+    align-items: center;
+    margin-top: 10px;
+}
+
+@media (max-width: 1400px) {
+    .profile-buttons {
+        margin-left: 5px !important;
+    }
 }
 
 .notification-title{
@@ -610,4 +628,52 @@ footer{
 
 .share-social-media{
     margin-left: 20px
+}
+
+@media (max-width: 1024px) {
+    .container-fluid {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .profile-box, .posts-box, .calendario-box, .notification-box, .filtro-box {
+        width: 100%;
+    }
+
+    .profile-box {
+        order: 1;
+        height: 17vh;
+    }
+
+    .posts-box {
+        order: 2;
+        width: 100%; /* Ensure full width */
+        height: 80vh;
+    }
+
+    .calendario-box {
+        order: 3;
+        height: 15vh; /* Adjust as needed */
+    }
+
+    .filtro-box {
+        order: 4;
+        height: 15vh; /* Adjust as needed */
+    }
+
+    .notification-box {
+        order: 5;
+        height: 63vh;
+    }
+}
+
+@media (max-width: 1024px) {
+    .posts-box {
+        width: 100% !important; /* Ensure it takes the full width */
+        /* Ensure the box is displayed as a block element */
+        display: block !important; 
+        order: 2;
+        height: 80vh; /* Adjust height as needed */
+    }
 }
