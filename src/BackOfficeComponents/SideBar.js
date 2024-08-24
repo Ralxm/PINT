@@ -10,6 +10,8 @@ export default function SideBar(){
     } else {
         stolang = JSON.parse(stolang);
     }
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
     return(
         <div className='side-bar col-2'>
             <div className='col-lg-12 backoffice-option' onClick={() => window.location= "#/backoffice/estatistica"}>
