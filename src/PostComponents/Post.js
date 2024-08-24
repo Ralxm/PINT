@@ -163,8 +163,8 @@ export default function Post() {
         if(Publicacao[0]){
             let base64Image;
             if(Publicacao[0].IMAGEM){
-                const base64 = Buffer.from(Publicacao[0].IMAGEM.data, "binary" ).toString("base64");
-                base64Image = 'data:image/jpeg;base64,' + base64;
+                //const base64 = Buffer.from(Publicacao[0].IMAGEM.data, "binary" ).toString("base64");
+                base64Image = 'data:image/jpeg;base64,' + Publicacao[0].IMAGEM;
             }
             
 

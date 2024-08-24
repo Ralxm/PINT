@@ -799,8 +799,8 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
             }
             let base64Image;
             if(data.IMAGEM){
-                const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
-                base64Image = 'data:image/jpeg;base64,' + base64;
+                //const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
+                base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
             }
                 return(
                     <div className='col-12 showTable'>
@@ -817,7 +817,7 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
                             <a>Título: {data.TITULO}</a>
                             <a>Texto: {data.TEXTO}</a>
                             <a>Rating: {data.RATING}</a>
-                            { data.IMAGEM && <img src={base64Image} alt={'logo192.png'} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
+                            {data.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
                         </div>
                         <div className='showTableButtons'>
                             <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>

@@ -364,8 +364,8 @@ export default function Main(){
                         if(evento.IDEVENTO == 1 || espaco.IDESPACO == 1){ //RETURN DE UM ESPAÇO POIS O EVENTO É O DEFAULT
                             let base64Image;
                             if(data.IMAGEM){
-                                const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
-                                base64Image = 'data:image/jpeg;base64,' + base64;
+                                //const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
+                                base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
                             }
                             return(
                                 <div className='card mb-3 post' style={{cursor: 'pointer'}} onClick={() => window.location = "#/post/" + data.IDPUBLICACAO}>
