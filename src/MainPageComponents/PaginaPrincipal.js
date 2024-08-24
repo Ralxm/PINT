@@ -611,7 +611,7 @@ export default function Main(){
             <div className='container-fluid notifications-box'>
                 <div className='d-flex'>
                     <div className='col-6 d-flex notficiation-button-change' >
-                        <button className='btn btn-outline-primary' id="btnpubs" onClick={showPubs}>{data.texto5main}</button>
+                        <button className='btn btn-success' id="btnpubs" onClick={showPubs}>{data.texto5main}</button>
                     </div>
                     <div className='col-6 d-flex notficiation-button-change'>
                         <button className='btn btn-outline-primary' id="btncoms" onClick={showComs}>{data.texto6main}</button>
@@ -631,15 +631,19 @@ export default function Main(){
     function showPubs(){
         document.getElementById("pubs").style.display = "block";
         document.getElementById("coms").style.display = "none";
-        document.querySelector("#btnpubs").classList.add('btn-outline-success');
-        document.querySelector("#btncoms").classList.remove('btn-outline-success');
+        document.querySelector("#btnpubs").classList.add('btn-success');
+        document.querySelector("#btnpubs").classList.remove('btn-outline-primary');
+        document.querySelector("#btncoms").classList.remove('btn-success');
+        document.querySelector("#btncoms").classList.add('btn-outline-primary');
     }
 
     function showComs(){
         document.getElementById("pubs").style.display = "none";
         document.getElementById("coms").style.display = "block";
-        document.querySelector("#btnpubs").classList.remove('btn-outline-success');
-        document.querySelector("#btncoms").classList.add('btn-outline-success');
+        document.querySelector("#btnpubs").classList.remove('btn-success');
+        document.querySelector("#btnpubs").classList.add('btn-outline-primary');
+        document.querySelector("#btncoms").classList.remove('btn-outline-primary');
+        document.querySelector("#btncoms").classList.add('btn-success');
     }
 
     return(
