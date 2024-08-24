@@ -12,9 +12,9 @@ export default function Main(){
     let stolang = localStorage.getItem("lang");
     if (!stolang) {
         stolang = "pt";
-        localStorage.setItem("lang", JSON.stringify(stolang)); // Store it as a string in localStorage
+        localStorage.setItem("lang", JSON.stringify(stolang));
     } else {
-        stolang = JSON.parse(stolang); // Parse the existing language value from localStorage
+        stolang = JSON.parse(stolang);
     }
     
     let data = JSON.parse(JSON.stringify(lang));
