@@ -6,8 +6,16 @@ import Profile from './Profile'
 import {Buffer} from 'buffer'
 import authService from '../views/auth-service';
 import "rsuite/dist/rsuite-no-reset.min.css"
+import * as lang from '../Universal/lang.json';
 
 export default function Main(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
+
     const urlCategoria = "https://pint-backend-8vxk.onrender.com/categoria/";
     const urlSubCategoria = "https://pint-backend-8vxk.onrender.com/subcategoria/";
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
@@ -185,10 +193,10 @@ export default function Main(){
                         &nbsp;
                     </div>
                     <div className='col-lg-8 filtro-text filtro-title'>
-                        <span>Filtros</span>
+                        <span>{data.texto1main}</span>
                     </div>
                     <div className='col-lg-2 filtro-text filtro-submit'>
-                        <input type='submit' value='Filtrar' onClick={HandleFiltros}></input>
+                        <input type='submit' value={data.texto2main} onClick={HandleFiltros}></input>
                     </div>
                     <div className='col-lg-1 filtro-text filtro-title'>
                         &nbsp;
@@ -599,10 +607,10 @@ export default function Main(){
             <div className='container-fluid notifications-box'>
                 <div className='d-flex'>
                     <div className='col-6 d-flex notficiation-button-change' >
-                        <button className='btn btn-outline-primary' id="btnpubs" onClick={showPubs}>Publicações por aprovar</button>
+                        <button className='btn btn-outline-primary' id="btnpubs" onClick={showPubs}>{data.texto5main}</button>
                     </div>
                     <div className='col-6 d-flex notficiation-button-change'>
-                        <button className='btn btn-outline-primary' id="btncoms" onClick={showComs}>Comentários por aprovar</button>
+                        <button className='btn btn-outline-primary' id="btncoms" onClick={showComs}>{data.texto6main}</button>
                     </div>
                 </div>
                 

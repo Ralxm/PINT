@@ -357,6 +357,7 @@ footer{
     justify-content: "center";
     align-items: center;
     margin-top: 10px;
+    margin-left: 4px;
 }
 
 @media (max-width: 1400px) {
@@ -429,9 +430,6 @@ footer{
 
 .post-text-info{
     margin-top: 20px;
-}
-
-.imagem-post-info{
 }
 
 .side-bar{

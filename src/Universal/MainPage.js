@@ -9,6 +9,7 @@ import authService from "../views/auth-service";
 import { useNavigate } from "react-router-dom";
 import Main from '../MainPageComponents/PaginaPrincipal'
 import Post from '../PostComponents/Post'
+import ProfilePage from '../ProfilePageComponents/ProfilePage'
 
 
 export default function MainPage() {
@@ -23,6 +24,8 @@ export default function MainPage() {
                         <Route path='post/:id' element={<Publicacao></Publicacao>}>
                         </Route>
                         <Route path='backoffice/*' element={<BackOffice></BackOffice>}>
+                        </Route>
+                        <Route path='profile/:id' element={<ProfilePage></ProfilePage>}>
                         </Route>
                     </Routes>
                 <Footer></Footer>

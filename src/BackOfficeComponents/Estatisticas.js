@@ -3,8 +3,16 @@ import '../Universal/index.css';
 import axios from 'axios';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import authHeader from '../views/auth-header';
+import * as lang from '../Universal/lang.json';
 
 export default function Estatistica(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
+
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
     const urlCidade = "https://pint-backend-8vxk.onrender.com/cidade/";
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
@@ -123,13 +131,13 @@ export default function Estatistica(){
         <div className='col-10' style={{display: 'flex'}}>
             <div className='col-5 side-bar' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option'>
-                    Publicações Criadas nos Últimos 30 dias
+                    {data.texto9backoffice}
                 </div>
                 <div className='col-lg-12 showTable-list' style={{overflowY: 'scroll', maxHeight: '40vh'}}>
                     <PublicacoesCriadasUltimos30Dias></PublicacoesCriadasUltimos30Dias>
                 </div>
                 <div className='col-lg-12 backoffice-option'>
-                    Colaboradores Inativos
+                    {data.texto10backoffice}
                 </div>
                 <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '30vh'}}>
                     <ColaboradoresInativos></ColaboradoresInativos>
@@ -137,13 +145,13 @@ export default function Estatistica(){
             </div>
             <div className='col-5 side-bar' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option' style={{overflowY: 'scroll', maxHeight: '40vh'}}>
-                    Registos nos últimos 30 dias
+                    {data.texto11backoffice}
                 </div>
                 <div className='col-lg-12 showTable-list'>
                     <Registos30Dias></Registos30Dias>
                 </div>
                 <div className='col-lg-12 backoffice-option' style={{overflowY: 'scroll', maxHeight: '30vh'}}>
-                    Número de publicações por colaborador
+                    {data.texto12backoffice}
                 </div>
                 <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '30vh'}}>
                     <PostsPorColaborador></PostsPorColaborador>

@@ -248,6 +248,11 @@ export default function Cidade(){
         let id;
         let cargo;
         const urlCriar = 'https://pint-backend-8vxk.onrender.com/colaborador/create'
+        NomeCargo.map((data) =>{
+            if(data.NOME == CARGO){
+                cargo = data.IDCARGO;
+            }
+        })
         const datapost = {
             EMAIL : EMAIL,
             PASSWORDCOLABORADOR : PASSWORDCOLABORADOR,
@@ -257,6 +262,8 @@ export default function Cidade(){
             DATANASCIMENTO : DATANASCIMENTO,
             DATAREGISTO : DATAREGISTO,
             ULTIMOLOGIN : ULTIMOLOGIN,
+            TIPOCONTA: 1,
+            CARGO: cargo
         }
         await axios.post(urlCriar, datapost)
         .then(res => {
@@ -272,7 +279,7 @@ export default function Cidade(){
             console.log('Erro: asd' + error);
         })
 
-        const urlCriarColaboradorCargo = 'https://pint-backend-8vxk.onrender.com/colaborador_cargo/create'
+        /*const urlCriarColaboradorCargo = 'https://pint-backend-8vxk.onrender.com/colaborador_cargo/create'
         NomeCargo.map((data) =>{
             if(data.NOME == CARGO){
                 cargo = data.IDCARGO;
@@ -293,7 +300,7 @@ export default function Cidade(){
         })
         .catch(error =>{
             alert('Erro: ' + error);
-        })
+        })*/
     }
 
     function editarColuna(){
@@ -315,7 +322,8 @@ export default function Cidade(){
             CIDADE: CIDADE,
             DATANASCIMENTO: DATANASCIMENTO,
             DATAREGISTO: DATAREGISTO,
-            ULTIMOLOGIN:ULTIMOLOGIN,
+            ULTIMOLOGIN: ULTIMOLOGIN,
+            TIPOCONTA: 1
         }
         axios.put(urlEditar, datapost, authHeader())
         .then(res =>{

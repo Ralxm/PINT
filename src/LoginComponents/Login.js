@@ -6,6 +6,9 @@ import authHeader from '../views/auth-header';
 import authService from '../views/auth-service';
 
 export default function LoginInput(){
+        if(!JSON.parse(localStorage.getItem("lang"))){
+            localStorage.setItem("lang", "pt");
+        }
         const url = "https://pint-backend-8vxk.onrender.com/";
         const [Colaboradores, setColaboradores] = useState([]);
 
