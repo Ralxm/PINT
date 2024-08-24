@@ -3,12 +3,13 @@ import '../Universal/index.css'
 import * as lang from '../Universal/lang.json';
 
 export default function SideBar(){
-    if(!JSON.parse(localStorage.getItem("lang"))){
-        localStorage.setItem("lang", "pt");
+    let stolang = localStorage.getItem("lang");
+    if (!stolang) {
+        stolang = "pt";
+        localStorage.setItem("lang", JSON.stringify(stolang));
+    } else {
+        stolang = JSON.parse(stolang);
     }
-    let stolang = JSON.parse(localStorage.getItem("lang"));
-    let data = JSON.parse(JSON.stringify(lang));
-    data = data[stolang];
     return(
         <div className='side-bar col-2'>
             <div className='col-lg-12 backoffice-option' onClick={() => window.location= "#/backoffice/estatistica"}>
