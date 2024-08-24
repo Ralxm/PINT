@@ -9,10 +9,14 @@ import "rsuite/dist/rsuite-no-reset.min.css"
 import * as lang from '../Universal/lang.json';
 
 export default function Main(){
-    if(!JSON.parse(localStorage.getItem("lang"))){
-        localStorage.setItem("lang", "pt");
+    let stolang = localStorage.getItem("lang");
+    if (!stolang) {
+        stolang = "pt";
+        localStorage.setItem("lang", JSON.stringify(stolang)); // Store it as a string in localStorage
+    } else {
+        stolang = JSON.parse(stolang); // Parse the existing language value from localStorage
     }
-    let stolang = JSON.parse(localStorage.getItem("lang"));
+    
     let data = JSON.parse(JSON.stringify(lang));
     data = data[stolang];
 
