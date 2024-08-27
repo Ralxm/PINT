@@ -27,9 +27,6 @@ export default function BackOffice(){
         } else if (location.pathname === '/backoffice') {
             navigate('estatistica');
         }
-        if(document.readyState === "complete"){
-            changeTheme(1)
-        }
     }, [navigate]);
 
     return(
