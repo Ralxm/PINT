@@ -29,8 +29,36 @@ export default function Profile(){
     const [Utilizador, setUtilizador] = useState("")
     const [Cidade, setCidade] = useState("")
 
+    function changeTheme(props){
+        let theme = localStorage.getItem("theme");
+        if(!theme){
+            let whatTheme = "dark";
+            localStorage.setItem("theme", JSON.stringify(whatTheme));
+            document.documentElement.classList.toggle("darkmode");
+        }
+        else{
+            theme = JSON.parse(theme);
+            if(theme == "dark"){
+                if(props == 2){
+                    localStorage.removeItem("theme")
+                }
+                document.documentElement.classList.toggle("darkmode");
+            }
+        }
+    }
+
     useEffect(() => {
         loadPerfil();
+        const handleLoad = () => {
+            changeTheme(1);
+        };
+
+        window.addEventListener('load', handleLoad);
+
+        // Cleanup to remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('load', handleLoad);
+        };
     }, [])
 
     useEffect(() => {

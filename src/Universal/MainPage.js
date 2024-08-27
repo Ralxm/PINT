@@ -13,9 +13,19 @@ import ProfilePage from '../ProfilePageComponents/ProfilePage'
 
 
 export default function MainPage() {
-    if(document.readyState === "complete"){
-        changeTheme(1)
-    }
+    useEffect(() => {
+        // This will execute when the entire page, including all dependent resources, has loaded
+        const handleLoad = () => {
+            changeTheme(1);
+        };
+
+        window.addEventListener('load', handleLoad);
+
+        // Cleanup to remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('load', handleLoad);
+        };
+    }, []);
 
     function changeTheme(props){
         let theme = localStorage.getItem("theme");
@@ -34,7 +44,7 @@ export default function MainPage() {
             }
         }
     }
-    
+
         return (
             <div>
                 <NavigationBar></NavigationBar> 
