@@ -16,7 +16,7 @@ import Estatistica from '../BackOfficeComponents/Estatisticas';
 
 export default function BackOffice(){
     window.addEventListener('load', changeTheme(1));
-    
+
     const navigate = useNavigate();
     const location = useLocation();
     const [user, setUser] = useState(null);
@@ -53,6 +53,9 @@ export default function BackOffice(){
             navigate('/');
         } else if (location.pathname === '/backoffice') {
             navigate('estatistica');
+        }
+        if(document.readyState === "complete"){
+            changeTheme(1)
         }
     }, [navigate]);
 

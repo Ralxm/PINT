@@ -8,7 +8,6 @@ import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
 export default function Profile(){
-    window.addEventListener('load', changeTheme(1));
     if(!JSON.parse(localStorage.getItem("lang"))){
         localStorage.setItem("lang", "pt");
     }
@@ -38,7 +37,9 @@ export default function Profile(){
     const [Cidade, setCidade] = useState("")
 
     useEffect(() => {
-        
+        if(document.readyState === "complete"){
+            changeTheme(1)
+        }
         loadPerfil();
     }, [])
 

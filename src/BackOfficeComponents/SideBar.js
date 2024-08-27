@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../Universal/index.css'
 import * as lang from '../Universal/lang.json';
 
 export default function SideBar(){
+    useEffect(()=>{
+        if(document.readyState === "complete"){
+            changeTheme(1)
+        }
+    }, [])
     window.addEventListener('load', changeTheme(1));
     let theme = localStorage.getItem("theme");
     if(theme){
