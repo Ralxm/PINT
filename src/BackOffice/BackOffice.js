@@ -1,13 +1,3 @@
-(function() {
-    let theme = localStorage.getItem("theme");
-    if (theme) {
-      theme = JSON.parse(theme);
-      if (theme === "dark") {
-        document.documentElement.classList.add("darkmode");
-      }
-    }
-  })();
-
 import React, {useEffect, useState} from 'react'
 import { Route, Routes } from "react-router-dom";
 import '../Universal/index.css';
@@ -23,6 +13,16 @@ import Categoria from '../BackOfficeComponents/Categoria'
 import Subcategoria from '../BackOfficeComponents/Subcategoria';
 import Post from '../BackOfficeComponents/Post'
 import Estatistica from '../BackOfficeComponents/Estatisticas';
+
+(function() {
+    let theme = localStorage.getItem("theme");
+    if (theme) {
+      theme = JSON.parse(theme);
+      if (theme === "dark") {
+        document.documentElement.classList.add("darkmode");
+      }
+    }
+  })();
 
 export default function BackOffice(){
     const navigate = useNavigate();

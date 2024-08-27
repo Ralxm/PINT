@@ -1,13 +1,3 @@
-(function() {
-    let theme = localStorage.getItem("theme");
-    if (theme) {
-      theme = JSON.parse(theme);
-      if (theme === "dark") {
-        document.documentElement.classList.add("darkmode");
-      }
-    }
-  })();
-
 import React, {useState, useEffect} from 'react';
 import { Calendar, Badge, Tooltip, Whisper } from 'rsuite';
 import '../Universal/index.css'
@@ -17,6 +7,16 @@ import {Buffer} from 'buffer'
 import authService from '../views/auth-service';
 import "rsuite/dist/rsuite-no-reset.min.css"
 import * as lang from '../Universal/lang.json';
+
+(function() {
+    let theme = localStorage.getItem("theme");
+    if (theme) {
+      theme = JSON.parse(theme);
+      if (theme === "dark") {
+        document.documentElement.classList.add("darkmode");
+      }
+    }
+  })();
 
 export default function Main(){
     let stolang = localStorage.getItem("lang");

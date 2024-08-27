@@ -1,3 +1,11 @@
+import React, {useState, useEffect} from 'react';
+import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton} from 'react-share';
+import { useParams } from 'react-router-dom';
+import { Buffer } from 'buffer';
+import '../Universal/index.css';
+import axios from 'axios';
+import Profile from '../MainPageComponents/Profile'
+       
 (function() {
     let theme = localStorage.getItem("theme");
     if (theme) {
@@ -7,15 +15,7 @@
       }
     }
   })();
-
-import React, {useState, useEffect} from 'react';
-import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton} from 'react-share';
-import { useParams } from 'react-router-dom';
-import { Buffer } from 'buffer';
-import '../Universal/index.css';
-import axios from 'axios';
-import Profile from '../MainPageComponents/Profile'
-       
+  
 export default function Post() {
     const { id } = useParams();
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";

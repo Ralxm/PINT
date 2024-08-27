@@ -1,3 +1,12 @@
+import React, { useEffect, useState } from 'react'
+import '../Universal/index.css'
+import { useNavigate } from 'react-router-dom';
+import authService from '../views/auth-service'
+import axios from 'axios'
+import * as lang from '../Universal/lang.json';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+
 (function() {
     let theme = localStorage.getItem("theme");
     if (theme) {
@@ -7,15 +16,6 @@
       }
     }
   })();
-
-import React, { useEffect, useState } from 'react'
-import '../Universal/index.css'
-import { useNavigate } from 'react-router-dom';
-import authService from '../views/auth-service'
-import axios from 'axios'
-import * as lang from '../Universal/lang.json';
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
 
 export default function Profile(){
     if(!JSON.parse(localStorage.getItem("lang"))){

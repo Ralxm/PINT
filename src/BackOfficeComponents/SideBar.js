@@ -1,3 +1,7 @@
+import React, { useEffect } from 'react'
+import '../Universal/index.css'
+import * as lang from '../Universal/lang.json';
+
 (function() {
     let theme = localStorage.getItem("theme");
     if (theme) {
@@ -7,10 +11,6 @@
       }
     }
   })();
-
-import React, { useEffect } from 'react'
-import '../Universal/index.css'
-import * as lang from '../Universal/lang.json';
 
 export default function SideBar(){
 
