@@ -1,50 +1,32 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import '../Universal/index.css'
 import * as lang from '../Universal/lang.json';
 
-(function() {
-    let theme = localStorage.getItem("theme");
-    if (theme) {
-      theme = JSON.parse(theme);
-      if (theme === "dark") {
-        document.documentElement.classList.add("darkmode");
-      }
-    }
-  })();
-
 export default function SideBar(){
+    let theme = localStorage.getItem("theme");
+    if(theme){
+        if(JSON.parse(theme) == "dark"){
+            changeTheme(1);
+        }
+    }
 
-    useEffect(()=>{
+    function changeTheme(props){
         let theme = localStorage.getItem("theme");
-        if(theme){
-            if(JSON.parse(theme) == "dark"){
-                changeTheme(1);
+        if(!theme){
+            let whatTheme = "dark";
+            localStorage.setItem("theme", JSON.stringify(whatTheme));
+            document.documentElement.classList.toggle("darkmode");
+        }
+        else{
+            theme = JSON.parse(theme);
+            if(theme == "dark"){
+                if(props == 2){
+                    localStorage.removeItem("theme")
+                }
+                document.documentElement.classList.toggle("darkmode");
             }
         }
-    }, [])
-
-    function changeTheme(props) {
-        let theme = localStorage.getItem("theme");
-        if (!theme) {
-          // If no theme is set, default to dark mode
-          let whatTheme = "dark";
-          localStorage.setItem("theme", JSON.stringify(whatTheme));
-          document.documentElement.classList.add("darkmode");
-        } else {
-          theme = JSON.parse(theme);
-          if (theme === "dark") {
-            if (props === 2) {
-              localStorage.removeItem("theme");
-            } else {
-              localStorage.setItem("theme", JSON.stringify("light"));
-            }
-            document.documentElement.classList.remove("darkmode");
-          } else {
-            localStorage.setItem("theme", JSON.stringify("dark"));
-            document.documentElement.classList.add("darkmode");
-          }
-        }
-      }
+    }
 
 
     let stolang = localStorage.getItem("lang");

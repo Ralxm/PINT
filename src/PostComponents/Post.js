@@ -6,16 +6,6 @@ import '../Universal/index.css';
 import axios from 'axios';
 import Profile from '../MainPageComponents/Profile'
        
-(function() {
-    let theme = localStorage.getItem("theme");
-    if (theme) {
-      theme = JSON.parse(theme);
-      if (theme === "dark") {
-        document.documentElement.classList.add("darkmode");
-      }
-    }
-  })();
-  
 export default function Post() {
     const { id } = useParams();
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
@@ -620,7 +610,7 @@ export default function Post() {
                                 </div>
                             </div>
                             <label for="message">Mensagem</label>
-                            <textarea name="msg" id="msg" cols="30" rows="5" className="form-control comentario-mensagem" style={{resize: "none"}}></textarea>
+                            <textarea name="msg" id="msg" cols="30" rows="5" className="form-control" style={{resize: "none"}}></textarea>
                         </div>
                         <div className="form-group d-flex" style={{justifyContent: "center", marginTop: "20px"}}>
                             <button type="button" id="post" className="btn btn-outline-info" onClick={Comentar}>Post Comment</button>

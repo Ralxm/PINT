@@ -14,43 +14,35 @@ import Subcategoria from '../BackOfficeComponents/Subcategoria';
 import Post from '../BackOfficeComponents/Post'
 import Estatistica from '../BackOfficeComponents/Estatisticas';
 
-(function() {
-    let theme = localStorage.getItem("theme");
-    if (theme) {
-      theme = JSON.parse(theme);
-      if (theme === "dark") {
-        document.documentElement.classList.add("darkmode");
-      }
-    }
-  })();
-
 export default function BackOffice(){
     const navigate = useNavigate();
     const location = useLocation();
     const [user, setUser] = useState(null);
 
-    function changeTheme(props) {
-        let theme = localStorage.getItem("theme");
-        if (!theme) {
-          // If no theme is set, default to dark mode
-          let whatTheme = "dark";
-          localStorage.setItem("theme", JSON.stringify(whatTheme));
-          document.documentElement.classList.add("darkmode");
-        } else {
-          theme = JSON.parse(theme);
-          if (theme === "dark") {
-            if (props === 2) {
-              localStorage.removeItem("theme");
-            } else {
-              localStorage.setItem("theme", JSON.stringify("light"));
-            }
-            document.documentElement.classList.remove("darkmode");
-          } else {
-            localStorage.setItem("theme", JSON.stringify("dark"));
-            document.documentElement.classList.add("darkmode");
-          }
+    let theme = localStorage.getItem("theme");
+    if(theme){
+        if(JSON.parse(theme) == "dark"){
+            changeTheme(1);
         }
-      }
+    }
+
+    function changeTheme(props){
+        let theme = localStorage.getItem("theme");
+        if(!theme){
+            let whatTheme = "dark";
+            localStorage.setItem("theme", JSON.stringify(whatTheme));
+            document.documentElement.classList.toggle("darkmode");
+        }
+        else{
+            theme = JSON.parse(theme);
+            if(theme == "dark"){
+                if(props == 2){
+                    localStorage.removeItem("theme")
+                }
+                document.documentElement.classList.toggle("darkmode");
+            }
+        }
+    }
 
     useEffect(()=>{
         const currentUser = authService.getCurrentUser();
@@ -59,12 +51,6 @@ export default function BackOffice(){
             navigate('/');
         } else if (location.pathname === '/backoffice') {
             navigate('estatistica');
-        }
-        let theme = localStorage.getItem("theme");
-        if(theme){
-            if(JSON.parse(theme) == "dark"){
-                changeTheme(1);
-            }
         }
     }, [navigate]);
 
