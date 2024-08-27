@@ -71,8 +71,7 @@ export default function NavigationBar(){
     }
 
     return(
-        
-        <div className='col-12 title-row d-flex' style={{alignItems: "center"}}>
+        <div className='col-12 title-row d-flex nav-bar' style={{alignItems: "center"}}>
             <a className='col-11 softshares-tile' onClick={() => window.location = "#/mainpage"} style={{cursor: "pointer"}}>
                 Softshares
             </a>

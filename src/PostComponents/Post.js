@@ -27,7 +27,8 @@ export default function Post() {
 
     const [votosRelevantes, setVotosRelevantes] = useState([]);
 
-    const [QuestionarioString, setQuestionarioString] = useState("")
+    const [QuestionarioString, setQuestionarioString] = useState("");
+    const [Rating, setRating] = useState("")
 
     useEffect(()=>{
         loadPost();
@@ -156,10 +157,27 @@ export default function Post() {
         })
     }
 
+    async function updateRating(rating){
+        let urlRating = urlPost + 'updateRating/' + id
+        const data = {
+            RATING: rating
+        }
+        try {
+            const res = await axios.put(urlRating, data);
+            if (res.data.success === true) {          
+            } else {
+                alert("Erro Web Service");
+            }
+        } catch (err) {
+            alert("Erro a ir buscar o post");
+            console.error(err);
+        }
+    }
+
     function Page(){
         useEffect(()=>{
 
-        }, [Comentarios])
+        }, [Comentarios, Rating])
         if(Publicacao[0]){
             let base64Image;
             if(Publicacao[0].IMAGEM){
@@ -176,7 +194,7 @@ export default function Post() {
             let rating = 0;
             let count = 0;
             Comentarios.map((data) =>{
-                if(data.IDPOST == Publicacao[0].IDPUBLICACAO){
+                if(data.IDPOST == Publicacao[0].IDPUBLICACAO && data.aprovacao.APROVADA == 1){
                     count++;
                     rating += data.AVALIACAO;
                 }
@@ -188,6 +206,10 @@ export default function Post() {
             }
             else{
                 ratingFinal = (rating / count).toFixed(1);
+            }
+
+            if(ratingFinal >= 0 && ratingFinal <= 5){
+                updateRating(ratingFinal)
             }
 
             return(
@@ -298,7 +320,7 @@ export default function Post() {
     }
 
     return(
-        <div className='d-flex'>
+        <div className='d-flex publicacao'>
             <Page></Page>
             <div className="col-3 pe-0 g-0">
                 <Profile></Profile>
@@ -493,12 +515,24 @@ export default function Post() {
         if (dd < 10) dd = '0' + dd;
         if (mm < 10) mm = '0' + mm;
         const today = `${yyyy}-${mm}-${dd}`;
+        
+        let datapostAprovacao;
+        if(mensagem == ""){
+            datapostAprovacao = {
+                IDCOLABORADOR: 0,
+                DATAAPROVACAO: today,
+                APROVADA: 1,
+            };
+        }
+        else{
+            datapostAprovacao = {
+                IDCOLABORADOR: 0,
+                DATAAPROVACAO: today,
+                APROVADA: 0,
+            };
+        }
     
-        const datapostAprovacao = {
-            IDCOLABORADOR: 0,
-            DATAAPROVACAO: today,
-            APROVADA: 0,
-        };
+        
     
         try {
             const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao);
@@ -525,7 +559,9 @@ export default function Post() {
                 alert(resComentario.data.message);
                 return;
             }
-            alert("O seu comentário foi criado com sucesso. Este será mostrado após aprovação por parte da administração")
+            if(mensagem != ""){
+                alert("O seu comentário foi criado com sucesso. Este será mostrado após aprovação por parte da administração")
+            }
         } catch (error) {
             console.error("An error occurred: ", error);
             alert("An error occurred while processing your request. Please try again.");
@@ -543,44 +579,38 @@ export default function Post() {
                                 <div className="container__items">
                                     <input type="radio" name="stars" id="st5"/>
                                     <label for="st5">
-                                    <div className="star-stroke">
-                                        <div className="star-fill"></div>
-                                    </div>
-                                    <div className="label-description" data-content="Excellent"></div>
+                                        <div className="star-stroke">
+                                            <div className="star-fill"></div>
+                                        </div>
                                     </label>
                                     <input type="radio" name="stars" id="st4"/>
                                     <label for="st4">
-                                    <div className="star-stroke">
-                                        <div className="star-fill"></div>
-                                    </div>
-                                    <div className="label-description" data-content="Good"></div>
+                                        <div className="star-stroke">
+                                            <div className="star-fill"></div>
+                                        </div>
                                     </label>
                                     <input type="radio" name="stars" id="st3"/>
                                     <label for="st3">
-                                    <div className="star-stroke">
-                                        <div className="star-fill"></div>
-                                    </div>
-                                    <div className="label-description" data-content="OK"></div>
+                                        <div className="star-stroke">
+                                            <div className="star-fill"></div>
+                                        </div>
                                     </label>
                                     <input type="radio" name="stars" id="st2"/>
                                     <label for="st2">
-                                    <div className="star-stroke">
-                                        <div className="star-fill"></div>
-                                    </div>
-                                    <div className="label-description" data-content="Bad"></div>
+                                        <div className="star-stroke">
+                                            <div className="star-fill"></div>
+                                        </div>
                                     </label>
                                     <input type="radio" name="stars" id="st1"/>
                                     <label for="st1">
-                                    <div className="star-stroke">
-                                        <div className="star-fill"></div>
-                                    </div>
-                                    
-                                    <div className="label-description" data-content="Terrible"></div>
+                                        <div className="star-stroke">
+                                            <div className="star-fill"></div>
+                                        </div>
                                     </label>
                                 </div>
                             </div>
                             <label for="message">Mensagem</label>
-                            <textarea name="msg" id="msg" cols="30" rows="5" className="form-control" style={{resize: "none"}}></textarea>
+                            <textarea name="msg" id="msg" cols="30" rows="5" className="form-control comentario-mensagem" style={{resize: "none"}}></textarea>
                         </div>
                         <div className="form-group d-flex" style={{justifyContent: "center", marginTop: "20px"}}>
                             <button type="button" id="post" className="btn btn-outline-info" onClick={Comentar}>Post Comment</button>
@@ -599,8 +629,11 @@ export default function Post() {
                     (date.getMonth() + 1).toString().padStart(2, '0') + '/' +
                     date.getFullYear();
             if(data.aprovacao.APROVADA == 1){
+                if(data.TEXTO == ""){
+                    return;
+                }
                 return(
-                    <div class="card p-3">
+                    <div class="card p-3 comentario-box-theme">
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="user d-flex flex-row align-items-center">
                                 <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"/>

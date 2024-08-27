@@ -5,7 +5,7 @@ import './index.css'
 class Footer extends React.Component {
     render() {
         return (
-            <footer>
+            <footer className='footer-bar'>
                 <div className='title-row'>
                     <div className='col-lg-12 softshares-footer'>
                         <div class='footer-separador'>

@@ -216,7 +216,7 @@ export default function Main(){
             return (
                 <div className='col-12 filtro-saude filtro pe-0'>
                     <input type='checkbox' id={'input-' + (index + 1)} onClick={() => toggle_all_checkboxes(data, Subcategoria)}></input>
-                    <button className='' id='dropdown-saude' onClick={() => toggle_filtro('filtro-' + (index + 1), 'arrow-' + (index + 1))}>
+                    <button className='filtro-button' id='dropdown-saude' onClick={() => toggle_filtro('filtro-' + (index + 1), 'arrow-' + (index + 1))}>
                         {data.NOME}
                         <a style={{ float: 'right' }} id={'arrow-' + (index + 1)}>&#9661;</a>
                     </button>
@@ -647,7 +647,7 @@ export default function Main(){
     }
 
     return(
-        <div className='d-flex container-fluid'>
+        <div className='d-flex container-fluid mainpage'>
             <div>
                 <Filtro></Filtro>
                 <CalendarioBox></CalendarioBox>
