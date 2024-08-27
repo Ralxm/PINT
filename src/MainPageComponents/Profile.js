@@ -15,13 +15,6 @@ export default function Profile(){
     let data = JSON.parse(JSON.stringify(lang));
     data = data[stolang];
 
-    let theme = localStorage.getItem("theme");
-    if(theme){
-        if(JSON.parse(theme) == "dark"){
-            changeTheme(1);
-        }
-    }
-
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
 
     const navigate = useNavigate();
@@ -37,7 +30,12 @@ export default function Profile(){
     const [Cidade, setCidade] = useState("")
 
     useEffect(() => {
-        
+        let theme = localStorage.getItem("theme");
+        if(theme){
+            if(JSON.parse(theme) == "dark"){
+                changeTheme(1);
+            }
+        }
         loadPerfil();
     }, [])
 
@@ -72,23 +70,28 @@ export default function Profile(){
         })
     }
 
-    function changeTheme(props){
+    function changeTheme(props) {
         let theme = localStorage.getItem("theme");
-        if(!theme){
-            let whatTheme = "dark";
-            localStorage.setItem("theme", JSON.stringify(whatTheme));
-            document.documentElement.classList.toggle("darkmode");
-        }
-        else{
-            theme = JSON.parse(theme);
-            if(theme == "dark"){
-                if(props == 2){
-                    localStorage.removeItem("theme")
-                }
-                document.documentElement.classList.toggle("darkmode");
+        if (!theme) {
+          // If no theme is set, default to dark mode
+          let whatTheme = "dark";
+          localStorage.setItem("theme", JSON.stringify(whatTheme));
+          document.documentElement.classList.add("darkmode");
+        } else {
+          theme = JSON.parse(theme);
+          if (theme === "dark") {
+            if (props === 2) {
+              localStorage.removeItem("theme");
+            } else {
+              localStorage.setItem("theme", JSON.stringify("light"));
             }
+            document.documentElement.classList.remove("darkmode");
+          } else {
+            localStorage.setItem("theme", JSON.stringify("dark"));
+            document.documentElement.classList.add("darkmode");
+          }
         }
-    }
+      }
 
     return (
         <div className='container-fluid profile-box'>
