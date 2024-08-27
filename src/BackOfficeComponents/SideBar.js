@@ -3,38 +3,6 @@ import '../Universal/index.css'
 import * as lang from '../Universal/lang.json';
 
 export default function SideBar(){
-    useEffect(()=>{
-        if(document.readyState === "complete"){
-            changeTheme(1)
-        }
-    }, [])
-    window.addEventListener('load', changeTheme(1));
-    let theme = localStorage.getItem("theme");
-    if(theme){
-        if(JSON.parse(theme) == "dark"){
-            changeTheme(1);
-        }
-    }
-
-    function changeTheme(props){
-        let theme = localStorage.getItem("theme");
-        if(!theme){
-            let whatTheme = "dark";
-            localStorage.setItem("theme", JSON.stringify(whatTheme));
-            document.documentElement.classList.toggle("darkmode");
-        }
-        else{
-            theme = JSON.parse(theme);
-            if(theme == "dark"){
-                if(props == 2){
-                    localStorage.removeItem("theme")
-                }
-                document.documentElement.classList.toggle("darkmode");
-            }
-        }
-    }
-
-
     let stolang = localStorage.getItem("lang");
     if (!stolang) {
         stolang = "pt";

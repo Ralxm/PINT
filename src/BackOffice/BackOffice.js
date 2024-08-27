@@ -15,36 +15,9 @@ import Post from '../BackOfficeComponents/Post'
 import Estatistica from '../BackOfficeComponents/Estatisticas';
 
 export default function BackOffice(){
-    window.addEventListener('load', changeTheme(1));
-
     const navigate = useNavigate();
     const location = useLocation();
     const [user, setUser] = useState(null);
-
-    let theme = localStorage.getItem("theme");
-    if(theme){
-        if(JSON.parse(theme) == "dark"){
-            changeTheme(1);
-        }
-    }
-
-    function changeTheme(props){
-        let theme = localStorage.getItem("theme");
-        if(!theme){
-            let whatTheme = "dark";
-            localStorage.setItem("theme", JSON.stringify(whatTheme));
-            document.documentElement.classList.toggle("darkmode");
-        }
-        else{
-            theme = JSON.parse(theme);
-            if(theme == "dark"){
-                if(props == 2){
-                    localStorage.removeItem("theme")
-                }
-                document.documentElement.classList.toggle("darkmode");
-            }
-        }
-    }
 
     useEffect(()=>{
         const currentUser = authService.getCurrentUser();
