@@ -15,13 +15,6 @@ export default function Profile(){
     let data = JSON.parse(JSON.stringify(lang));
     data = data[stolang];
 
-    let theme = localStorage.getItem("theme");
-    if(theme){
-        if(JSON.parse(theme) == "dark"){
-            changeTheme(1);
-        }
-    }
-
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
 
     const navigate = useNavigate();
@@ -37,9 +30,6 @@ export default function Profile(){
     const [Cidade, setCidade] = useState("")
 
     useEffect(() => {
-        if(document.readyState === "complete"){
-            changeTheme(1)
-        }
         loadPerfil();
     }, [])
 
