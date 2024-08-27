@@ -25,40 +25,46 @@ export default function Profile(){
             navigate('/');
         }
     }
+
+    function changeTema(props){
+        let theme = localStorage.getItem("theme");
+        const isDarkMode = document.documentElement.classList.contains("darkmode");
+        if(!theme && props == 1){
+            if(!isDarkMode){
+                localStorage.setItem("theme", JSON.stringify("light"));
+            }
+            else if(isDarkMode){
+                localStorage.setItem("theme", JSON.stringify("dark"));
+            }
+        }
+        theme = localStorage.getItem("theme");
+        if(theme){
+            theme = JSON.parse(theme);
+            if(props === 2){
+                if(theme == "light" && !isDarkMode){
+                    localStorage.setItem("theme", JSON.stringify("dark"));
+                }
+                else if(theme == "dark" && isDarkMode){
+                    localStorage.setItem("theme", JSON.stringify("light"));
+                }
+                document.documentElement.classList.toggle("darkmode");
+            }
+            else if(props == 1){
+                if(theme === "dark" && !isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                }
+                else if(theme == "light" && isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                }
+            }
+        }
+    }
         
     const [Utilizador, setUtilizador] = useState("")
     const [Cidade, setCidade] = useState("")
 
-    function changeTheme(props){
-        let theme = localStorage.getItem("theme");
-        if(!theme){
-            let whatTheme = "dark";
-            localStorage.setItem("theme", JSON.stringify(whatTheme));
-            document.documentElement.classList.toggle("darkmode");
-        }
-        else{
-            theme = JSON.parse(theme);
-            if(theme == "dark"){
-                if(props == 2){
-                    localStorage.removeItem("theme")
-                }
-                document.documentElement.classList.toggle("darkmode");
-            }
-        }
-    }
-
     useEffect(() => {
         loadPerfil();
-        const handleLoad = () => {
-            changeTheme(1);
-        };
-
-        window.addEventListener('load', handleLoad);
-
-        // Cleanup to remove the event listener when the component unmounts
-        return () => {
-            window.removeEventListener('load', handleLoad);
-        };
     }, [])
 
     useEffect(() => {
@@ -125,7 +131,7 @@ export default function Profile(){
                 </div>
             </div>
             <div className='col-12 profile-buttons'>
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sun" viewBox="0 0 16 16" onClick={() => changeTheme(2)} style={{cursor: "pointer"}}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sun" viewBox="0 0 16 16" onClick={() => changeTema(2)} style={{cursor: "pointer"}}>
                     <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
                 </svg>
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-graph-up icon" viewBox="0 0 16 16" onClick={() => window.location = "#/backoffice"}>

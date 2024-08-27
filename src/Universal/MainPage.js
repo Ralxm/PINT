@@ -29,18 +29,34 @@ export default function MainPage() {
 
     function changeTheme(props){
         let theme = localStorage.getItem("theme");
-        if(!theme){
-            let whatTheme = "dark";
-            localStorage.setItem("theme", JSON.stringify(whatTheme));
-            document.documentElement.classList.toggle("darkmode");
+        const isDarkMode = document.documentElement.classList.contains("darkmode");
+        if(!theme && props == 1){
+            if(!isDarkMode){
+                localStorage.setItem("theme", JSON.stringify("light"));
+            }
+            else if(isDarkMode){
+                localStorage.setItem("theme", JSON.stringify("dark"));
+            }
         }
-        else{
+        theme = localStorage.getItem("theme");
+        if(theme){
             theme = JSON.parse(theme);
-            if(theme == "dark"){
-                if(props == 2){
-                    localStorage.removeItem("theme")
+            if(props === 2){
+                if(theme == "light" && !isDarkMode){
+                    localStorage.setItem("theme", JSON.stringify("dark"));
+                }
+                else if(theme == "dark" && isDarkMode){
+                    localStorage.setItem("theme", JSON.stringify("light"));
                 }
                 document.documentElement.classList.toggle("darkmode");
+            }
+            else if(props == 1){
+                if(theme === "dark" && !isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                }
+                else if(theme == "light" && isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                }
             }
         }
     }

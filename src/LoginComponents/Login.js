@@ -39,6 +39,7 @@ export default function LoginInput(){
                 else{
                     if(res.cargo == 1){
                         logLogin(EMAIL)
+                        localStorage.setItem("theme", JSON.stringify("light"));
                         navigate('mainpage');
                     }
                     else{
