@@ -1,3 +1,13 @@
+(function() {
+    let theme = localStorage.getItem("theme");
+    if (theme) {
+      theme = JSON.parse(theme);
+      if (theme === "dark") {
+        document.documentElement.classList.add("darkmode");
+      }
+    }
+  })();
+
 import React, {useState, useEffect} from 'react';
 import {FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton, WhatsappIcon, WhatsappShareButton} from 'react-share';
 import { useParams } from 'react-router-dom';

@@ -1,3 +1,13 @@
+(function() {
+    let theme = localStorage.getItem("theme");
+    if (theme) {
+      theme = JSON.parse(theme);
+      if (theme === "dark") {
+        document.documentElement.classList.add("darkmode");
+      }
+    }
+  })();
+
 import React, {useEffect, useState} from 'react'
 import { Route, Routes } from "react-router-dom";
 import '../Universal/index.css';

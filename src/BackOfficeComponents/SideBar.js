@@ -1,3 +1,13 @@
+(function() {
+    let theme = localStorage.getItem("theme");
+    if (theme) {
+      theme = JSON.parse(theme);
+      if (theme === "dark") {
+        document.documentElement.classList.add("darkmode");
+      }
+    }
+  })();
+
 import React, { useEffect } from 'react'
 import '../Universal/index.css'
 import * as lang from '../Universal/lang.json';
