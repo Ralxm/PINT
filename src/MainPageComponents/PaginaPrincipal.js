@@ -9,6 +9,7 @@ import "rsuite/dist/rsuite-no-reset.min.css"
 import * as lang from '../Universal/lang.json';
 
 export default function Main(){
+    window.addEventListener('load', changeTheme(1));
     let stolang = localStorage.getItem("lang");
     if (!stolang) {
         stolang = "pt";

@@ -7,6 +7,7 @@ import axios from 'axios';
 import Profile from '../MainPageComponents/Profile'
        
 export default function Post() {
+    window.addEventListener('load', changeTheme(1));
     const { id } = useParams();
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
     const urlComentarios = "https://pint-backend-8vxk.onrender.com/comentario/";

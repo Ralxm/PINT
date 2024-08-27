@@ -3,6 +3,7 @@ import '../Universal/index.css'
 import * as lang from '../Universal/lang.json';
 
 export default function SideBar(){
+    window.addEventListener('load', changeTheme(1));
     let theme = localStorage.getItem("theme");
     if(theme){
         if(JSON.parse(theme) == "dark"){

@@ -15,6 +15,8 @@ import Post from '../BackOfficeComponents/Post'
 import Estatistica from '../BackOfficeComponents/Estatisticas';
 
 export default function BackOffice(){
+    window.addEventListener('load', changeTheme(1));
+    
     const navigate = useNavigate();
     const location = useLocation();
     const [user, setUser] = useState(null);
