@@ -7,6 +7,7 @@ import {Buffer} from 'buffer'
 import authService from '../views/auth-service';
 import "rsuite/dist/rsuite-no-reset.min.css"
 import * as lang from '../Universal/lang.json';
+import authHeader from '../views/auth-header';
 
 export default function Main(){
     let stolang = localStorage.getItem("lang");
@@ -95,16 +96,7 @@ export default function Main(){
 
     function loadTables(){
         let id = JSON.parse(localStorage.getItem('id'));
-        let token;
-        try{
-            let user = localStorage.getItem('user');
-            let userData = JSON.parse(user);
-            token = userData.token;
-        }
-        catch{
-            console.log("Erro a ir buscar o token");
-        }
-        axios.get(urlColaborador + 'list', {headers: { 'Authorization' : 'Bearer ' + token } })
+        axios.get(urlColaborador + 'list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -119,7 +111,7 @@ export default function Main(){
             alert("Erro: " + error)
         })
 
-        axios.get(urlColaborador + 'get/' + id, {headers: { 'Authorization' : 'Bearer ' + token } })
+        axios.get(urlColaborador + 'get/' + id, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -162,7 +154,8 @@ export default function Main(){
             alert("Erro: " + error)
         })
 
-        axios.get(urlPost + 'list')
+        let cidade = JSON.parse(localStorage.getItem("cidade"));
+        axios.get(urlPost + 'listByCidade/' + cidade)
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -414,7 +407,6 @@ export default function Main(){
         }, [Filtros, FiltroPub]);
     
         return Publicacao.map((data, index) => {
-            if (data.CIDADE === data.colaborador.CIDADE && data.CIDADE === Utilizador.CIDADE) {
                 if (data.aprovacao.APROVADA === 1) {
                     if (Filtros.some(data2 => data2.IDSUBCATEGORIA === data.SUBCATEGORIA)){
                         const { categorium, espaco, evento, subcategorium } = data;
@@ -444,7 +436,7 @@ export default function Main(){
                     }
                 }
             }
-        })
+        )
     }
 
     function Aprovar(props){

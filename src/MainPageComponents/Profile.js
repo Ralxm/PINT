@@ -22,6 +22,7 @@ export default function Profile(){
         let user = authService.getCurrentUser();
         if(user){
             authService.logout();
+            changeTema(1)
             navigate('/');
         }
     }

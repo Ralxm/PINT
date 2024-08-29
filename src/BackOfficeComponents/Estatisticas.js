@@ -16,12 +16,15 @@ export default function Estatistica(){
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
     const urlCidade = "https://pint-backend-8vxk.onrender.com/cidade/";
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
+    const urlCategoria = "https://pint-backend-8vxk.onrender.com/categoria/";
 
     const [Colaborador, setColaborador] = useState([]);
     const [ColaboradorCargo, setColaboradorCargo] = useState([]);
     const [NomeCidade, setNomeCidade] = useState([]);
     const [NomeCargo, setNomeCargo] = useState([]);
     const [Post, setPost] = useState([]);
+    const [PostViews, setPostViews] = useState([]);
+    const [Categoria, setCategoria] = useState([]);
 
     const [Utilizador, setUtilizador] = useState([]);
     
@@ -75,15 +78,6 @@ export default function Estatistica(){
 
     function loadEstatistica(){
         let id = JSON.parse(localStorage.getItem('id'));
-        let token;
-        try{
-            let user = localStorage.getItem('user');
-            let userData = JSON.parse(user);
-            token = userData.token;
-        }
-        catch{
-            console.log("Erro a ir buscar o token");
-        }
         axios.get(urlColaborador + 'list', authHeader())
         .then(res => {
             if(res.data.success === true){
@@ -125,10 +119,38 @@ export default function Estatistica(){
         .catch(error => {
             alert("Erro: " + error)
         })
+
+        axios.get(urlPost + 'topViews')
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setPostViews(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: " + error)
+        })
+
+        axios.get(urlCategoria + 'list')
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setCategoria(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: " + error)
+        })
     }
 
     return(
-        <div className='col-10' style={{display: 'flex'}}>
+        <div className='col-10' style={{display: 'flex', overflowY: "scroll"}}>
             <div className='col-5 side-bar' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option'>
                     {data.texto9backoffice}
@@ -137,10 +159,16 @@ export default function Estatistica(){
                     <PublicacoesCriadasUltimos30Dias></PublicacoesCriadasUltimos30Dias>
                 </div>
                 <div className='col-lg-12 backoffice-option'>
-                    {data.texto10backoffice}
+                    {data.texto13backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '30vh'}}>
-                    <ColaboradoresInativos></ColaboradoresInativos>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                    <PublicacoesComMaisViewsSempre></PublicacoesComMaisViewsSempre>
+                </div>
+                <div className='col-lg-12 backoffice-option' style={{marginTop: "10px"}}>
+                    {data.texto14backoffice}
+                </div>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                    <PublicacoesComMaisViews30DiasPorCategoria></PublicacoesComMaisViews30DiasPorCategoria>
                 </div>
             </div>
             <div className='col-5 side-bar' style={{marginLeft: "10px"}}>
@@ -150,11 +178,17 @@ export default function Estatistica(){
                 <div className='col-lg-12 showTable-list'>
                     <Registos30Dias></Registos30Dias>
                 </div>
-                <div className='col-lg-12 backoffice-option' style={{overflowY: 'scroll', maxHeight: '30vh'}}>
+                <div className='col-lg-12 backoffice-option' style={{overflowY: 'scroll', maxHeight: '40vh'}}>
                     {data.texto12backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '30vh'}}>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
                     <PostsPorColaborador></PostsPorColaborador>
+                </div>
+                <div className='col-lg-12 backoffice-option' style={{marginTop: "10px"}}>
+                    {data.texto10backoffice}
+                </div>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                    <ColaboradoresInativos></ColaboradoresInativos>
                 </div>
             </div>
         </div>
@@ -335,6 +369,69 @@ export default function Estatistica(){
                     </div>
                 )
             }
+        })
+    }
+
+    function PublicacoesComMaisViews30DiasPorCategoria(){
+        return Categoria.map((categoria) => {
+            let postFinal;
+            let viewsFinal = 0;
+            Post.map((post) => {
+                if(post.CATEGORIA == categoria.IDCATEGORIA){
+                    if(post.VIEWS > viewsFinal){
+                        postFinal = post;
+                        viewsFinal = post.VIEWS;
+                    }
+                }
+            })
+            if(postFinal){
+                return(
+                    <div className='col-12 d-flex showTable'>
+                        <div className='col-4'>
+                            <div className='showTableText'>
+                                <a>Categoria: {categoria.NOME}</a>
+                                <a>Subcategoria: {postFinal.subcategorium.NOME}</a>  
+                            </div>
+                        </div>
+                        <div className='col-5'>
+                            <div className='showTableText'>
+                                <a>ID Publicação: {postFinal.IDPUBLICACAO}</a>
+                                <a>Título: {postFinal.TITULO}</a>
+                                <a>Visualizações: {postFinal.VIEWS}</a>
+                            </div>
+                        </div>
+                        <div className='col-3'>
+                            <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + postFinal.IDPUBLICACAO}>Ver publicação</button>
+                        </div>
+                    </div>
+                )
+                return(
+                    <div className='col-12 showTable'>
+                        <div className='showTableText'>
+                            <a>Categoria: {categoria.NOME}</a>
+                            <a>ID Publicação: {postFinal.IDPUBLICACAO}</a>
+                            <a>Título: {postFinal.TITULO}</a>
+                            <a>Visualizações: {postFinal.VIEWS}</a>
+                            <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + postFinal.IDPUBLICACAO}>Ver publicação</button>
+                        </div>
+                    </div>
+                )
+            }
+        })
+    }
+
+    function PublicacoesComMaisViewsSempre(){
+        return PostViews.map((post) =>{
+            return(
+                <div className='col-6 showTable'>
+                    <div className='showTableText'>
+                        <a>ID Publicação: {post.IDPUBLICACAO}</a>
+                        <a>Título: {post.TITULO}</a>
+                        <a>Visualizações: {post.VIEWS}</a>
+                        <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + post.IDPUBLICACAO}>Ver publicação</button>
+                    </div>
+                </div>
+            )
         })
     }
 }

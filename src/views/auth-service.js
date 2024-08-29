@@ -8,6 +8,7 @@ class AuthService{
                 localStorage.setItem('user', JSON.stringify(res.data));   
                 localStorage.setItem("id", JSON.stringify(res.data.id));
                 localStorage.setItem("cargo", JSON.stringify(res.data.cargo));
+                localStorage.setItem("cidade", JSON.stringify(res.data.cidade));
             }
             return res.data;
         }, reason => {throw new Error('Utilizador Inválido');});
@@ -16,6 +17,7 @@ class AuthService{
         localStorage.removeItem('user');
         localStorage.removeItem('id');
         localStorage.removeItem('cargo');
+        localStorage.removeItem('cidade');
     }
     getCurrentUser() {
         return JSON.parse(localStorage.getItem('user'));

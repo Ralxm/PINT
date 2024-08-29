@@ -19,7 +19,9 @@
         "texto9backoffice": "Publicações criadas nos últimos 30 dias",
         "texto10backoffice": "Colaboradores inativos",
         "texto11backoffice": "Registos nos últimos 30 dias",
-        "texto12backoffice": "Número de publicações por colaborador"
+        "texto12backoffice": "Número de publicações por colaborador",
+        "texto13backoffice": "Top 5 publicações com mais visualizações de sempre",
+        "texto14backoffice": "Publicação com mais visualizações nos últimos 30 dias por categoria"
     },
     "es": {
 	"texto1login": "Entrar",
@@ -41,7 +43,9 @@
         "texto9backoffice": "Publicaciones creadas en los últimos 30 días.",
         "texto10backoffice": "Colaboradores inactivos",
         "texto11backoffice": "Registros en los últimos 30 días",
-        "texto12backoffice": "Número de publicaciones por colaborador"
+        "texto12backoffice": "Número de publicaciones por colaborador",
+        "texto13backoffice": "Publicações com mais visualizações de sempre",
+        "texto14backoffice": "Publicações com mais visualizações nos últimos 30 dias"
     },
     "en": {
 	"texto1login": "Login",
@@ -63,7 +67,9 @@
         "texto9backoffice": "Posts created in the last 30 days",
         "texto10backoffice": "Inactive Collaborators",
         "texto11backoffice": "Records in the last 30 days",
-        "texto12backoffice": "Number of publications per collaborators"
+        "texto12backoffice": "Number of publications per collaborators",
+        "texto13backoffice": "Publicações com mais visualizações de sempre",
+        "texto14backoffice": "Publicações com mais visualizações nos últimos 30 dias"
     }
 
 
