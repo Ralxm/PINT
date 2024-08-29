@@ -42,6 +42,8 @@ export default function Main(){
 
     const [Filtros, setFiltros] = useState([])
 
+    const [FiltroPub, setFiltroPub] = useState("");
+
     function changeTheme(props){
         let theme = localStorage.getItem("theme");
         const isDarkMode = document.documentElement.classList.contains("darkmode");
@@ -391,32 +393,38 @@ export default function Main(){
         return null;
       }
 
-    function PostBox({ Filtros }) {
+    function PostBox({ Filtros, FiltroPub }) {
         return(
             <div className='col-6 posts-box'>
-                <Post Filtros={Filtros}></Post>
+                <div className='col-12' style={{display: "none"}}>
+                    <nav className="navbar d-flex" style={{justifyContent: "center"}}>
+                        <form className="d-flex">
+                            <input onChange={(value) => setFiltroPub(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Publicação" aria-label="Search" id='filtrarPublicacao'/>
+                        </form>
+                    </nav>
+                </div>
+                <Post Filtros={Filtros} FiltroPub={FiltroPub}></Post>
             </div>
         )
     }
 
-    function Post({ Filtros }) {
+    function Post({ Filtros, FiltroPub }) {
         useEffect(() => {
-            // Quando o filtro é alterado, o component Post da re-render
-        }, [Filtros]);
+
+        }, [Filtros, FiltroPub]);
     
         return Publicacao.map((data, index) => {
-            if(Publicacao && data.CIDADE == data.colaborador.CIDADE && data.CIDADE == Utilizador.CIDADE){
-                if(data.aprovacao.APROVADA == 1){
-                    if(Filtros.some(data2 => data2.IDSUBCATEGORIA == data.SUBCATEGORIA)){
+            if (data.CIDADE === data.colaborador.CIDADE && data.CIDADE === Utilizador.CIDADE) {
+                if (data.aprovacao.APROVADA === 1) {
+                    if (Filtros.some(data2 => data2.IDSUBCATEGORIA === data.SUBCATEGORIA)){
                         const { categorium, espaco, evento, subcategorium } = data;
-                        if(evento.IDEVENTO == 1 || espaco.IDESPACO == 1){ //RETURN DE UM ESPAÇO POIS O EVENTO É O DEFAULT
+                        if (evento.IDEVENTO === 1 || espaco.IDESPACO === 1) { // RETURN DE UM ESPAÇO POIS O EVENTO É O DEFAULT
                             let base64Image;
-                            if(data.IMAGEM){
-                                //const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
+                            if (data.IMAGEM) {
                                 base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
                             }
-                            return(
-                                <div className='card mb-3 post' style={{cursor: 'pointer'}} onClick={() => window.location = "#/post/" + data.IDPUBLICACAO}>
+                            return (
+                                <div className='card mb-3 post' style={{ cursor: 'pointer' }} onClick={() => window.location = "#/post/" + data.IDPUBLICACAO}>
                                     <div className="row g-0">
                                         <div className="col-md-4 post-img-box">
                                             {data.IMAGEM && <img className="img-fluid rounded-start post-img" src={base64Image}></img>}
@@ -427,17 +435,14 @@ export default function Main(){
                                                 <p className="card-text">{categorium.NOME + ' - ' + subcategorium.NOME}</p>
                                                 <p className="card-text">{data.TEXTO}</p>
                                             </div>
-                                            <a className="card-text post-website position-absolute bottom-0" style={{marginLeft: '10px', marginTop: '10px'}} href={espaco.WEBSITE} target='_blank'>{espaco.WEBSITE}</a>
+                                            <a className="card-text post-website position-absolute bottom-0" style={{ marginLeft: '10px', marginTop: '10px' }} href={espaco.WEBSITE} target='_blank'>{espaco.WEBSITE}</a>
                                         </div>
                                     </div>
                                 </div>
                             )
                         }
-                        else{ //RETURN DE UM EVENTO POIS O ESPAÇO É O DEFAULT
-        
-                        }
                     }
-            } 
+                }
             }
         })
     }
@@ -696,7 +701,7 @@ export default function Main(){
                 <Filtro></Filtro>
                 <CalendarioBox></CalendarioBox>
             </div>
-            <PostBox Filtros={Filtros}></PostBox>
+            <PostBox Filtros={Filtros} FiltroPub={FiltroPub}></PostBox>
             <div className="col-lg-3 pe-0 g-0">
                 <Profile></Profile>
                 <Notifications></Notifications>

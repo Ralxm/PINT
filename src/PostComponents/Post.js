@@ -30,6 +30,18 @@ export default function Post() {
     const [QuestionarioString, setQuestionarioString] = useState("");
     const [Rating, setRating] = useState("")
 
+    const [TITULOUPDATE, setTITULOUPDATE] = useState("");
+    const [TEXTOUPDATE, setTEXTOUPDATE] = useState("")
+    const [CATEGORIAUPDATE, setCATEGORIAUPDATE] = useState("");
+    const [SUBCATEGORIAUPDATE, setSUBCATEGORIAUPDATE] = useState("")
+
+    const [Categoria, setCategoria] = useState([]);
+    const [Subcategoria, setSubcategoria] = useState([])
+    const [CATEGORIA, setCATEGORIA] = useState("");
+    const [SUBCATEGORIA, setSUBCATEGORIA] = useState("")
+
+    const [IsEditing, setIsEditing] = useState("")
+
     function changeTheme(props){
         let theme = localStorage.getItem("theme");
         const isDarkMode = document.documentElement.classList.contains("darkmode");
@@ -97,6 +109,44 @@ export default function Post() {
         }
     }, [Publicacao]);
 
+    useEffect(()=>{
+        if (Categoria.length > 0) {
+            loadSubcategorias();
+        }
+    }, [CATEGORIA]);
+
+    function loadSubcategorias(){
+        let id;
+        Categoria.map((data) => {
+            if (data.NOME === CATEGORIA) {
+                id = data.IDCATEGORIA;
+            }
+        });
+
+        axios.get(`https://pint-backend-8vxk.onrender.com/subcategoria/listbyid/${id}`)
+            .then(res => {
+                if (res.data.success === true) {
+                    const data = res.data.data;
+                    setSubcategoria(data);
+
+                    // If SUBCATEGORIA is already set, ensure it's in the list
+                    if (SUBCATEGORIA) {
+                        const selectedSubcategoria = data.find(sub => sub.IDSUBCATEGORIA === SUBCATEGORIA);
+                        if (selectedSubcategoria) {
+                            setSUBCATEGORIA(selectedSubcategoria);
+                        } else {
+                            setSUBCATEGORIA(""); // Reset if the previous subcategory is not found
+                        }
+                    }
+                } else {
+                    alert("Erro ao buscar subcategorias");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao buscar subcategorias: " + error);
+            });
+    }
+    
     async function view(){
         let urlview = urlPost + 'view/' + id
         const viewdata = {
@@ -112,6 +162,20 @@ export default function Post() {
             alert("Erro a ir buscar o post");
             console.error(err);
         }
+
+        axios.get('https://pint-backend-8vxk.onrender.com/categoria/list')
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setCategoria(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: fase3" + error)
+        }) 
     }
 
     async function loadPost() {
@@ -123,6 +187,10 @@ export default function Post() {
                 const data = res.data.data;
                 setPublicacao(data);
                 setQuestionarioString(data[0].evento.IDQUESTIONARIO)
+                setCATEGORIA(data.CATEGORIA);
+                setSUBCATEGORIA(data.SUBCATEGORIA);
+                setTITULOUPDATE(data.TITULO);
+                setTEXTOUPDATE(data.TEXTO);
                 t = true
             } else {
                 alert("Erro Web Service");
@@ -218,6 +286,112 @@ export default function Post() {
         }
     }
 
+    function ListCategorias(){
+        return Categoria.map((data, index) =>{
+            return <option key={index} value ={data.CATEGORIA}>{data.NOME}</option>
+        })
+    }
+
+    function ListSubcategorias() {
+        return Subcategoria.map((data, index) => {
+            return (
+                <option key={index} value={data.SUBCATEGORIA}>
+                    {data.NOME}
+                </option>
+            );
+        });
+    }
+
+    function EditarPublicacao(){
+        setIsEditing(true)
+        document.getElementById("editarPublicacao").style.display = "block";
+        document.getElementById("comentario-create-box").style.display = "none";
+    }
+
+    function FecharEditarPublicacao(){
+        setIsEditing(false)
+        document.getElementById("editarPublicacao").style.display = "none";
+        document.getElementById("comentario-create-box").style.display = "block";
+    }
+
+    async function FinalEditarPublicao(){
+        let idCat;
+        Categoria.map((data) => {
+            if (data.NOME === CATEGORIA) {
+                idCat = data.IDCATEGORIA;
+            }
+        });
+        let idSub;
+        Subcategoria.map((data) => {
+            if (data.NOME === SUBCATEGORIA) {
+                idSub = data.IDSUBCATEGORIA;
+            }
+        });
+        let titulo = document.getElementById("novoTitulo").value;
+        let texto = document.getElementById("novoTexto").value;
+        const datapostUpdate = {
+            CATEGORIA: idCat,
+            SUBCATEGORIA: idSub,
+            TIULO: titulo,
+            TEXTO: texto
+        }
+        try {
+            const url = urlPost + "adminUpdate/" + id;
+            const res = await axios.post(url, datapostUpdate);
+            if (res.data.success === true) { 
+                window.location.reload();         
+            } else {
+                alert("Erro Web Service");
+            }
+        } catch (err) {
+            alert("Erro a ir buscar o post");
+            alert(err)
+            console.error(err.message);
+        }
+    }
+
+    function Editar(){
+        if(Publicacao){
+            return( 
+                <div className='container-fluid comentario-create-box' id="editarPublicacao" style={{height: '60vh'}}>
+                    <div>
+                        <div className='col-12 d-flex'>
+                            <div className='col-10' style={{marginTop: "10px"}}>
+                                <span>Editar a publicação</span>
+                                <div style={{alignItems: "center", display: 'flex', marginTop: "10px"}}>
+                                    <label style={{minWidth: '100px'}}>Categoria</label>
+                                    <select id="inputState" className="input-group-select" value={CATEGORIA} onChange={(value) => setCATEGORIA(value.target.value)}>
+                                        <option defaultValue>Selecione</option>
+                                        <ListCategorias></ListCategorias>
+                                    </select>
+                                </div>
+                                <div style={{alignItems: "center", display: 'flex', marginTop: "10px"}}>
+                                    <label style={{minWidth: '100px'}}>Subcategoria</label>
+                                    <select id="inputState" className="input-group-select" value={SUBCATEGORIA} onChange={(value) => setSUBCATEGORIA(value.target.value)}>
+                                        <option defaultValue>Selecione</option>
+                                        <ListSubcategorias></ListSubcategorias>
+                                    </select>
+                                </div>
+                                <div style={{alignItems: "center", display: 'flex', marginTop: "10px"}}>
+                                    <label style={{minWidth: '100px'}}>Título</label>
+                                    <input id="novoTitulo"></input>
+                                </div>
+                                <div style={{alignItems: "center", display: 'flex', marginBottom: "10px", marginTop: "10px"}}>
+                                    <label style={{minWidth: '100px'}}>Texto</label>
+                                    <textarea style={{resize: "none", width: "300px", height: "100px"}} id="novoTexto" value={TEXTOUPDATE}></textarea>
+                                </div>
+                                <button className='btn btn-outline-success' style={{cursor: "pointer"}} onClick={() => FinalEditarPublicao()}>Editar</button>
+                            </div>
+                            <div className='col-2' style={{marginTop: "10px"}}>
+                                <button className='btn btn-outline-danger' style={{cursor: "pointer"}} onClick={() => FecharEditarPublicacao()}>Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    }
+
     function Page(){
         useEffect(()=>{
 
@@ -261,7 +435,6 @@ export default function Post() {
                     <div className='col-1'>
                         &nbsp;
                     </div>
-        
                     <div className='col-10 main-post-box' style={{overflowY:'scroll'}}>
                         <div className='post-nav-bar'>
                             <div className='post-main-info col-10'>
@@ -274,7 +447,7 @@ export default function Post() {
                                         {Publicacao[0].aprovacao.APROVADA == 0 && <a>Publicação não aprovada</a>}
                                     </div>
                                     <div className='post-main-buttons col-2'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16" style={{cursor: "pointer"}} onClick={() => EditarPublicacao()}>
                                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
                                         </svg>
                                         <div style={{ width: "25%" }}>
@@ -362,16 +535,6 @@ export default function Post() {
         }
         
     }
-
-    return(
-        <div className='d-flex publicacao'>
-            <Page></Page>
-            <div className="col-3 pe-0 g-0">
-                <Profile></Profile>
-                <CriarComentario></CriarComentario>
-            </div>
-        </div>
-    )
 
     function VerVotos(){
         if(document.getElementById('votosRelevantes').style.display == "block"){
@@ -614,7 +777,7 @@ export default function Post() {
 
     function CriarComentario(){
         return(
-            <div className='container-fluid comentario-create-box' style={{height: '60vh'}}>
+            <div className='container-fluid comentario-create-box' id="comentario-create-box" style={{height: '60vh'}}>
                 <div>
                     <form id="algin-form d-flex">
                         <div className="form-group">
@@ -728,5 +891,16 @@ export default function Post() {
             console.log("Erro");
         })
     }
+
+    return(
+        <div className='d-flex publicacao'>
+            <Page></Page>
+            <div className="col-3 pe-0 g-0">
+                <Profile></Profile>
+                <CriarComentario></CriarComentario>
+                <Editar></Editar>
+            </div>
+        </div>
+    )
 }
 

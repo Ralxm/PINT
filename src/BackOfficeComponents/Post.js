@@ -45,6 +45,9 @@ export default function Post(){
     const [Utilizador, setUtilizador] = useState([]);
 
     const [ImageUrl, setImageUrl] = useState("");
+
+    const [FiltroPublicacao, setFiltroPublicacao] = useState("");
+    const [FiltroColaborador, setFiltroColaborador] = useState("");
     
     useEffect(() => {
         document.title = 'Mostrar Post';
@@ -163,7 +166,7 @@ export default function Post(){
             }
         })
         .catch(error => {
-            alert("Erro: " + error)
+            alert("Erro:asdfasdfasdfasdf " + error)
         })
     }
 
@@ -194,6 +197,22 @@ export default function Post(){
             <div className='side-bar col-4' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option'>
                     Listagem Publicações
+                </div>
+                <div className='col-lg-12 d-flex'>
+                    <div className='col-6 d-flex' style={{justifyContent: "center"}}>
+                        <nav className="navbar navbar-light bg-light">
+                            <form className="form-inline d-flex">
+                                <input onChange={(value) => setFiltroColaborador(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Colaborador - ID ou Nome" aria-label="Search" id='filtrarColaboradores'/>
+                            </form>
+                        </nav>
+                    </div>
+                    <div className='col-6 d-flex' style={{justifyContent: "center"}}>
+                        <nav className="navbar navbar-light bg-light">
+                            <form className="form-inline d-flex">
+                                <input onChange={(value) => setFiltroPublicacao(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Publicação - ID ou Título" aria-label="Search" id='filtrarColaboradores'/>
+                            </form>
+                        </nav>
+                    </div>
                 </div>
                 <div className='col-lg-12 showTable-list'>
                     <ListTables></ListTables>
@@ -251,10 +270,6 @@ export default function Post(){
                             </div>
                         </div>
                         <div id='eventoChecked' className='input-group-special' style={{diplay:'none'}}>
-                            <div className='input-group'>
-                                <label>Nome do Questionário</label>
-                                <input id='descricao' onChange={(value)=> setNOMEQUESTIONARIO(value.target.value)}></input>
-                            </div>
                             <div className='input-group'>
                                 <label>Data do Evento</label>
                                 <input id='descricao' type='date' onChange={(value)=> setDATAEVENTO(value.target.value)}></input>
@@ -419,156 +434,6 @@ function test(){
         console.log(data);
     })
 }
-
-/*async function criarColuna() {
-    const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
-    const urlCriarAprovacao = 'https://pint-backend-8vxk.onrender.com/aprovacao/create';
-    const urlCriarEspaco = 'https://pint-backend-8vxk.onrender.com/espaco/create';
-    const urlCriarEvento = 'https://pint-backend-8vxk.onrender.com/evento/create';
-    const urlCriarQuestionario = 'https://pint-backend-8vxk.onrender.com/questionario/create';
-    const urlCriarOpcoesEscolha = 'https://pint-backend-8vxk.onrender.com/opcoes_escolha/create';
-
-    let idEspaco = null;
-    let idEvento = 1;
-    let idAprovacao = null;
-    let idQuestionario = null; // Initialize variable here
-    let IDQUESTIONARIO = null; // Initialize variable here
-    let options = []; // Initialize options if it's not already
-
-    try {
-        if (document.getElementById('checkEspaco').checked) {
-            const datapostEspaco = {
-                COORDENADAS: COORDENADAS,
-                WEBSITE: WEBSITE
-            };
-            const resEspaco = await axios.post(urlCriarEspaco, datapostEspaco);
-            if (resEspaco.data.success) {
-                idEspaco = resEspaco.data.data.IDESPACO;
-                setEspaco(idEspaco);
-            } else {
-                alert(resEspaco.data.message);
-                return;
-            }
-            setEVENTO(1);
-        }
-
-        if (document.getElementById('checkEvento').checked) {
-            const datapostQuestionario = {
-                NOME: NOME
-            };
-            const resQuestionario = await axios.post(urlCriarQuestionario, datapostQuestionario);
-            if (resQuestionario.data.success) {
-                idQuestionario = resQuestionario.data.data.IDQUESTIONARIO;
-                setIDQUESTIONARIO(idQuestionario);
-                console.log(idQuestionario);
-            } else {
-                alert(resQuestionario.data.message);
-                return;
-            }
-        }
-
-        if (idQuestionario) { 
-            const requests = options.map(option => {
-                const datapostOpcoesEscolha = {
-                    NOME: option.value,
-                    TIPOOPCAO: 1,
-                    IDQUESTIONARIO: idQuestionario
-                };
-                console.log(datapostOpcoesEscolha)
-                return axios.post(url, datapostOpcoesEscolha)
-              });
-              
-              // Execute all requests and handle the responses
-              Promise.all(requests)
-                .then(responses => {
-                  // All requests are successful
-                  console.log('All requests were successful:', responses);
-                })
-                .catch(error => {
-                  // At least one request failed
-                  console.error('One or more requests failed:', error);
-                });
-        } else {
-            console.error("IDQUESTIONARIO is not defined");
-        }
-
-        const datapostEvento = {
-            IDQUESTIONARIO: idQuestionario
-        };
-        const resEvento = await axios.post(urlCriarEvento, datapostEvento);
-        if (resEvento.data.success) {
-            idEvento = resEvento.data.data.IDEVENTO;
-            setEVENTO(idEvento);
-        } else {
-            alert(resEvento.data.message);
-            return;
-        }
-        setESPACO(1);
-
-        let now = new Date();
-        let dd = now.getDate();
-        let mm = now.getMonth() + 1;
-        let yyyy = now.getFullYear();
-        if (dd < 10) dd = '0' + dd;
-        if (mm < 10) mm = '0' + mm;
-        let today = `${yyyy}-${mm}-${dd}`;
-
-        const datapostAprovacao = {
-            IDCOLABORADOR: 0,
-            DATAAPROVACAO: today,
-            APROVADA: 0
-        };
-        const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao);
-        if (resAprovacao.data.success) {
-            idAprovacao = resAprovacao.data.data.IDAPROVACAO;
-            setAprovacao(idAprovacao);
-        } else {
-            alert(resAprovacao.data.message);
-            return;
-        }
-
-        let idCidade = Cidade.find(data => data.NOME === CIDADE)?.IDCIDADE;
-        let idColaborador = Colaborador.find(data => data.NOME === COLABORADOR)?.IDCOLABORADOR;
-        let idCategoria = Categoria.find(data => data.NOME === CATEGORIA)?.IDCATEGORIA;
-        let idSubcategoria = Subcategoria.find(data => data.NOME === SUBCATEGORIA)?.IDSUBCATEGORIA;
-
-        setAPROVACAO(idAprovacao);
-
-        const datapostPost = new FormData();
-        datapostPost.append('CIDADE', idCidade);
-        datapostPost.append('APROVACAO', idAprovacao);
-        datapostPost.append('COLABORADOR', idColaborador);
-        datapostPost.append('CATEGORIA', idCategoria);
-        datapostPost.append('SUBCATEGORIA', idSubcategoria);
-        datapostPost.append('ESPACO', idEspaco);
-        datapostPost.append('EVENTO', idEvento);
-        datapostPost.append('DATAPUBLICACAO', DATAPUBLICACAO);
-        datapostPost.append('DATAULTIMAATIVIDADE', DATAULTIMAATIVIDADE);
-        datapostPost.append('TITULO', TITULO);
-        datapostPost.append('TEXTO', TEXTO);
-        datapostPost.append('RATING', RATING);
-        if (IMAGEM) {
-            datapostPost.append('IMAGEM', IMAGEM);
-        }
-
-        await axios.post(urlCriarPost, datapostPost, { headers: { 'Content-Type': 'multipart/form-data' } })
-            .then(res => {
-                if (res.data.success === true) {
-                    loadTables();
-                } else {
-                    alert('Erro');
-                }
-            })
-            .catch(error => {
-                alert("Error: fase123 " + (error.response ? error.response.data.message : error.message));
-            });
-
-        loadTables();
-    } catch (error) {
-        alert('something');
-        console.error(error);
-    }
-}*/
 
 async function criarColuna() {
     const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
@@ -789,7 +654,47 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
     }
 
     function ListTables(){
-        return Post.map((data, index) => {
+        const [filteredPosts, setFilteredPosts] = useState(Post);
+        let lowercasedFiltroPublicacao;
+        let lowercasedFiltroColaborador;
+
+        useEffect(() => {
+            if (FiltroColaborador === "" && FiltroPublicacao === "") {
+                setFilteredPosts(Post);
+            } else {
+                // Convert inputs to lowercase if they are non-empty strings
+                const lowercasedFiltroPublicacao = FiltroPublicacao ? FiltroPublicacao.toLowerCase() : '';
+                const lowercasedFiltroColaborador = FiltroColaborador ? FiltroColaborador.toLowerCase() : '';
+        
+                const filtered = Post.filter(data => {
+                    // Convert ID fields to string for comparison
+                    const idPublicacaoStr = data.IDPUBLICACAO.toString();
+                    const idColaboradorStr = data.COLABORADOR.toString();
+                    const colaboradorNomeStr = data.colaborador.NOME.toLowerCase();
+                    const tituloStr = data.TITULO.toLowerCase();
+        
+                    // Check if the current post matches the filters
+                    const matchesPublicacao = (
+                        (!FiltroPublicacao || 
+                        idPublicacaoStr.includes(FiltroPublicacao) || 
+                        tituloStr.includes(lowercasedFiltroPublicacao))
+                    );
+        
+                    const matchesColaborador = (
+                        (!FiltroColaborador || 
+                        idColaboradorStr.includes(FiltroColaborador) || 
+                        colaboradorNomeStr.includes(lowercasedFiltroColaborador))
+                    );
+        
+                    // Return true if both conditions match or if one filter is empty
+                    return matchesPublicacao && matchesColaborador;
+                });
+        
+                setFilteredPosts(filtered);
+            }
+        }, [FiltroColaborador, FiltroPublicacao, Post]);
+
+        return filteredPosts.map((data, index) => {
             let aprovada;
             if(data.aprovacao.APROVADA == 1){
                 aprovada = 'Aprovada';
@@ -826,6 +731,44 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
                     </div>
                 )
         })
+
+        /*return Post.map((data, index) => {
+            let aprovada;
+            if(data.aprovacao.APROVADA == 1){
+                aprovada = 'Aprovada';
+            }
+            else{
+                aprovada = 'Não Aprovada';
+            }
+            let base64Image;
+            if(data.IMAGEM){
+                //const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
+                base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
+            }
+                return(
+                    <div className='col-12 showTable'>
+                        <div className='showTableText'>
+                            <a>ID Publicação: {data.IDPUBLICACAO}</a>
+                            <a>Aprovação{' ID: ' + data.APROVACAO + ' - ' + aprovada}</a>
+                            <a>Colaborador: {' ID: ' + data.COLABORADOR + ' - ' +  data.colaborador.NOME}</a>
+                            <a>Categoria: {data.categorium.NOME}</a>
+                            <a>Subcategoria: {data.subcategorium.NOME}</a>
+                            {data.EVENTO === 1 && <a>Espaço: {data.espaco.IDESPACO}</a>}
+                            {data.ESPACO === 1 && <a>Evento: {data.EVENTO}</a>}
+                            <a>Data publicação: {data.DATAPUBLICACAO}</a>
+                            <a>Data ultima atividade: {data.DATAULTIMAATIVIDADE}</a>
+                            <a>Título: {data.TITULO}</a>
+                            <a>Texto: {data.TEXTO}</a>
+                            <a>Rating: {data.RATING}</a>
+                            {data.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
+                        </div>
+                        <div className='showTableButtons'>
+                            <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
+                            <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                        </div>
+                    </div>
+                )
+        })*/
     }
 
     function ListCidades(){
