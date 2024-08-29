@@ -21,8 +21,16 @@ export default function Profile(){
     function logoutHandler(){
         let user = authService.getCurrentUser();
         if(user){
-            authService.logout();
             changeTema(1)
+            const isDarkMode = document.documentElement.classList.contains("darkmode");
+            let theme = localStorage.getItem("theme");
+            if(theme){
+                if(JSON.parse(theme) == "dark" && isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                    localStorage.removeItem("theme");
+                }
+            }
+            authService.logout(); 
             navigate('/');
         }
     }

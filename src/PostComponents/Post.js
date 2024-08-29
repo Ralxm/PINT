@@ -332,7 +332,7 @@ export default function Post() {
         const datapostUpdate = {
             CATEGORIA: idCat,
             SUBCATEGORIA: idSub,
-            TIULO: titulo,
+            TITULO: titulo,
             TEXTO: texto
         }
         try {
