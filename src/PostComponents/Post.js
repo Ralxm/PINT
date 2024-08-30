@@ -16,6 +16,7 @@ export default function Post() {
     const urlOpcoesEscolha = "https://pint-backend-8vxk.onrender.com/opcoes_escolha/";
     const urlVoto = "https://pint-backend-8vxk.onrender.com/voto/";
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
+    const urlEvento = "https://pint-backend-8vxk.onrender.com/evento/";
 
     const [Publicacao, setPublicacao] = useState("");
     const [Comentarios, setComentarios] = useState([]);
@@ -40,7 +41,8 @@ export default function Post() {
     const [CATEGORIA, setCATEGORIA] = useState("");
     const [SUBCATEGORIA, setSUBCATEGORIA] = useState("")
 
-    const [IsEditing, setIsEditing] = useState("")
+    const [ESTADO, setESTADO] = useState("")
+    const [ESPACO, setESPACO] = useState("")
 
     function changeTheme(props){
         let theme = localStorage.getItem("theme");
@@ -187,16 +189,17 @@ export default function Post() {
                 const data = res.data.data;
                 setPublicacao(data);
                 setQuestionarioString(data[0].evento.IDQUESTIONARIO)
-                setCATEGORIA(data.CATEGORIA);
-                setSUBCATEGORIA(data.SUBCATEGORIA);
-                setTITULOUPDATE(data.TITULO);
-                setTEXTOUPDATE(data.TEXTO);
+                setCATEGORIA(data[0].CATEGORIA);
+                setSUBCATEGORIA(data[0].SUBCATEGORIA);
+                setTITULOUPDATE(data[0].TITULO);
+                setTEXTOUPDATE(data[0].TEXTO);
+                setESTADO(data[0].evento.ESTADO)
+                setESPACO(data[0].ESPACO)
                 t = true
             } else {
                 alert("Erro Web Service");
             }
         } catch (err) {
-            alert("Erro a ir buscar o post");
             console.error(err);
         }
     }
@@ -281,7 +284,7 @@ export default function Post() {
                 alert("Erro Web Service");
             }
         } catch (err) {
-            alert("Erro a ir buscar o post");
+            alert("Erro a atualizar o rating");
             console.error(err);
         }
     }
@@ -300,18 +303,6 @@ export default function Post() {
                 </option>
             );
         });
-    }
-
-    function EditarPublicacao(){
-        setIsEditing(true)
-        document.getElementById("editarPublicacao").style.display = "block";
-        document.getElementById("comentario-create-box").style.display = "none";
-    }
-
-    function FecharEditarPublicacao(){
-        setIsEditing(false)
-        document.getElementById("editarPublicacao").style.display = "none";
-        document.getElementById("comentario-create-box").style.display = "block";
     }
 
     async function FinalEditarPublicao(){
@@ -344,7 +335,7 @@ export default function Post() {
                 alert("Erro Web Service");
             }
         } catch (err) {
-            alert("Erro a ir buscar o post");
+            alert("Erro a editar publicação");
             alert(err)
             console.error(err.message);
         }
@@ -382,9 +373,6 @@ export default function Post() {
                                 </div>
                                 <button className='btn btn-outline-success' style={{cursor: "pointer"}} onClick={() => FinalEditarPublicao()}>Editar</button>
                             </div>
-                            <div className='col-2' style={{marginTop: "10px"}}>
-                                <button className='btn btn-outline-danger' style={{cursor: "pointer"}} onClick={() => FecharEditarPublicacao()}>Fechar</button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -392,10 +380,42 @@ export default function Post() {
         }
     }
 
+    async function AtivarEvento(){
+        console.log(ESTADO);
+        const datapostEvento = {
+            ESTADO : 1,
+        }
+        
+        console.log(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO)
+        const res = await axios.post(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO , datapostEvento);
+        if (res.data.success) {
+            setESTADO(1);
+        } else {
+            alert(res.data.message);
+            return null;
+        }
+        window.location.reload()
+    }
+
+    async function DesativarEvento(){
+        console.log(ESTADO);
+        const datapostEvento = {
+            ESTADO : 0,
+        }
+        const res = await axios.post(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO , datapostEvento);
+        if (res.data.success) {
+            setESTADO(0);
+        } else {
+            alert(res.data.message);
+            return null;
+        }
+        window.location.reload()
+    }
+
     function Page(){
         useEffect(()=>{
 
-        }, [Comentarios, Rating])
+        }, [Comentarios, Rating, ESTADO])
         if(Publicacao[0]){
             let base64Image;
             if(Publicacao[0].IMAGEM){
@@ -442,14 +462,20 @@ export default function Post() {
                                     <a>{Publicacao[0].colaborador.NOME}</a>
                                 </div>
                                 </div>
-                                    <div style={{backgroundColor: 'red', marginLeft: '-20px', marginRight: '10px', color: 'white'}}>
-                                        {Publicacao[0].EVENTO == 1 && diffDays >= 15 && <a>Espaço Inativo</a>}
-                                        {Publicacao[0].aprovacao.APROVADA == 0 && <a>Publicação não aprovada</a>}
-                                    </div>
                                     <div className='post-main-buttons col-2'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-pencil" viewBox="0 0 16 16" style={{cursor: "pointer"}} onClick={() => EditarPublicacao()}>
-                                            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
-                                        </svg>
+                                        {Publicacao[0].ESPACO == 1 && <div>
+                                            {ESTADO ? (
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-toggle-on" viewBox="0 0 16 16" onClick={() => DesativarEvento()} style={{cursor: "pointer"}}>
+                                                    <path d="M5 3a5 5 0 0 0 0 10h6a5 5 0 0 0 0-10zm6 9a4 4 0 1 1 0-8 4 4 0 0 1 0 8"/>
+                                                </svg>
+                                            ) : (
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-toggle-off" viewBox="0 0 16 16" onClick={() => AtivarEvento()} style={{cursor: "pointer"}}>
+                                                    <path d="M11 4a4 4 0 0 1 0 8H8a5 5 0 0 0 2-4 5 5 0 0 0-2-4zm-6 8a4 4 0 1 1 0-8 4 4 0 0 1 0 8M0 8a5 5 0 0 0 5 5h6a5 5 0 0 0 0-10H5a5 5 0 0 0-5 5"/>
+                                                </svg>
+                                                )
+                                            }
+                                        </div>}
+                                        
                                         <div style={{ width: "25%" }}>
                                         </div>
                                         <FacebookShareButton url={window.location.href}>
@@ -472,6 +498,11 @@ export default function Post() {
         
                                 <div className='post-subcategory-info col-12'>
                                     <a style={{ color: "rgba(0,0,0,0.5)" }}>{Publicacao[0].categorium.NOME} - {Publicacao[0].subcategorium.NOME}</a>
+                                    <div style={{backgroundColor: 'red', color: 'white', justifyContent: "center", marginTop: "10px"}} className='col-2 d-flex'>
+                                        {Publicacao[0].EVENTO == 1 && diffDays >= 15 && <a>Espaço Inativo</a>}
+                                        {Publicacao[0].evento.ESTADO == 0 && Publicacao[0].ESPACO == 1 && <a>Evento Inativo</a>}
+                                        {Publicacao[0].aprovacao.APROVADA == 0 && <a>Publicação não aprovada</a>}
+                                    </div>
                                 </div>
         
                                 <div className='post-text-info col-12'>
@@ -581,37 +612,16 @@ export default function Post() {
             else{
                 res = (totalVotosOpcao/votosTotais).toFixed(1) * 100;
             }
-            if(pessoaJaVotou == 0){
-                return(
-                    <div className='d-flex' style={{alignItems: "center"}}>
-                        <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
-                            {data.NOME}
-                        </span>
-                        <div style={{flexGrow: 1}}>
-                            <div className="progress" style={{ marginTop: "10px", height: "30px", cursor: "pointer", position: "relative" }} onClick={() => Votar(data)}>
-                                <div className="progress-bar" role="progressbar" style={{ width: res + "%" }} aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                        <div>
-                                <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
-                                    Ver votantes
-                                </button>
-                        </div>
-                    </div>
-                )
-            }
-            else{
-                if(data.IDOPCAO == emQualVotou){
+            if(ESTADO == 0){
+                if(pessoaJaVotou == 0){
                     return(
                         <div className='d-flex' style={{alignItems: "center"}}>
                             <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
                                 {data.NOME}
                             </span>
-                            <div style={{width: "70%"}}>
-                                <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
-                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">
-                                        &nbsp;&#10003;
-                                    </div>
+                            <div style={{flexGrow: 1}}>
+                                <div className="progress" style={{ marginTop: "10px", height: "30px", cursor: "pointer", position: "relative" }}>
+                                    <div className="progress-bar" role="progressbar" style={{ width: res + "%" }} aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                             <div>
@@ -623,14 +633,58 @@ export default function Post() {
                     )
                 }
                 else{
+                    if(data.IDOPCAO == emQualVotou){
+                        return(
+                            <div className='d-flex' style={{alignItems: "center"}}>
+                                <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
+                                    {data.NOME}
+                                </span>
+                                <div style={{width: "70%"}}>
+                                    <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                        <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">
+                                            &nbsp;&#10003;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                        Ver votantes
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    }
+                    else{
+                        return(
+                            <div className='d-flex' style={{alignItems: "center"}}>
+                                <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
+                                    {data.NOME}
+                                </span>
+                                <div style={{width: "70%"}}>
+                                    <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                        <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                        Ver votantes
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    }
+                }
+            }
+            else{
+                if(pessoaJaVotou == 0){
                     return(
                         <div className='d-flex' style={{alignItems: "center"}}>
                             <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
                                 {data.NOME}
                             </span>
-                            <div style={{width: "70%"}}>
-                                <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
-                                    <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100"></div>
+                            <div style={{flexGrow: 1}}>
+                                <div className="progress" style={{ marginTop: "10px", height: "30px", cursor: "pointer", position: "relative" }} onClick={() => Votar(data)}>
+                                    <div className="progress-bar" role="progressbar" style={{ width: res + "%" }} aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                             </div>
                             <div>
@@ -641,7 +695,48 @@ export default function Post() {
                         </div>
                     )
                 }
-                
+                else{
+                    if(data.IDOPCAO == emQualVotou){
+                        return(
+                            <div className='d-flex' style={{alignItems: "center"}}>
+                                <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
+                                    {data.NOME}
+                                </span>
+                                <div style={{width: "70%"}}>
+                                    <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                        <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100">
+                                            &nbsp;&#10003;
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                        Ver votantes
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    }
+                    else{
+                        return(
+                            <div className='d-flex' style={{alignItems: "center"}}>
+                                <span style={{marginRight: "10px", width: "100px", whiteSpace: "nowrap", overflowY: "scroll", textOverflow: "ellipsis"}}>
+                                    {data.NOME}
+                                </span>
+                                <div style={{width: "70%"}}>
+                                    <div className="progress" style={{marginTop:"10px", height: "30px", cursor: "pointer"}}>
+                                        <div className="progress-bar" role="progressbar" style={{width: res + "%", color: "black"}} aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button style={{marginTop:"10px", marginLeft: "10px"}} className='btn btn-outline-info' onClick={() => handleVerVotos(votosRelevantes)}>
+                                        Ver votantes
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    }
+                }
             }
         })
     }
@@ -738,8 +833,6 @@ export default function Post() {
                 APROVADA: 0,
             };
         }
-    
-        
     
         try {
             const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao);
@@ -897,7 +990,7 @@ export default function Post() {
             <Page></Page>
             <div className="col-3 pe-0 g-0">
                 <Profile></Profile>
-                <CriarComentario></CriarComentario>
+                {(ESTADO == 1 || ESPACO != 1)  && <CriarComentario></CriarComentario>}
                 <Editar></Editar>
             </div>
         </div>

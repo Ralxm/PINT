@@ -17,8 +17,7 @@ export default function SideBar(){
         };
     }, []);
 
-    function changeTheme(props){
-        console.log("abc")    
+    function changeTheme(props){   
         let theme = localStorage.getItem("theme");
         const isDarkMode = document.documentElement.classList.contains("darkmode");
         if(!theme && props == 1){

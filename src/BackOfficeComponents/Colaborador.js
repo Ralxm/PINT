@@ -2,9 +2,12 @@ import React, {useState, useEffect} from 'react';
 import '../Universal/index.css';
 import axios from 'axios';
 import authHeader from '../views/auth-header';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function Cidade(){
     const url = "https://pint-backend-8vxk.onrender.com/colaborador/list";
+    const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
 
     const [Colaborador, setColaborador] = useState([]);
     
@@ -18,6 +21,7 @@ export default function Cidade(){
     const [DATANASCIMENTO, setDATANASCIMENTO] = useState("");
     const [DATAREGISTO, setDATAREGISTO] = useState("");
     const [ULTIMOLOGIN, setULTIMOLOGIN] = useState("");
+    const [ATIVO, setATIVO] = useState("");
 
     const [NomeCidade, setNomeCidade] = useState([]);
     const [NomeCargo, setNomeCargo] = useState([]);
@@ -56,7 +60,51 @@ export default function Cidade(){
         .catch(error => {
             alert("Erro: " + error)
         })
+        const handleLoad = () => {
+            changeTheme(1);
+        };
+
+        window.addEventListener('load', handleLoad);
+
+        // Cleanup to remove the event listener when the component unmounts
+        return () => {
+            window.removeEventListener('load', handleLoad);
+        };
     }, []);
+
+    function changeTheme(props){   
+        let theme = localStorage.getItem("theme");
+        const isDarkMode = document.documentElement.classList.contains("darkmode");
+        if(!theme && props == 1){
+            if(!isDarkMode){
+                localStorage.setItem("theme", JSON.stringify("light"));
+            }
+            else if(isDarkMode){
+                localStorage.setItem("theme", JSON.stringify("dark"));
+            }
+        }
+        theme = localStorage.getItem("theme");
+        if(theme){
+            theme = JSON.parse(theme);
+            if(props === 2){
+                if(theme == "light" && !isDarkMode){
+                    localStorage.setItem("theme", JSON.stringify("dark"));
+                }
+                else if(theme == "dark" && isDarkMode){
+                    localStorage.setItem("theme", JSON.stringify("light"));
+                }
+                document.documentElement.classList.toggle("darkmode");
+            }
+            else if(props == 1){
+                if(theme === "dark" && !isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                }
+                else if(theme == "light" && isDarkMode){
+                    document.documentElement.classList.toggle("darkmode");
+                }
+            }
+        }
+    }
 
     function loadTables(){
         let token;
@@ -263,7 +311,9 @@ export default function Cidade(){
             DATAREGISTO : DATAREGISTO,
             ULTIMOLOGIN : ULTIMOLOGIN,
             TIPOCONTA: 1,
-            CARGO: cargo
+            CARGO: cargo,
+            ATIVO: 1,
+            MUDOUPASSWORD: 1,
         }
         await axios.post(urlCriar, datapost)
         .then(res => {
@@ -438,15 +488,61 @@ function ListTables() {
                     <a>Data de registo: {data.DATAREGISTO}</a>
                     <br></br>
                     <a>Data do último login: {data.ULTIMOLOGIN}</a>
+                    <br></br>
+                    <a>Ativo: {data.ATIVO}</a>
                 </div>
                 <div className='showTableButtons'>
                     <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                    <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                    {data.ATIVO ? 
+                        (
+                            <button className='btn btn-warning' onClick={() => desativarColaborador(data.IDCOLABORADOR)}>Desativar</button>
+                        ) 
+                        :
+                        (
+                            <button className='btn btn-success' onClick={() => ativarColaborador(data.IDCOLABORADOR)}>Ativar</button>
+                        )
+                    }
+                    <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
+                        <a>Confirmar apagar?</a>
+                        <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                    </Popup>
+                    
                 </div>
             </div>
         );
     });
 }
+
+    async function desativarColaborador(props){
+        const datapost = {
+            ATIVO: 0
+        }
+        console.log(urlColaborador + 'updateAtivo/' + props)
+        await axios.post(urlColaborador + 'updateAtivo/' + props, datapost, authHeader())
+        .then(res =>{
+            if(res.data.success){
+                loadTables();
+            }
+        })
+        .catch(error => {
+            console.log("Erro asdasd" + error)
+        });
+    }
+
+    async function ativarColaborador(props){
+        const datapost = {
+            ATIVO: 1
+        }
+        await axios.post(urlColaborador + 'updateAtivo/' + props, datapost, authHeader())
+        .then(res =>{
+            if(res.data.success){
+                loadTables();
+            }
+        })
+        .catch(error => {
+            console.log("Erro asdasd" + error)
+        });
+    }
 
     async function ApagarColuna(data){
         try{

@@ -37,13 +37,18 @@ export default function LoginInput(){
                     setloading(false);
                 }
                 else{
-                    if(res.cargo == 1){
-                        logLogin(EMAIL)
-                        localStorage.setItem("theme", JSON.stringify("light"));
-                        navigate('mainpage');
+                    if(res.ativo == 0){
+                        alert("A sua conta está inativada, contacte um administrador.");
                     }
                     else{
-                        alert('Website não está disponibilizado para utilizadores normais')
+                        if(res.cargo == 1){
+                            logLogin(EMAIL)
+                            localStorage.setItem("theme", JSON.stringify("light"));
+                            navigate('mainpage');
+                        }
+                        else{
+                            alert('Website não está disponibilizado para utilizadores normais')
+                        }
                     }
                 }
             })

@@ -29,6 +29,8 @@ export default function Main(){
     const urlEvento = "https://pint-backend-8vxk.onrender.com/aprovacao/";
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
     const urlComentario = "https://pint-backend-8vxk.onrender.com/comentario/";
+
+    const urlMix = "https://pint-backend-8vxk.onrender.com/mix/mainpage/";
     let checked = 0;
 
     const [Categoria, setCategoria] = useState([]);
@@ -96,6 +98,44 @@ export default function Main(){
 
     function loadTables(){
         let id = JSON.parse(localStorage.getItem('id'));
+        let cidade = JSON.parse(localStorage.getItem("cidade"));
+        
+        axios.get(urlMix + cidade, authHeader())
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data;
+                setPublicacao(data.post);
+                setCategoria(data.categoria);
+                setSubcategoria(data.subcategoria);
+                setColaborador(data.colaborador);
+                setEspaco(data.espaco);
+                setEvento(data.evento);
+                setComentario(data.comentario);
+                setFiltros(data.subcategoria);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: " + error)
+        })
+
+        axios.get(urlColaborador + 'get/' + id, authHeader())
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setUtilizador(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: " + error)
+        })
+
+        /*let id = JSON.parse(localStorage.getItem('id'));
         axios.get(urlColaborador + 'list', authHeader())
         .then(res => {
             if (res.data.success === true){
@@ -209,7 +249,7 @@ export default function Main(){
         })
         .catch(error => {
             alert("Erro: " + error)
-        })
+        })*/
     }
 
     function HandleFiltros(){
@@ -386,7 +426,7 @@ export default function Main(){
         return null;
       }
 
-    function PostBox({ Filtros, FiltroPub }) {
+    function PostBox({ Filtros }) {
         return(
             <div className='col-6 posts-box'>
                 <div className='col-12' style={{display: "none"}}>
@@ -396,16 +436,15 @@ export default function Main(){
                         </form>
                     </nav>
                 </div>
-                <Post Filtros={Filtros} FiltroPub={FiltroPub}></Post>
+                <Post Filtros={Filtros}></Post>
             </div>
         )
     }
 
-    function Post({ Filtros, FiltroPub }) {
+    function Post({ Filtros }) {
         useEffect(() => {
 
-        }, [Filtros, FiltroPub]);
-    
+        }, [Filtros]);
         return Publicacao.map((data, index) => {
                 if (data.aprovacao.APROVADA === 1) {
                     if (Filtros.some(data2 => data2.IDSUBCATEGORIA === data.SUBCATEGORIA)){
@@ -415,6 +454,7 @@ export default function Main(){
                             if (data.IMAGEM) {
                                 base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
                             }
+                            
                             return (
                                 <div className='card mb-3 post' style={{ cursor: 'pointer' }} onClick={() => window.location = "#/post/" + data.IDPUBLICACAO}>
                                     <div className="row g-0">
@@ -693,7 +733,7 @@ export default function Main(){
                 <Filtro></Filtro>
                 <CalendarioBox></CalendarioBox>
             </div>
-            <PostBox Filtros={Filtros} FiltroPub={FiltroPub}></PostBox>
+            <PostBox Filtros={Filtros}></PostBox>
             <div className="col-lg-3 pe-0 g-0">
                 <Profile></Profile>
                 <Notifications></Notifications>

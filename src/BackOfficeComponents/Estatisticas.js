@@ -17,6 +17,7 @@ export default function Estatistica(){
     const urlCidade = "https://pint-backend-8vxk.onrender.com/cidade/";
     const urlPost = "https://pint-backend-8vxk.onrender.com/post/";
     const urlCategoria = "https://pint-backend-8vxk.onrender.com/categoria/";
+    const urlComentario = "https://pint-backend-8vxk.onrender.com/comentario/";
 
     const [Colaborador, setColaborador] = useState([]);
     const [ColaboradorCargo, setColaboradorCargo] = useState([]);
@@ -25,6 +26,7 @@ export default function Estatistica(){
     const [Post, setPost] = useState([]);
     const [PostViews, setPostViews] = useState([]);
     const [Categoria, setCategoria] = useState([]);
+    const [Comentario, setComentario] = useState([]);
 
     const [Utilizador, setUtilizador] = useState([]);
     
@@ -77,6 +79,7 @@ export default function Estatistica(){
     }, []);
 
     function loadEstatistica(){
+        let cidade = JSON.parse(localStorage.getItem('cidade'))
         let id = JSON.parse(localStorage.getItem('id'));
         axios.get(urlColaborador + 'list', authHeader())
         .then(res => {
@@ -106,7 +109,7 @@ export default function Estatistica(){
             alert("Erro " + error);
         }); 
 
-        axios.get(urlPost + 'list')
+        axios.get(urlPost + 'listByCidade/' + cidade)
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -147,6 +150,20 @@ export default function Estatistica(){
         .catch(error => {
             alert("Erro: " + error)
         })
+
+        axios.get(urlComentario + 'list')
+        .then(res => {
+            if (res.data.success === true){
+                const data = res.data.data;
+                setComentario(data);
+            }
+            else {
+                alert("Erro Web Service");
+            }
+        })
+        .catch(error => {
+            alert("Erro: " + error)
+        })
     }
 
     return(
@@ -161,34 +178,46 @@ export default function Estatistica(){
                 <div className='col-lg-12 backoffice-option'>
                     {data.texto13backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '45vh', justifyContent: "center"}}>
                     <PublicacoesComMaisViewsSempre></PublicacoesComMaisViewsSempre>
                 </div>
                 <div className='col-lg-12 backoffice-option' style={{marginTop: "10px"}}>
                     {data.texto14backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '45vh'}}>
                     <PublicacoesComMaisViews30DiasPorCategoria></PublicacoesComMaisViews30DiasPorCategoria>
+                </div>
+                <div className='col-lg-12 backoffice-option' style={{marginTop: "10px"}}>
+                    {data.texto16backoffice}
+                </div>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '45vh', justifyContent: "center"}}>
+                    <PublicacoesMaiorRating></PublicacoesMaiorRating>
                 </div>
             </div>
             <div className='col-5 side-bar' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option' style={{overflowY: 'scroll', maxHeight: '40vh'}}>
                     {data.texto11backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list'>
+                <div className='col-lg-12 showTable-list' style={{overflowY: 'scroll', maxHeight: '45vh'}}>
                     <Registos30Dias></Registos30Dias>
                 </div>
                 <div className='col-lg-12 backoffice-option' style={{overflowY: 'scroll', maxHeight: '40vh'}}>
                     {data.texto12backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '45vh', justifyContent: "center"}}>
                     <PostsPorColaborador></PostsPorColaborador>
                 </div>
                 <div className='col-lg-12 backoffice-option' style={{marginTop: "10px"}}>
                     {data.texto10backoffice}
                 </div>
-                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '40vh'}}>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '45vh'}}>
                     <ColaboradoresInativos></ColaboradoresInativos>
+                </div>
+                <div className='col-lg-12 backoffice-option' style={{marginTop: "10px"}}>
+                    {data.texto15backoffice}
+                </div>
+                <div className='col-lg-12 showTable-list' style={{ display: 'flex', flexWrap: 'wrap', overflowY: 'auto', maxHeight: '45vh', justifyContent: "center"}}>
+                    <PublicacoesMaisComentadas></PublicacoesMaisComentadas>
                 </div>
             </div>
         </div>
@@ -405,17 +434,6 @@ export default function Estatistica(){
                         </div>
                     </div>
                 )
-                return(
-                    <div className='col-12 showTable'>
-                        <div className='showTableText'>
-                            <a>Categoria: {categoria.NOME}</a>
-                            <a>ID Publicação: {postFinal.IDPUBLICACAO}</a>
-                            <a>Título: {postFinal.TITULO}</a>
-                            <a>Visualizações: {postFinal.VIEWS}</a>
-                            <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + postFinal.IDPUBLICACAO}>Ver publicação</button>
-                        </div>
-                    </div>
-                )
             }
         })
     }
@@ -433,6 +451,64 @@ export default function Estatistica(){
                 </div>
             )
         })
+    }
+
+    function PublicacoesMaisComentadas(){
+        let hoje = new Date();
+        if(Post.length > 0){
+            let postsFinal = []
+            Post.map((post) => {
+                let numComs = 0;
+                Comentario.map((comentario) => {
+                    let datacomentario = new Date(comentario.DATACOMENTARIO)
+                    const diffTime = Math.abs(datacomentario - hoje);
+                    let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+                    if(comentario.IDPOST == post.IDPUBLICACAO && diffDays <= 30){
+                        numComs++;
+                    }
+                })
+                postsFinal.push([post, numComs]);
+            })
+            postsFinal.sort((b, a) => a[1] - b[1]);
+            return postsFinal.map((post, index) => {
+                if(index < 5 && post[1] > 0){
+                    return(
+                        <div className='col-6 showTable'>
+                            <div className='showTableText'>
+                                <a>ID Publicação: {post[0].IDPUBLICACAO}</a>
+                                <a>Título: {post[0].TITULO}</a>
+                                <a>Quantidade de comentários: {post[1]}</a>
+                                <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + post[0].IDPUBLICACAO}>Ver publicação</button>
+                            </div>
+                        </div>
+                    )
+                }
+            })
+        }
+    }
+
+    function PublicacoesMaiorRating(){
+        if(Post.length > 0){
+            let postsFinal = []
+            Post.map((post) => {
+                postsFinal.push([post, post.RATING]);
+            })
+            postsFinal.sort((b, a) => a[1] - b[1]);
+            return postsFinal.map((post, index) => {
+                if(index < 5){
+                    return(
+                        <div className='col-6 showTable'>
+                            <div className='showTableText'>
+                                <a>ID Publicação: {post[0].IDPUBLICACAO}</a>
+                                <a>Título: {post[0].TITULO}</a>
+                                <a>Rating: {post[1]}</a>
+                                <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + post[0].IDPUBLICACAO}>Ver publicação</button>
+                            </div>
+                        </div>
+                    )
+                }
+            })
+        }
     }
 }
 

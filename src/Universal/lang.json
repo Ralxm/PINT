@@ -21,7 +21,9 @@
         "texto11backoffice": "Registos nos últimos 30 dias",
         "texto12backoffice": "Número de publicações por colaborador",
         "texto13backoffice": "Top 5 publicações com mais visualizações de sempre",
-        "texto14backoffice": "Publicação com mais visualizações nos últimos 30 dias por categoria"
+        "texto14backoffice": "Publicação com mais visualizações nos últimos 30 dias por categoria",
+        "texto15backoffice": "Top 5 publicaçõpes mais comentadas nos últimos 30 dias",
+        "texto16backoffice": "Top 5 publicaçõpes com maior rating de sempre"
     },
     "es": {
 	"texto1login": "Entrar",
@@ -45,7 +47,9 @@
         "texto11backoffice": "Registros en los últimos 30 días",
         "texto12backoffice": "Número de publicaciones por colaborador",
         "texto13backoffice": "Publicações com mais visualizações de sempre",
-        "texto14backoffice": "Publicações com mais visualizações nos últimos 30 dias"
+        "texto14backoffice": "Publicações com mais visualizações nos últimos 30 dias",
+        "texto15backoffice": "Publicaçõpes mais comentadas",
+        "texto16backoffice": "Top 5 publicaçõpes com maior rating de sempre"
     },
     "en": {
 	"texto1login": "Login",
@@ -69,7 +73,9 @@
         "texto11backoffice": "Records in the last 30 days",
         "texto12backoffice": "Number of publications per collaborators",
         "texto13backoffice": "Publicações com mais visualizações de sempre",
-        "texto14backoffice": "Publicações com mais visualizações nos últimos 30 dias"
+        "texto14backoffice": "Publicações com mais visualizações nos últimos 30 dias",
+        "texto15backoffice": "Publicaçõpes mais comentadas",
+        "texto16backoffice": "Top 5 publicaçõpes com maior rating de sempre"
     }
 
 

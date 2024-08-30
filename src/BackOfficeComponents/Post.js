@@ -544,7 +544,7 @@ async function criarOpcoesEscolha(idQuestionario) {
 
 async function criarEvento(idQuestionario) {
     const urlCriarEvento = 'https://pint-backend-8vxk.onrender.com/evento/create';
-    const datapostEvento = { IDQUESTIONARIO: idQuestionario, DATAEVENTO };
+    const datapostEvento = { IDQUESTIONARIO: idQuestionario, DATAEVENTO, ESTADO: 1 };
     try {
         const res = await axios.post(urlCriarEvento, datapostEvento);
         if (res.data.success) {
