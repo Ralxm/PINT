@@ -200,14 +200,14 @@ export default function Cidade(){
                         </div>
                         <div className='input-group'>
                             <label>Cargo</label>
-                            <select id="inputState" className="input-group-select" value = {CARGO} onChange={(value) => setCARGO(value.target.value)}>
+                            <select id="inputStateCargoCriar" className="input-group-select" value = {CARGO} onChange={(value) => setCARGO(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCargos></ListCargos>
                             </select>
                         </div>
                         <div className='input-group'>
                             <label>Cidade</label>
-                            <select id="inputState" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
+                            <select id="inputStateCidadeCriar" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCidades></ListCidades>
                             </select>
@@ -293,41 +293,47 @@ export default function Cidade(){
     )
 
     async function criarColuna(){
-        let id;
-        let cargo;
-        const urlCriar = 'https://pint-backend-8vxk.onrender.com/colaborador/create'
-        NomeCargo.map((data) =>{
-            if(data.NOME == CARGO){
-                cargo = data.IDCARGO;
+        if(document.getElementById("inputStateCargoCriar").value != "Selecione" && document.getElementById("inputStateCidadeCriar").value != "Selecione"){
+            let id;
+            let cargo;
+            const urlCriar = 'https://pint-backend-8vxk.onrender.com/colaborador/create'
+            NomeCargo.map((data) =>{
+                if(data.NOME == CARGO){
+                    cargo = data.IDCARGO;
+                }
+            })
+            const datapost = {
+                EMAIL : EMAIL,
+                PASSWORDCOLABORADOR : PASSWORDCOLABORADOR,
+                NOME : NOME,
+                TELEMOVEL : TELEMOVEL,
+                CIDADE : CIDADE,
+                DATANASCIMENTO : DATANASCIMENTO,
+                DATAREGISTO : DATAREGISTO,
+                ULTIMOLOGIN : ULTIMOLOGIN,
+                TIPOCONTA: 1,
+                CARGO: cargo,
+                ATIVO: 1,
+                MUDOUPASSWORD: 1,
             }
-        })
-        const datapost = {
-            EMAIL : EMAIL,
-            PASSWORDCOLABORADOR : PASSWORDCOLABORADOR,
-            NOME : NOME,
-            TELEMOVEL : TELEMOVEL,
-            CIDADE : CIDADE,
-            DATANASCIMENTO : DATANASCIMENTO,
-            DATAREGISTO : DATAREGISTO,
-            ULTIMOLOGIN : ULTIMOLOGIN,
-            TIPOCONTA: 1,
-            CARGO: cargo,
-            ATIVO: 1,
-            MUDOUPASSWORD: 1,
+            await axios.post(urlCriar, datapost)
+            .then(res => {
+                if(res.data.success === true){
+                    loadTables();
+                    id = res.data.data;
+                }
+                else{
+                    alert(res.data.message);
+                }
+            })
+            .catch(error =>{
+                console.log('Erro: asd' + error);
+            })
         }
-        await axios.post(urlCriar, datapost)
-        .then(res => {
-            if(res.data.success === true){
-                loadTables();
-                id = res.data.data;
-            }
-            else{
-                alert(res.data.message);
-            }
-        })
-        .catch(error =>{
-            console.log('Erro: asd' + error);
-        })
+        else{
+            alert("Preencha o cargo antes de criar")
+        }
+        
 
         /*const urlCriarColaboradorCargo = 'https://pint-backend-8vxk.onrender.com/colaborador_cargo/create'
         NomeCargo.map((data) =>{
