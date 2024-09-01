@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import '../Universal/index.css';
 import axios from 'axios';
 import Categoria from './Categoria';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function Subcategoria(){
 
@@ -179,7 +181,10 @@ export default function Subcategoria(){
                     </div>
                     <div className='showTableButtons'>
                         <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                        <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                        <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
+                            <a>Confirmar apagar?</a>
+                            <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                        </Popup>
                     </div>
                 </div>
             )

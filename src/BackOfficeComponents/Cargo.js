@@ -144,10 +144,13 @@ export default function Cargo(){
                         <br></br>
                         <a>Descrição: {data.DESCRICAO}</a>
                     </div>
-                    <div className='showTableButtons'>
+                    {(index >= 2) &&
+                        <div className='showTableButtons'>
                         <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
                         <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
                     </div>
+                    }
+                    
                 </div>
             )
         })

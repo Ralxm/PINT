@@ -75,6 +75,8 @@ export default function MainPage() {
                         </Route>
                         <Route path='profile/:id' element={<ProfilePage></ProfilePage>}>
                         </Route>
+                        <Route path='microsite' element={<ProfilePage></ProfilePage>}>
+                        </Route>
                     </Routes>
                 <Footer></Footer>
             </div>

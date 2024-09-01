@@ -169,15 +169,17 @@ export default function AuditLog(){
                         <a>Timestamp: {data.DATA}</a>
                         <br></br>
                         <a>Descrição: {data.DESCRICAO}</a>
-                    </div>
-                    <div className='showTableButtons'>
-                        <button className='btn btn-info' onClick={() => EditarColuna(data)}>Editar</button>
-                        <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
-                    </div>
+                    </div>   
                 </div>
             )
         })
     }
+    /* 
+    <div className='showTableButtons'>
+                        <button className='btn btn-info' onClick={() => EditarColuna(data)}>Editar</button>
+                        <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                    </div>
+    */
 
     function ApagarColuna(data){
         setLOGID(data.LOGID);

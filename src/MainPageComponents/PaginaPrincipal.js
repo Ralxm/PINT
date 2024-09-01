@@ -134,122 +134,6 @@ export default function Main(){
         .catch(error => {
             alert("Erro: " + error)
         })
-
-        /*let id = JSON.parse(localStorage.getItem('id'));
-        axios.get(urlColaborador + 'list', authHeader())
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setColaborador(data);
-            }
-            else {
-                alert("Erro Web Service");
-                authService.logout();
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        axios.get(urlColaborador + 'get/' + id, authHeader())
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setUtilizador(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        axios.get(urlCategoria + 'list')
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setCategoria(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        axios.get(urlSubCategoria + 'list')
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setSubcategoria(data);
-                setFiltros(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        let cidade = JSON.parse(localStorage.getItem("cidade"));
-        axios.get(urlPost + 'listByCidade/' + cidade)
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setPublicacao(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        axios.get(urlEspaco + 'list')
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setEspaco(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        axios.get(urlEvento + 'list')
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setEvento(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })
-
-        axios.get(urlComentario + 'list')
-        .then(res => {
-            if (res.data.success === true){
-                const data = res.data.data;
-                setComentario(data);
-            }
-            else {
-                alert("Erro Web Service");
-            }
-        })
-        .catch(error => {
-            alert("Erro: " + error)
-        })*/
     }
 
     function HandleFiltros(){
@@ -573,64 +457,6 @@ export default function Main(){
             </button>
         )
     }
-    
-    function Notification() {
-        return (
-            <>
-                {Publicacao.map((data, index) => {
-                    if (data.aprovacao.APROVADA == 0 && data.CIDADE == Utilizador.CIDADE) {
-                        return (
-                            <div className='container-fluid col-lg-12 notification'>
-                                <a href={window.location.pathname + '#/post/' + data.IDPUBLICACAO} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
-                                    <div className='col-lg-12 notification-title'>
-                                        <h4>{data.TITULO}</h4>
-                                    </div>
-                                    <div className='col-lg-12 notification-text'>
-                                        <p>{data.TEXTO}</p>
-                                    </div>
-                                </a>
-                                <div className='col-lg-12 notification-buttons'>
-                                    <Aceitar pub={data}></Aceitar>
-                                    <Rejeitar pub={data}></Rejeitar>
-                                </div>
-                            </div>
-                        );
-                    }
-                    return null; // Ensure nothing is rendered if the condition is not met
-                })}
-                
-                {Comentario.map((comment, index) => {
-                    let id = JSON.parse(localStorage.getItem('id'))
-                    let col;
-                    Colaborador.map((data) =>{
-                        if(data.IDCOLABORADOR == id){
-                            col = data.CIDADE;
-                        }
-                    })
-                    
-                    if (comment.aprovacao.APROVADA == 0) {
-                        return (
-                            <div className='container-fluid col-lg-12 notification'>
-                                <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
-                                    <div className='col-lg-12 notification-title'>
-                                        <h4>{comment.IDCOMENTARIO}</h4>
-                                    </div>
-                                    <div className='col-lg-12 notification-text'>
-                                        <p>{comment.TEXTO}</p>
-                                    </div>
-                                </a>
-                                <div className='col-lg-12 notification-buttons'>
-                                    <Aceitar pub={comment}></Aceitar>
-                                    <Rejeitar pub={comment}></Rejeitar>
-                                </div>
-                            </div>
-                        );
-                    }
-                    return null; // Ensure nothing is rendered if the condition is not met
-                })}
-            </>
-        );
-    }
 
     function Pubs(){
         return Publicacao.map((data, index) => {
@@ -659,10 +485,16 @@ export default function Main(){
     function Coms(){
         return Comentario.map((comment, index) => {
             let id = JSON.parse(localStorage.getItem('id'))
-            let col;
-            Colaborador.map((data) =>{
-                if(data.IDCOLABORADOR == id){
-                    col = data.CIDADE;
+            let titulo;
+            let nome;
+            Publicacao.map((post) =>{
+                if(post.IDPUBLICACAO == comment.IDPOST){
+                    titulo = post.TITULO
+                }
+            })
+            Colaborador.map((colaborador) => {
+                if(colaborador.IDCOLABORADOR == comment.IDCOLABORADOR){
+                    nome = colaborador.NOME;
                 }
             })
             
@@ -671,9 +503,11 @@ export default function Main(){
                     <div className='container-fluid col-lg-12 notification'>
                         <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
                             <div className='col-lg-12 notification-title'>
-                                <h4>{comment.IDCOMENTARIO}</h4>
+                                <h4>{titulo}</h4>
                             </div>
                             <div className='col-lg-12 notification-text'>
+                                <a>Colaborador: {nome}</a><br></br>
+                                <a>Rating: {comment.AVALIACAO}</a>
                                 <p>{comment.TEXTO}</p>
                             </div>
                         </a>

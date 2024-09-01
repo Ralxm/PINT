@@ -344,7 +344,7 @@ export default function Post() {
     function Editar(){
         if(Publicacao){
             return( 
-                <div className='container-fluid comentario-create-box' id="editarPublicacao" style={{height: '60vh'}}>
+                <div className='container-fluid comentario-create-box' id="editarPublicacao" style={{paddingBottom: "20px"}}>
                     <div>
                         <div className='col-12 d-flex'>
                             <div className='col-10' style={{marginTop: "10px"}}>
@@ -369,7 +369,7 @@ export default function Post() {
                                 </div>
                                 <div style={{alignItems: "center", display: 'flex', marginBottom: "10px", marginTop: "10px"}}>
                                     <label style={{minWidth: '100px'}}>Texto</label>
-                                    <textarea style={{resize: "none", width: "300px", height: "100px"}} id="novoTexto" value={TEXTOUPDATE}></textarea>
+                                    <textarea style={{resize: "none", width: "300px", height: "100px"}} id="novoTexto"></textarea>
                                 </div>
                                 <button className='btn btn-outline-success' style={{cursor: "pointer"}} onClick={() => FinalEditarPublicao()}>Editar</button>
                             </div>
@@ -774,6 +774,7 @@ export default function Post() {
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
+                ultimaAtividade()
                 loadVotos()
             }
             else {
@@ -783,6 +784,22 @@ export default function Post() {
         .catch(err =>{
             alert("Erro a carregar os comentários");
         })
+    }
+
+    async function ultimaAtividade(){
+        const now = new Date();
+        let dd = now.getDate();
+        let mm = now.getMonth() + 1;
+        const yyyy = now.getFullYear();
+        if (dd < 10) dd = '0' + dd;
+        if (mm < 10) mm = '0' + mm;
+        const today = `${yyyy}-${mm}-${dd}`;
+
+        const datapostAtividade = {
+            DATAULTIMAATIVIDADE : today
+        }
+
+        const resPost = await axios.post(urlPost + 'ultimaAtividade/' + id, datapostAtividade);
     }
 
     async function Comentar() {
@@ -830,7 +847,7 @@ export default function Post() {
             datapostAprovacao = {
                 IDCOLABORADOR: 0,
                 DATAAPROVACAO: today,
-                APROVADA: 0,
+                APROVADA: 1,
             };
         }
     
@@ -855,22 +872,34 @@ export default function Post() {
             const resComentario = await axios.post(urlComentarios + 'create', datapost);
     
             if (resComentario.data.success) {
+                const datapostAtividade = {
+                    DATAULTIMAATIVIDADE : today
+                }
+                const viewdata = {
+                    VIEWS: Publicacao[0].VIEWS
+                }
+                const resPost = await axios.post(urlPost + 'ultimaAtividade/' + id, datapostAtividade);
+                const resView = await axios.put(urlPost + 'view/' + id, viewdata)
+                if(resPost.data.success && resView.data.success){
+                    loadPost()
+                }
+                
             } else {
-                alert(resComentario.data.message);
                 return;
             }
             if(mensagem != ""){
-                alert("O seu comentário foi criado com sucesso. Este será mostrado após aprovação por parte da administração")
+                //alert("O seu comentário foi criado com sucesso. Este será mostrado após aprovação por parte da administração")
             }
         } catch (error) {
             console.error("An error occurred: ", error);
             alert("An error occurred while processing your request. Please try again.");
         }
+        
     }
 
     function CriarComentario(){
         return(
-            <div className='container-fluid comentario-create-box' id="comentario-create-box" style={{height: '60vh'}}>
+            <div className='container-fluid comentario-create-box' id="comentario-create-box" style={{paddingBottom: '20px'}}>
                 <div>
                     <form id="algin-form d-flex">
                         <div className="form-group">

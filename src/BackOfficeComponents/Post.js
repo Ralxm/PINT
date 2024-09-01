@@ -3,6 +3,8 @@ import { Buffer } from 'buffer';
 import '../Universal/index.css';
 import axios from 'axios';
 import authHeader from '../views/auth-header';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function Post(){
     const url = "https://pint-backend-8vxk.onrender.com/post/list";
@@ -221,7 +223,6 @@ export default function Post(){
             <div className='side-bar col-4' style={{marginLeft: "10px"}} id={'insertColumn'}>
                 <div className='col-lg-12 backoffice-option'>
                     Inserir Publicação
-                    <button onClick={test}>testar</button>
                 </div>
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
@@ -319,121 +320,8 @@ export default function Post(){
                     </div>
                 </div>
             </div>
-            <div className='side-bar col-4' style={{marginLeft: "10px", display: 'none'}} id={'editColumn'}>
-                <div className='col-lg-12 backoffice-option'>
-                    <div className='edit-header'>
-                        Editar Colaborador
-                        <button onClick={FecharEditar} className='btn btn-secondary fechar-button'>Fechar</button>
-                    </div>
-                </div>
-                <div className='col-lg-12 input-create-thing-big-box'>
-                    <div className='input-create-thing'>
-                    <div className='input-group'>
-                            <label>Cidade</label>
-                            <select id="inputState" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
-                                        <option defaultValue>Selecione</option>
-                                        <ListCidades></ListCidades>
-                            </select>
-                        </div>
-                        <div className='input-group'>
-                            <label>Colaborador</label>
-                            <select id="inputState" className="input-group-select" value = {COLABORADOR} onChange={(value) => setCOLABORADOR(value.target.value)}>
-                                        <option defaultValue>Selecione</option>
-                                        <ListColaboradores></ListColaboradores>
-                            </select>
-                        </div>
-                        <div className='input-group'>
-                            <label>Categoria</label>
-                            <select id="inputState" className="input-group-select" value={CATEGORIA} onChange={(value) => setCATEGORIA(value.target.value)}>
-                                <option defaultValue>Selecione</option>
-                                <ListCategorias></ListCategorias>
-                            </select>
-                        </div>
-                        <div className='input-group'>
-                            <label>Subcategoria</label>
-                            <select id="inputState" className="input-group-select" value = {SUBCATEGORIA} onChange={(value) => setSUBCATEGORIA(value.target.value)}>
-                                <option defaultValue>Selecione</option>
-                                <ListSubcategorias></ListSubcategorias>
-                            </select>
-                        </div>
-                        <div>
-                            <input type={'checkbox'} className='form-check-input' id='checkEspaco' onClick={() => atualizarCheck('checkEspaco')}></input>
-                            <label className='form-check-label' for='checkEspaco'>Espaço</label>
-                            <input type={'checkbox'} className='form-check-input' id='checkEvento' onClick={()=> atualizarCheck('checkEvento')}></input>
-                            <label className='form-check-label' for="checkEvento">Evento</label>
-                        </div>
-                        <div id='espacoChecked' className='input-group-special'>
-                            <div className='input-group'>
-                                <label>Coordenadas</label>
-                                <input id='descricao' onChange={(value)=> setCOORDENADAS(value.target.value)}></input>
-                            </div>
-                            <div className='input-group'>
-                                <label>Website</label>
-                                <input id='descricao' onChange={(value)=> setWEBSITE(value.target.value)}></input>
-                            </div>
-                        </div>
-                        <div id='eventoChecked' className='input-group-special' style={{diplay:'none'}}>
-                            <div className='input-group'>
-                                <label>Nome do Questionário</label>
-                                <input id='descricao' onChange={(value)=> setNOMEQUESTIONARIO(value.target.value)}></input>
-                            </div>
-                            <div className='input-group'>
-                                <label>Data do Evento</label>
-                                <input id='descricao' type='date' onChange={(value)=> setDATAEVENTO(value.target.value)}></input>
-                            </div>
-                            {options.map((option, index) => (
-                                <div className='input-group' key={index}>
-                                    <label>{option.label}:</label>
-                                    <input id='descricao' value={option.value} onChange={(value) => handleInputChange(index, value)}></input>
-                                </div>
-                            ))}
-                            <div className='input-group'>
-                                <button style={{width:'80%', marginLeft:'10%'}} className='btn btn-outline-info' onClick={addOption} disabled={options.length >= 4}>Adicionar opção</button>
-                            </div>
-                            {options.length > 2 && (
-                                <div className='input-group'>
-                                    <button style={{ width: '80%', marginLeft: '10%' }} className='btn btn-outline-danger' onClick={removeOption}>Remover última opção</button>
-                                </div>
-                            )}
-                        </div>
-                        <div className='input-group'>
-                            <label>Data de publicação</label>
-                            <input id='descricao' onChange={(value)=> setDATAPUBLICACAO(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Data da ultima atividade</label>
-                            <input id='descricao' onChange={(value)=> setDATAULTIMAATIVIDADE(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Título</label>
-                            <input id='descricao' onChange={(value)=> setTITULO(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Texto</label>
-                            <input id='descricao' onChange={(value)=> setTEXTO(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Rating</label>
-                            <input id='descricao' onChange={(value)=> setRATING(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Imagem</label>
-                            <input id='descricao' type='file' onChange={(value)=> setIMAGEM(value.target.files[0])}></input>
-                        </div>
-                        <div>
-                            <button onClick={editarColuna} className='btn btn-info'>Editar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     )
-
-function test(){
-    options.map((data)=>{
-        console.log(data);
-    })
-}
 
 async function criarColuna() {
     const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
@@ -621,38 +509,6 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
     }
 }
 
-    function editarColuna(){
-        const urlEditar = 'https://pint-backend-8vxk.onrender.com/post/update/' + IDPUBLICACAO;
-        const datapost = {
-            CIDADE: CIDADE,
-            APROVACAO: APROVACAO,
-            COLABORADOR: COLABORADOR,
-            CATEGORIA: CATEGORIA,
-            SUBCATEGORIA: SUBCATEGORIA,
-            ESPACO: ESPACO,
-            EVENTO: EVENTO,
-            DATAPUBLICACAO: DATAPUBLICACAO,
-            DATAULTIMAATIVIDADE: DATAULTIMAATIVIDADE,
-            TITULO: TITULO,
-            TEXTO: TEXTO,
-            RATING: RATING,
-            IMAGEM: IMAGEM,
-        }
-        axios.put(urlEditar, datapost)
-        .then(res =>{
-            if(res.data.success === true){
-                alert('Cidade editada com sucesso');
-                loadTables();
-            }
-            else{
-                alert('Erro');
-            }
-        })
-        .catch(error => { 
-            alert("Error: fase7" + error);
-        })
-    }
-
     function ListTables(){
         const [filteredPosts, setFilteredPosts] = useState(Post);
         let lowercasedFiltroPublicacao;
@@ -725,50 +581,15 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
                             {data.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
                         </div>
                         <div className='showTableButtons'>
-                            <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                            <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                            <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
+                                <a>Confirmar apagar?</a>
+                                <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                            </Popup>
+                            
                         </div>
                     </div>
                 )
         })
-
-        /*return Post.map((data, index) => {
-            let aprovada;
-            if(data.aprovacao.APROVADA == 1){
-                aprovada = 'Aprovada';
-            }
-            else{
-                aprovada = 'Não Aprovada';
-            }
-            let base64Image;
-            if(data.IMAGEM){
-                //const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
-                base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
-            }
-                return(
-                    <div className='col-12 showTable'>
-                        <div className='showTableText'>
-                            <a>ID Publicação: {data.IDPUBLICACAO}</a>
-                            <a>Aprovação{' ID: ' + data.APROVACAO + ' - ' + aprovada}</a>
-                            <a>Colaborador: {' ID: ' + data.COLABORADOR + ' - ' +  data.colaborador.NOME}</a>
-                            <a>Categoria: {data.categorium.NOME}</a>
-                            <a>Subcategoria: {data.subcategorium.NOME}</a>
-                            {data.EVENTO === 1 && <a>Espaço: {data.espaco.IDESPACO}</a>}
-                            {data.ESPACO === 1 && <a>Evento: {data.EVENTO}</a>}
-                            <a>Data publicação: {data.DATAPUBLICACAO}</a>
-                            <a>Data ultima atividade: {data.DATAULTIMAATIVIDADE}</a>
-                            <a>Título: {data.TITULO}</a>
-                            <a>Texto: {data.TEXTO}</a>
-                            <a>Rating: {data.RATING}</a>
-                            {data.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
-                        </div>
-                        <div className='showTableButtons'>
-                            <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                            <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
-                        </div>
-                    </div>
-                )
-        })*/
     }
 
     function ListCidades(){
@@ -817,31 +638,6 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
         .catch(error => {
             alert("Erro fase9" + error)
         });
-    }
-
-    function inserirEditarColuna(data){
-        setIDPUBLICACAO(data.IDPUBLICACAO);
-        setCIDADE(data.CIDADE);
-        setAPROVACAO(data.APROVACAO);
-        setCOLABORADOR(data.COLABORADOR);
-        setCATEGORIA(data.CATEGORIA);
-        setSUBCATEGORIA(data.SUBCATEGORIA);
-        setESPACO(data.ESPACO);
-        setEVENTO(data.EVENTO);
-        setDATAPUBLICACAO(data.DATAPUBLICACAO);
-        setDATAULTIMAATIVIDADE(data.DATAULTIMAATIVIDADE);
-        setTITULO(data.TITULO);
-        setTEXTO(data.TEXTO);
-        setRATING(data.RATING);
-        setIMAGEM(data.IMAGEM);
-
-        document.getElementById('editColumn').style.display = 'block';
-        document.getElementById('insertColumn').style.display = 'none';
-    }
-
-    function FecharEditar(){ 
-        document.getElementById('editColumn').style.display = 'none';
-        document.getElementById('insertColumn').style.display = 'block';
     }
 
     function atualizarCheck(id){

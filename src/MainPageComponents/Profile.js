@@ -117,9 +117,9 @@ export default function Profile(){
                         {Cidade && <p>{Cidade.NOME}</p> }
                     </div>
                 </div>
-                <div className='col-3 profile-info-image'>
-                    <img src='./imageminicial.png' className='img-fluid profile-image'></img>
-                </div>
+                {Utilizador.IMAGEM && <div className='col-3 profile-info-image'>
+                    <img src={Utilizador.IMAGEM} className='img-fluid profile-image'></img>
+                </div>}
             </div>
             <div className='col-12 profile-buttons'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-sun" viewBox="0 0 16 16" onClick={() => changeTema(2)} style={{cursor: "pointer"}}>

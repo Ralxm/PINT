@@ -47,6 +47,11 @@ export default function LoginInput(){
                             navigate('mainpage');
                         }
                         else{
+                            localStorage.removeItem("user")
+                            localStorage.removeItem("cidade")
+                            localStorage.removeItem("id")
+                            localStorage.removeItem("theme")
+                            localStorage.removeItem("cargo")
                             alert('Website não está disponibilizado para utilizadores normais')
                         }
                     }
