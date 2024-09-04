@@ -314,7 +314,7 @@ export default function Cidade(){
                 TIPOCONTA: 1,
                 CARGO: cargo,
                 ATIVO: 1,
-                MUDOUPASSWORD: 1,
+                MUDOUPASSWORD: 0,
             }
             await axios.post(urlCriar, datapost)
             .then(res => {

@@ -90,7 +90,6 @@ export default function Main(){
 
         window.addEventListener('load', handleLoad);
 
-        // Cleanup to remove the event listener when the component unmounts
         return () => {
             window.removeEventListener('load', handleLoad);
         };
@@ -155,7 +154,7 @@ export default function Main(){
 
     function Filtro(){
             return (
-                <div className='container-fluid filtro-box'>
+                <div className='container-fluid filtro-box' style={{paddingBottom:"15px"}}>
                     <div className='col-lg-1 filtro-text filtro-title'>
                         &nbsp;
                     </div>
@@ -310,7 +309,7 @@ export default function Main(){
         return null;
       }
 
-    function PostBox({ Filtros }) {
+     function PostBox({ Filtros }) {
         return(
             <div className='col-6 posts-box'>
                 <div className='col-12' style={{display: "none"}}>

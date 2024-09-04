@@ -224,10 +224,10 @@ export default function Estatistica(){
     )
 
     function ColaboradoresInativos(){
-        return Colaborador.map((data, index) => {
+        return Colaborador.map((colaborador, index) => {
             let cargo;
             ColaboradorCargo.map((data2) =>{
-                if(data2.IDCOLABORADOR == data.IDCOLABORADOR){
+                if(data2.IDCOLABORADOR == colaborador.IDCOLABORADOR){
                     NomeCargo.map((data3) =>{
                         if(data3.IDCARGO == data2.IDCARGO){
                             cargo = data3.NOME;
@@ -237,25 +237,23 @@ export default function Estatistica(){
             })
             let cidade;
             NomeCidade.map((data2) =>{
-                if(data2.IDCIDADE == data.CIDADE){
+                if(data2.IDCIDADE == colaborador.CIDADE){
                     cidade = data2.NOME
                 }
             })
             let hoje = new Date();
-            let ultimo_login = new Date(data.ULTIMOLOGIN)
+            let ultimo_login = new Date(colaborador.ULTIMOLOGIN)
             const diffTime = Math.abs(ultimo_login - hoje);
             let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)); 
-            if(diffDays >= 15 && data.CIDADE === Utilizador.CIDADE){
+            if(diffDays >= 15 && colaborador.CIDADE === Utilizador.CIDADE){
                 return(
                     <div className='col-6 showTable'>
                         <div className='showTableText'>
-                            <a>ID Colaborador: {data.IDCOLABORADOR}</a>
-                            <a>Email: {data.EMAIL}</a>
-                            <a>Nome: {data.NOME}</a>
-                            <a>Telemovel: {data.TELEMOVEL}</a>
-                            <a>Cargo: {cargo}</a>
-                            <a>Cidade: {cidade}</a>
-                            <a>Data do último login: {data.ULTIMOLOGIN}</a>
+                            <a>{data.texto18backoffice}: {colaborador.IDCOLABORADOR}</a>
+                            <a>Email: {colaborador.EMAIL}</a>
+                            <a>{data.texto21backoffice}: {colaborador.NOME}</a>
+                            {colaborador.TELEMOVEL && <a>{data.texto23backoffice}: {colaborador.TELEMOVEL}</a>}
+                            <a>{data.texto24backoffice}: {colaborador.ULTIMOLOGIN}</a>
                         </div>
                     </div>
                 )
@@ -316,7 +314,7 @@ export default function Estatistica(){
                     <Legend />
                     <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
                 </LineChart>
-                <p>Total de Publicações: {totalPosts}</p>
+                <p>{data.texto29backoffice}: {totalPosts}</p>
             </div>
         );
     }
@@ -373,7 +371,7 @@ export default function Estatistica(){
                     <Legend />
                     <Line type="monotone" dataKey="count" stroke="#8884d8" activeDot={{ r: 8 }} />
                 </LineChart>
-                <p>Total de Registos: {totalRegistos}</p>
+                <p>{data.texto30backoffice}: {totalRegistos}</p>
             </div>
         );
     }
@@ -390,10 +388,10 @@ export default function Estatistica(){
                 return(
                     <div className='col-6 showTable'>
                         <div className='showTableText'>
-                            <a>ID Colaborador: {colaborador.IDCOLABORADOR}</a>
+                            <a>{data.texto18backoffice}: {colaborador.IDCOLABORADOR}</a>
                             <a>Email: {colaborador.EMAIL}</a>
-                            <a>Nome: {colaborador.NOME}</a>
-                            <a>Publições: {count}</a>
+                            <a>{data.texto21backoffice}: {colaborador.NOME}</a>
+                            <a>{data.texto22backoffice}: {count}</a>
                         </div>
                     </div>
                 )
@@ -418,15 +416,15 @@ export default function Estatistica(){
                     <div className='col-12 d-flex showTable'>
                         <div className='col-4'>
                             <div className='showTableText'>
-                                <a>Categoria: {categoria.NOME}</a>
-                                <a>Subcategoria: {postFinal.subcategorium.NOME}</a>  
+                                <a>{data.texto27backoffice}: {categoria.NOME}</a>
+                                <a>{data.texto28backoffice}: {postFinal.subcategorium.NOME}</a>  
                             </div>
                         </div>
                         <div className='col-5'>
                             <div className='showTableText'>
-                                <a>ID Publicação: {postFinal.IDPUBLICACAO}</a>
-                                <a>Título: {postFinal.TITULO}</a>
-                                <a>Visualizações: {postFinal.VIEWS}</a>
+                                <a>{data.texto17backoffice}: {postFinal.IDPUBLICACAO}</a>
+                                <a>{data.texto19backoffice}: {postFinal.TITULO}</a>
+                                <a>{data.texto20backoffice}: {postFinal.VIEWS}</a>
                             </div>
                         </div>
                         <div className='col-3'>
@@ -443,9 +441,9 @@ export default function Estatistica(){
             return(
                 <div className='col-6 showTable'>
                     <div className='showTableText'>
-                        <a>ID Publicação: {post.IDPUBLICACAO}</a>
-                        <a>Título: {post.TITULO}</a>
-                        <a>Visualizações: {post.VIEWS}</a>
+                        <a>{data.texto17backoffice}: {post.IDPUBLICACAO}</a>
+                        <a>{data.texto19backoffice}: {post.TITULO}</a>
+                        <a>{data.texto20backoffice}: {post.VIEWS}</a>
                         <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + post.IDPUBLICACAO}>Ver publicação</button>
                     </div>
                 </div>
@@ -475,9 +473,9 @@ export default function Estatistica(){
                     return(
                         <div className='col-6 showTable'>
                             <div className='showTableText'>
-                                <a>ID Publicação: {post[0].IDPUBLICACAO}</a>
-                                <a>Título: {post[0].TITULO}</a>
-                                <a>Quantidade de comentários: {post[1]}</a>
+                                <a>{data.texto17backoffice}: {post[0].IDPUBLICACAO}</a>
+                                <a>{data.texto19backoffice}: {post[0].TITULO}</a>
+                                <a>{data.texto25backoffice}: {post[1]}</a>
                                 <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + post[0].IDPUBLICACAO}>Ver publicação</button>
                             </div>
                         </div>
@@ -499,9 +497,9 @@ export default function Estatistica(){
                     return(
                         <div className='col-6 showTable'>
                             <div className='showTableText'>
-                                <a>ID Publicação: {post[0].IDPUBLICACAO}</a>
-                                <a>Título: {post[0].TITULO}</a>
-                                <a>Rating: {post[1]}</a>
+                                <a>{data.texto17backoffice}: {post[0].IDPUBLICACAO}</a>
+                                <a>{data.texto19backoffice}: {post[0].TITULO}</a>
+                                <a>{data.texto26backoffice}: {post[1]}</a>
                                 <button className='btn btn-outline-info' style={{maxWidth: "150px"}} onClick={() => window.location = "#/post/" + post[0].IDPUBLICACAO}>Ver publicação</button>
                             </div>
                         </div>

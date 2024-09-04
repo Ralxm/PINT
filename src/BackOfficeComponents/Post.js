@@ -5,8 +5,16 @@ import axios from 'axios';
 import authHeader from '../views/auth-header';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import * as lang from '../Universal/lang.json';
 
 export default function Post(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
+
     const url = "https://pint-backend-8vxk.onrender.com/post/list";
 
     const [Post, setPost] = useState([]);
@@ -27,7 +35,7 @@ export default function Post(){
     const [WEBSITE, setWEBSITE] = useState("");
 
     const [NOME, setNOMEQUESTIONARIO] = useState("");
-    const [options, setOptions] = useState([{ label: 'Opção 1', value: '' }, { label: 'Opção 2', value: '' }]);
+    const [options, setOptions] = useState([{ label: data.texto20publicacao + ' 1', value: '' }, { label: data.texto20publicacao + ' 2', value: '' }]);
     const [IDQUESTIONARIO, setIDQUESTIONARIO] = useState("");
 
     const [EVENTO, setEVENTO] = useState("");
@@ -227,28 +235,28 @@ export default function Post(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>Cidade</label>
+                            <label>{data.texto15publicacao}</label>
                             <select id="inputState" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCidades></ListCidades>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Colaborador</label>
+                            <label>{data.texto16publicacao}</label>
                             <select id="inputState" className="input-group-select" value = {COLABORADOR} onChange={(value) => setCOLABORADOR(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListColaboradores></ListColaboradores>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Categoria</label>
+                            <label>{data.texto3publicacao}</label>
                             <select id="inputState" className="input-group-select" value={CATEGORIA} onChange={(value) => setCATEGORIA(value.target.value)}>
                                 <option defaultValue>Selecione</option>
                                 <ListCategorias></ListCategorias>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Subcategoria</label>
+                            <label>{data.texto4publicacao}</label>
                             <select id="inputState" className="input-group-select" value = {SUBCATEGORIA} onChange={(value) => setSUBCATEGORIA(value.target.value)}>
                                 <option defaultValue>Selecione</option>
                                 <ListSubcategorias></ListSubcategorias>
@@ -262,17 +270,17 @@ export default function Post(){
                         </div>
                         <div id='espacoChecked' className='input-group-special'>
                             <div className='input-group'>
-                                <label>Coordenadas</label>
+                                <label>{data.texto17publicacao}</label>
                                 <input id='descricao' onChange={(value)=> setCOORDENADAS(value.target.value)}></input>
                             </div>
                             <div className='input-group'>
-                                <label>Website</label>
+                                <label>{data.texto18publicacao}</label>
                                 <input id='descricao' onChange={(value)=> setWEBSITE(value.target.value)}></input>
                             </div>
                         </div>
                         <div id='eventoChecked' className='input-group-special' style={{diplay:'none'}}>
                             <div className='input-group'>
-                                <label>Data do Evento</label>
+                                <label>{data.texto19publicacao}</label>
                                 <input id='descricao' type='date' onChange={(value)=> setDATAEVENTO(value.target.value)}></input>
                             </div>
                             {options.map((option, index) => (
@@ -291,27 +299,27 @@ export default function Post(){
                             )}
                         </div>
                         <div className='input-group'>
-                            <label>Data de publicação</label>
+                            <label>{data.texto7publicacao}</label>
                             <input id='descricao' onChange={(value)=> setDATAPUBLICACAO(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Data da ultima atividade</label>
+                            <label>{data.texto8publicacao}</label>
                             <input id='descricao' onChange={(value)=> setDATAULTIMAATIVIDADE(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Título</label>
+                            <label>{data.texto9publicacao}</label>
                             <input id='descricao' onChange={(value)=> setTITULO(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Texto</label>
+                            <label>{data.texto10publicacao}</label>
                             <input id='descricao' onChange={(value)=> setTEXTO(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Rating</label>
+                            <label>{data.texto11publicacao}</label>
                             <input id='descricao' onChange={(value)=> setRATING(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Imagem</label>
+                            <label>{data.texto23publicacao}</label>
                             <input id='descricao' type='file' onChange={(value)=> setIMAGEM(value.target.files[0])}></input>
                         </div>
                         <div>
@@ -502,10 +510,10 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
         if (res.data.success) {
             console.log('Post created successfully');
         } else {
-            alert('Error creating post');
+            //alert('Error creating post');
         }
     } catch (error) {
-        alert("Error creating post: " + (error.response ? error.response.data.message : error.message));
+        //alert("Error creating post: " + (error.response ? error.response.data.message : error.message));
     }
 }
 
@@ -550,40 +558,40 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
             }
         }, [FiltroColaborador, FiltroPublicacao, Post]);
 
-        return filteredPosts.map((data, index) => {
+        return filteredPosts.map((post, index) => {
             let aprovada;
-            if(data.aprovacao.APROVADA == 1){
-                aprovada = 'Aprovada';
+            if(post.aprovacao.APROVADA == 1){
+                aprovada = data.texto13publicacao;
             }
             else{
-                aprovada = 'Não Aprovada';
+                aprovada = data.texto14publicacao;
             }
             let base64Image;
-            if(data.IMAGEM){
+            if(post.IMAGEM){
                 //const base64 = Buffer.from(data.IMAGEM.data, "binary" ).toString("base64");
-                base64Image = 'data:image/jpeg;base64,' + data.IMAGEM;
+                base64Image = 'data:image/jpeg;base64,' + post.IMAGEM;
             }
                 return(
                     <div className='col-12 showTable'>
                         <div className='showTableText'>
-                            <a>ID Publicação: {data.IDPUBLICACAO}</a>
-                            <a>Aprovação{' ID: ' + data.APROVACAO + ' - ' + aprovada}</a>
-                            <a>Colaborador: {' ID: ' + data.COLABORADOR + ' - ' +  data.colaborador.NOME}</a>
-                            <a>Categoria: {data.categorium.NOME}</a>
-                            <a>Subcategoria: {data.subcategorium.NOME}</a>
-                            {data.EVENTO === 1 && <a>Espaço: {data.espaco.IDESPACO}</a>}
-                            {data.ESPACO === 1 && <a>Evento: {data.EVENTO}</a>}
-                            <a>Data publicação: {data.DATAPUBLICACAO}</a>
-                            <a>Data ultima atividade: {data.DATAULTIMAATIVIDADE}</a>
-                            <a>Título: {data.TITULO}</a>
-                            <a>Texto: {data.TEXTO}</a>
-                            <a>Rating: {data.RATING}</a>
-                            {data.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
+                            <a>{data.texto1publicacao}: {post.IDPUBLICACAO}</a>
+                            <a>{data.texto2publicacao}{': ' + post.APROVACAO + ' - ' + aprovada}</a>
+                            <a>{data.texto24publicacao}{': ' + post.COLABORADOR + ' - ' +  post.colaborador.NOME}</a>
+                            <a>{data.texto3publicacao}: {post.categorium.NOME}</a>
+                            <a>{data.texto4publicacao}: {post.subcategorium.NOME}</a>
+                            {post.EVENTO === 1 && <a>{data.texto5publicacao}: {post.espaco.IDESPACO}</a>}
+                            {post.ESPACO === 1 && <a>{data.texto6publicacao}: {post.EVENTO}</a>}
+                            <a>{data.texto7publicacao}: {post.DATAPUBLICACAO}</a>
+                            <a>{data.texto8publicacao}: {post.DATAULTIMAATIVIDADE}</a>
+                            <a>{data.texto9publicacao}: {post.TITULO}</a>
+                            <a>{data.texto10publicacao}: {post.TEXTO}</a>
+                            <a>{data.texto11publicacao}: {post.RATING}</a>
+                            {post.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
                         </div>
                         <div className='showTableButtons'>
                             <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
                                 <a>Confirmar apagar?</a>
-                                <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                                <button onClick={() => ApagarColuna(post)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
                             </Popup>
                             
                         </div>

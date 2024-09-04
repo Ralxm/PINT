@@ -1,8 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import '../Universal/index.css';
 import axios from 'axios';
+import * as lang from '../Universal/lang.json';
 
 export default function AuditLog(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
+
     const url = "https://pint-backend-8vxk.onrender.com/auditlog/list";
 
     const [AuditLog, setAuditLog] = useState([]);
@@ -51,55 +59,23 @@ export default function AuditLog(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>ID Conta</label>
+                            <label>{data.texto2auditlog}</label>
                             <input id='contaid' onChange={(value)=> setIDCONTA(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Tipo Atividade</label>
+                            <label>{data.texto3auditlog}</label>
                             <input id='tipoatividade' onChange={(value)=> setTIPOATIVIDADE(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Timestamp</label>
+                            <label>{data.texto4auditlog}</label>
                             <input id='timestamp' onChange={(value)=> setDATA(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Descrição</label>
+                            <label>{data.texto5auditlog}</label>
                             <input id='descricao' onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div>
                             <button onClick={criarAuditLog} className='btn btn-info'>Inserir</button>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-            <div className='side-bar col-4' style={{marginLeft: "10px", display: 'none'}} id={'editColumn'}>
-                <div className='col-lg-12 backoffice-option'>
-                    <div className='edit-header'>
-                        Editar AuditLog
-                        <button onClick={FecharEditar} className='btn btn-secondary fechar-button'>Fechar</button>
-                    </div>
-                </div>
-                <div className='col-lg-12 input-create-thing-big-box'>
-                    <div className='input-create-thing'>
-                        <div className='input-group'>
-                            <label>ID Conta</label>
-                            <input id='contaid' value={IDCONTA} onChange={(value)=> setIDCONTA(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Tipo Atividade</label>
-                            <input id='tipoatividade' value={TIPOATIVIDADE} onChange={(value)=> setTIPOATIVIDADE(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Timestamp</label>
-                            <input id='timestamp' value={DATA} onChange={(value)=> setDATA(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Descrição</label>
-                            <input id='descricao' value={DESCRICAO} onChange={(value)=> setDESCRICAO(value.target.value)}></input>
-                        </div>
-                        <div>
-                            <button onClick={editarAuditLog} className='btn btn-info'>Editar</button>
                         </div>
                     </div>
                     
@@ -156,61 +132,25 @@ export default function AuditLog(){
     }
 
     function ListAudit(){
-        return AuditLog.map((data, index) => {
+        return AuditLog.map((audit, index) => {
+            const now = new Date(audit.DATA);
+            const today = now.toISOString().split('T')[0];
             return(
                 <div className='col-12 showTable'>
                     <div className='showTableText'>
-                        <a>Log ID: {data.LOGID}</a>
+                        <a>{data.texto1auditlog}: {audit.LOGID}</a>
                         <br></br>
-                        <a>ID Conta: {data.IDCONTA}</a>
+                        <a>{data.texto2auditlog}: {audit.IDCONTA}</a>
                         <br></br>
-                        <a>Tipo Atividade: {data.TIPOATIVIDADE}</a>
+                        <a>{data.texto3auditlog}: {audit.TIPOATIVIDADE}</a>
                         <br></br>
-                        <a>Timestamp: {data.DATA}</a>
+                        <a>{data.texto4auditlog}: {today}</a>
                         <br></br>
-                        <a>Descrição: {data.DESCRICAO}</a>
+                        <a>{data.texto5auditlog}: {audit.DESCRICAO}</a>
                     </div>   
                 </div>
             )
         })
-    }
-    /* 
-    <div className='showTableButtons'>
-                        <button className='btn btn-info' onClick={() => EditarColuna(data)}>Editar</button>
-                        <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
-                    </div>
-    */
-
-    function ApagarColuna(data){
-        setLOGID(data.LOGID);
-        let idlog = data.LOGID;
-        const urlApagar = 'https://pint-backend-8vxk.onrender.com/auditlog/delete/' + data.LOGID;
-        axios.put(urlApagar)
-        .then(res =>{
-            if(res.data.success){
-                alert('Audit log com ID: ' + {idlog} + ' apagado com sucesso');
-                loadAuditLog();
-            }
-        })
-        .catch(error => {
-            alert("Erro " + error)
-        });
-    }
-
-    function EditarColuna(data){
-        setLOGID(data.LOGID);
-        setIDCONTA(data.IDCONTA);
-        setTIPOATIVIDADE(data.TIPOATIVIDADE);
-        setDATA(data.DATA);
-        setDESCRICAO(data.DESCRICAO);
-
-        document.getElementById('editColumn').style.display = 'block';
-        document.getElementById('insertColumn').style.display = 'none';
-    }
-
-    function FecharEditar(){ 
-        document.getElementById('editColumn').style.display = 'none';
-        document.getElementById('insertColumn').style.display = 'block';
     }
 }
 

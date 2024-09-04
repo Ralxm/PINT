@@ -451,12 +451,12 @@ export default function Post() {
             }
 
             return(
-                <div className='col-9 post-box' style={{maxHeight:"60vh", overflowY:'scroll'}}>
+                <div className='col-9 post-box'>
                     <div className='col-1'>
                         &nbsp;
                     </div>
                     <div className='col-10 main-post-box' style={{overflowY:'scroll'}}>
-                        <div className='post-nav-bar'>
+                        <div className='post-nav-bar'>  
                             <div className='post-main-info col-10'>
                                 <div className='d-flex' style={{cursor: "pointer"}} onClick={() => window.location = "#/profile/" + Publicacao[0].colaborador.IDCOLABORADOR}>
                                     <a>{Publicacao[0].colaborador.NOME}</a>
@@ -962,7 +962,7 @@ export default function Post() {
                     return;
                 }
                 return(
-                    <div class="card p-3 comentario-box-theme">
+                    <div class="card p-3 comentario-box-theme" style={{marginBottom: "10px"}}>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="user d-flex flex-row align-items-center">
                                 <img src="https://i.imgur.com/hczKIze.jpg" width="30" class="user-img rounded-circle mr-2"/>
