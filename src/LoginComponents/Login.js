@@ -89,7 +89,7 @@ export default function LoginInput(){
         }
 
         return (
-            <div className='col-lg-5 col-sm-12 big-login-box'>
+            <div className='col-lg-5 col-sm-12 big-login-box' style={{}}>
                 <div className='login-text-div'>
                     <span>Login</span>
                 </div>

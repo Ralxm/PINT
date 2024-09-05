@@ -30,7 +30,13 @@ class Footer extends React.Component {
                             <button className='btn btn-outline-success'>Download APK</button>
                         </a>
                     </div>
-                    <div className='col-lg-6'>
+                    <div className='col-lg-1 caixa-texto-esquerda d-flex'>
+                        <a href={'https://www.canva.com/design/DAGPh8G_ORQ/yoVNgRs2s5c3Ctqp1zKzZA/view?utm_content=DAGPh8G_ORQ&utm_campaign=designshare&utm_medium=link&utm_source=editor'} style={{cursor: "pointer", color: 'inherit', textDecoration:'none'}} target='_blank'>
+                        <button className='btn btn-outline-warning'>
+                            Microsite
+                        </button></a>
+                    </div>
+                    <div className='col-lg-5'>
                         &nbsp;
                     </div>
                     <div className='col-lg-1 caixa-texto-direita'>
