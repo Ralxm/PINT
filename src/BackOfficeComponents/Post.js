@@ -64,7 +64,7 @@ export default function Post(){
 
         loadTables();
 
-        axios.get('https://pint-backend-8vxk.onrender.com/cidade/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/cidade/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -92,7 +92,7 @@ export default function Post(){
             alert("Erro: fase2 " + error)
         })
 
-        axios.get('https://pint-backend-8vxk.onrender.com/categoria/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/categoria/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -106,7 +106,7 @@ export default function Post(){
             alert("Erro: fase3" + error)
         }) 
 
-        axios.get('https://pint-backend-8vxk.onrender.com/aprovacao/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/aprovacao/list', authHeader())
             .then(res => {
                 if(res.data.success === true){
                     const data = res.data.data;
@@ -129,7 +129,7 @@ export default function Post(){
             }
         })
         if (CATEGORIA) {
-            axios.get(`https://pint-backend-8vxk.onrender.com/subcategoria/listbyid/${id}`)
+            axios.get(`https://pint-backend-8vxk.onrender.com/subcategoria/listbyid/${id}`, authHeader())
                 .then(res => {
                     if (res.data.success === true) {
                         const data = res.data.data;
@@ -146,7 +146,7 @@ export default function Post(){
 
     useEffect(()=>{
         if(Utilizador){
-            axios.get(url + 'ByCidade/' + Utilizador.CIDADE)
+            axios.get(url + 'ByCidade/' + Utilizador.CIDADE, authHeader())
             .then(res => {
                 if(res.data.success === true){
                     const data = res.data.data;
@@ -384,7 +384,7 @@ async function criarEspaco() {
     const urlCriarEspaco = 'https://pint-backend-8vxk.onrender.com/espaco/create';
     const datapostEspaco = { COORDENADAS, WEBSITE };
     try {
-        const res = await axios.post(urlCriarEspaco, datapostEspaco);
+        const res = await axios.post(urlCriarEspaco, datapostEspaco, authHeader());
         if (res.data.success) {
             const idEspaco = res.data.data.IDESPACO;
             setEspaco(idEspaco);
@@ -403,7 +403,7 @@ async function criarQuestionario() {
     const urlCriarQuestionario = 'https://pint-backend-8vxk.onrender.com/questionario/create';
     const datapostQuestionario = { NOME };
     try {
-        const res = await axios.post(urlCriarQuestionario, datapostQuestionario);
+        const res = await axios.post(urlCriarQuestionario, datapostQuestionario, authHeader());
         if (res.data.success) {
             const idQuestionario = res.data.data.IDQUESTIONARIO;
             setIDQUESTIONARIO(idQuestionario);
@@ -427,7 +427,7 @@ async function criarOpcoesEscolha(idQuestionario) {
             TIPOOPCAO: 1,
             IDQUESTIONARIO: idQuestionario
         };
-        return axios.post(urlCriarOpcoesEscolha, datapostOpcoesEscolha);
+        return axios.post(urlCriarOpcoesEscolha, datapostOpcoesEscolha, authHeader());
     });
 
     try {
@@ -442,7 +442,7 @@ async function criarEvento(idQuestionario) {
     const urlCriarEvento = 'https://pint-backend-8vxk.onrender.com/evento/create';
     const datapostEvento = { IDQUESTIONARIO: idQuestionario, DATAEVENTO, ESTADO: 1 };
     try {
-        const res = await axios.post(urlCriarEvento, datapostEvento);
+        const res = await axios.post(urlCriarEvento, datapostEvento,  authHeader());
         if (res.data.success) {
             const idEvento = res.data.data.IDEVENTO;
             setEVENTO(idEvento);
@@ -470,7 +470,7 @@ async function criarAprovacao() {
     };
 
     try {
-        const res = await axios.post(urlCriarAprovacao, datapostAprovacao);
+        const res = await axios.post(urlCriarAprovacao, datapostAprovacao, authHeader());
         if (res.data.success) {
             const idAprovacao = res.data.data.IDAPROVACAO;
             setAprovacao(idAprovacao);
@@ -504,7 +504,7 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
         datapostPost.append('IMAGEM', IMAGEM);
     }
     try {
-        const res = await axios.post(urlCriarPost, datapostPost, { headers: { 'Content-Type': 'multipart/form-data' } });
+        const res = await axios.post(urlCriarPost, datapostPost, { headers: { 'Content-Type': 'multipart/form-data' } }, authHeader());
         if (res.data.success) {
             console.log('Post created successfully');
         } else {
@@ -635,7 +635,7 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
     function ApagarColuna(data){
         setIDPUBLICACAO(data.IDPUBLICACAO);
         const urlApagar = 'https://pint-backend-8vxk.onrender.com/post/delete/' + data.IDPUBLICACAO;
-        axios.put(urlApagar)
+        axios.put(urlApagar, authHeader())
         .then(res =>{
             if(res.data.success){
                 alert('Publicação: ' + {IDPUBLICACAO} + ' apagado com sucesso');

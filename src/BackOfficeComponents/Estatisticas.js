@@ -33,7 +33,7 @@ export default function Estatistica(){
     useEffect(() => {
         document.title = 'Mostrar Audit Log';
 
-        axios.get(urlCidade + 'list')
+        axios.get(urlCidade + 'list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -47,7 +47,7 @@ export default function Estatistica(){
             alert("Erro: " + error)
         })
 
-        axios.get('https://pint-backend-8vxk.onrender.com/cargo/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/cargo/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -61,7 +61,7 @@ export default function Estatistica(){
             alert("Erro: " + error)
         })
 
-        axios.get('https://pint-backend-8vxk.onrender.com/colaborador_cargo/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/colaborador_cargo/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -109,7 +109,7 @@ export default function Estatistica(){
             alert("Erro " + error);
         }); 
 
-        axios.get(urlPost + 'listByCidade/' + cidade)
+        axios.get(urlPost + 'listByCidade/' + cidade, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -123,7 +123,7 @@ export default function Estatistica(){
             alert("Erro: " + error)
         })
 
-        axios.get(urlPost + 'topViews')
+        axios.get(urlPost + 'topViews', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -137,7 +137,7 @@ export default function Estatistica(){
             alert("Erro: " + error)
         })
 
-        axios.get(urlCategoria + 'list')
+        axios.get(urlCategoria + 'list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -151,7 +151,7 @@ export default function Estatistica(){
             alert("Erro: " + error)
         })
 
-        axios.get(urlComentario + 'list')
+        axios.get(urlComentario + 'list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
