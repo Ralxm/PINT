@@ -166,7 +166,7 @@ export default function Post() {
             console.error(err);
         }
 
-        axios.get('https://pint-backend-8vxk.onrender.com/categoria/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/categoria/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;

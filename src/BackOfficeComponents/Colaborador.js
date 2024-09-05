@@ -577,7 +577,7 @@ function ListTables() {
             })
     
             const urlApagarColaboradorCargo = 'https://pint-backend-8vxk.onrender.com/colaborador_cargo/delete/' + colaboradorcargo;
-            await axios.put(urlApagarColaboradorCargo, authHeader())
+            await axios.put(urlApagarColaboradorCargo)
             .then(res =>{
                 if(res.data.success){
                     loadTables();
@@ -587,9 +587,7 @@ function ListTables() {
                 console.log("Erro asdasd" + error)
             });
             
-            console.log(data)
             const urlApagar = 'https://pint-backend-8vxk.onrender.com/colaborador/delete/' + data.IDCOLABORADOR;
-            console.log(urlApagar)
             await axios.put(urlApagar, null, authHeader())
             .then(res =>{
                 if(res.data.success){
