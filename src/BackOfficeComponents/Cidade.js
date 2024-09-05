@@ -4,6 +4,7 @@ import axios from 'axios';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import * as lang from '../Universal/lang.json';
+import authHeader from '../views/auth-header';
 
 export default function Cidade(){
     if(!JSON.parse(localStorage.getItem("lang"))){
@@ -26,7 +27,7 @@ export default function Cidade(){
     }, []);
 
     function loadTables(){
-        axios.get(url)
+        axios.get(url, authHeader())
         .then(res => {
             if(res.data.success === true){
                 const data = res.data.data;
@@ -96,7 +97,7 @@ export default function Cidade(){
         const datapost = {
             NOME: NOME
         }
-        axios.post(urlCriar, datapost)
+        axios.post(urlCriar, datapost, authHeader())
         .then(res => {
             if(res.data.success === true){
                 alert(res.data.message);
@@ -116,7 +117,7 @@ export default function Cidade(){
         const datapost = {
             NOME : NOME
         }
-        axios.put(urlEditar, datapost)
+        axios.put(urlEditar, datapost, authHeader())
         .then(res =>{
             if(res.data.success === true){
                 alert('Cidade editada com sucesso');
@@ -156,7 +157,7 @@ export default function Cidade(){
     function ApagarColuna(data){
         setIDCIDADE(data.IDCIDADE);
         const urlApagar = 'https://pint-backend-8vxk.onrender.com/cidade/delete/' + data.IDCIDADE;
-        axios.put(urlApagar)
+        axios.put(urlApagar, authHeader())
         .then(res =>{
             if(res.data.success){
                 alert('Audit log com ID: ' + {IDCIDADE} + ' apagado com sucesso');

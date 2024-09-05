@@ -383,7 +383,7 @@ export default function Main(){
             DATAAPROVACAO : aprovacao.DATAAPROVACAO,
             APROVADA : 1          
         }
-        axios.put(urlAprovacao + 'update/' + aprovacao.IDAPROVACAO, datapost)
+        axios.put(urlAprovacao + 'update/' + aprovacao.IDAPROVACAO, datapost, authHeader())
         .then(function(data){
             if(data.data.success === true){
                 console.log("fixe");
@@ -406,7 +406,7 @@ export default function Main(){
         const { aprovacao } = pub;
 
         if(pub.IDPUBLICACAO){
-            axios.put(urlPost + 'delete/' + pub.IDPUBLICACAO)
+            axios.put(urlPost + 'delete/' + pub.IDPUBLICACAO, authHeader())
             .then(function(data){
                 if(data.data.success === true){
                     console.log("fixe");
@@ -421,7 +421,7 @@ export default function Main(){
             })
         }
         else if(pub.IDCOMENTARIO){
-            axios.put(urlComentario + 'delete/' + pub.IDCOMENTARIO)
+            axios.put(urlComentario + 'delete/' + pub.IDCOMENTARIO, authHeader())
             .then(function(data){
                 if(data.data.success === true){
                     console.log("fixe");
@@ -436,7 +436,7 @@ export default function Main(){
             })
         }
         
-        axios.put(urlAprovacao + 'delete/' + aprovacao.IDAPROVACAO)
+        axios.put(urlAprovacao + 'delete/' + aprovacao.IDAPROVACAO, authHeader())
         .then(function(data){
             if(data.data.success === true){
                 console.log("fixe");

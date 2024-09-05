@@ -41,7 +41,7 @@ export default function Cidade(){
         document.title = 'Mostrar Colaboradores';
         loadTables();
 
-        axios.get('https://pint-backend-8vxk.onrender.com/cidade/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/cidade/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -55,7 +55,7 @@ export default function Cidade(){
             alert("Erro: " + error)
         })
 
-        axios.get('https://pint-backend-8vxk.onrender.com/cargo/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/cargo/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -138,7 +138,7 @@ export default function Cidade(){
             alert("Erro asdasd" + error);
         }); 
 
-        axios.get('https://pint-backend-8vxk.onrender.com/cargo/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/cargo/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -152,7 +152,7 @@ export default function Cidade(){
             alert("Erro: " + error)
         })
 
-        axios.get('https://pint-backend-8vxk.onrender.com/colaborador_cargo/list')
+        axios.get('https://pint-backend-8vxk.onrender.com/colaborador_cargo/list', authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -320,7 +320,7 @@ export default function Cidade(){
                 ATIVO: 1,
                 MUDOUPASSWORD: 0,
             }
-            await axios.post(urlCriar, datapost)
+            await axios.post(urlCriar, datapost, authHeader())
             .then(res => {
                 if(res.data.success === true){
                     loadTables();
@@ -416,7 +416,7 @@ export default function Cidade(){
             IDCARGO: cargo, 
             IDCOLABORADOR: IDCOLABORADOR,
         }
-        axios.put(urlEditarColaboradorCargo, datapostColaboradorCargo)
+        axios.put(urlEditarColaboradorCargo, datapostColaboradorCargo, authHeader())
         .then(res =>{
             if(res.data.success === true){
                 loadTables();
@@ -577,7 +577,7 @@ function ListTables() {
             })
     
             const urlApagarColaboradorCargo = 'https://pint-backend-8vxk.onrender.com/colaborador_cargo/delete/' + colaboradorcargo;
-            await axios.put(urlApagarColaboradorCargo)
+            await axios.put(urlApagarColaboradorCargo, authHeader())
             .then(res =>{
                 if(res.data.success){
                     loadTables();

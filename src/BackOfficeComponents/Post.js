@@ -587,6 +587,7 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
                             {post.IMAGEM && <img src={base64Image} style={{ maxWidth: '100%', height: 'auto', width: '40%' }}></img>}
                         </div>
                         <div className='showTableButtons'>
+                        
                             <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
                                 <a>Confirmar apagar?</a>
                                 <button onClick={() => ApagarColuna(post)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>

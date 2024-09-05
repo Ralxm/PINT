@@ -79,7 +79,7 @@ export default function LoginInput(){
                 DATA: today,
                 DESCRICAO: 'Conta com id ' + id + ' efetuou login.'
             }
-            axios.post(url + 'auditlog/create', datapost)
+            axios.post(url + 'auditlog/create', datapost, authHeader())
             .then(function(data){
 
             })

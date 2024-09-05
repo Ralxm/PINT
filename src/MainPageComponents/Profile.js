@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../Universal/index.css'
 import { useNavigate } from 'react-router-dom';
 import authService from '../views/auth-service'
+import authHeader from '../views/auth-header';
 import axios from 'axios'
 import * as lang from '../Universal/lang.json';
 import Popup from 'reactjs-popup';
@@ -92,7 +93,7 @@ export default function Profile(){
             console.log("Erro a ir buscar o token");
         }
         let url = urlColaborador + 'get/' + id
-        axios.get(url, {headers: { 'Authorization' : 'Bearer ' + token } })
+        axios.get(url, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;

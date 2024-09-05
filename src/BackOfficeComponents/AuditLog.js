@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import authHeader from '../views/auth-header';
 import '../Universal/index.css';
 import axios from 'axios';
 import * as lang from '../Universal/lang.json';
@@ -27,7 +28,7 @@ export default function AuditLog(){
     }, []);
 
     function loadAuditLog(){
-        axios.get(url)
+        axios.get(url, authHeader())
         .then(res => {
             if(res.data.success === true){
                 const data = res.data.data;
@@ -93,7 +94,7 @@ export default function AuditLog(){
             DATA: DATA,
             DESCRICAO: DESCRICAO
         }
-        axios.post(urlCriar, datapost)
+        axios.post(urlCriar, datapost, authHeader())
         .then(res => {
             if(res.data.success === true){
                 alert(res.data.message);
@@ -105,29 +106,6 @@ export default function AuditLog(){
         })
         .catch(error =>{
             alert('Erro: ' + error);
-        })
-    }
-
-    function editarAuditLog(){
-        const urlEditar = 'https://pint-backend-8vxk.onrender.com/auditlog/update/' + LOGID;
-        const datapost = {
-            IDCONTA: IDCONTA,
-            TIPOATIVIDADE: TIPOATIVIDADE,
-            DATA: DATA,
-            DESCRICAO: DESCRICAO
-        }
-        axios.put(urlEditar, datapost)
-        .then(res =>{
-            if(res.data.success === true){
-                alert('AuditLog editado com sucesso');
-                loadAuditLog();
-            }
-            else{
-                alert('Erro');
-            }
-        })
-        .catch(error => { 
-            alert("Error: " + error);
         })
     }
 

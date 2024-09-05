@@ -4,6 +4,7 @@ import axios from 'axios';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import * as lang from '../Universal/lang.json';
+import authHeader from '../views/auth-header';
 
 export default function Categoria(){
     if(!JSON.parse(localStorage.getItem("lang"))){
@@ -27,7 +28,7 @@ export default function Categoria(){
     }, []);
 
     function loadTables(){
-        axios.get(url)
+        axios.get(url, authHeader())
         .then(res => {
             if(res.data.success === true){
                 const data = res.data.data;
@@ -106,7 +107,7 @@ export default function Categoria(){
             NOME: NOME,
             DESCRICAO : DESCRICAO
         }
-        axios.post(urlCriar, datapost)
+        axios.post(urlCriar, datapost, authHeader())
         .then(res => {
             if(res.data.success === true){
                 alert(res.data.message);
@@ -127,7 +128,7 @@ export default function Categoria(){
             NOME: NOME,
             DESCRICAO : DESCRICAO
         }
-        axios.put(urlEditar, datapost)
+        axios.put(urlEditar, datapost, authHeader())
         .then(res =>{
             if(res.data.success === true){
                 alert('Categoria editada com sucesso');
@@ -169,7 +170,7 @@ export default function Categoria(){
     function ApagarColuna(data){
         setIDCATEGORIA(data.IDCATEGORIA);
         const urlApagar = 'https://pint-backend-8vxk.onrender.com/categoria/delete/' + data.IDCATEGORIA;
-        axios.put(urlApagar)
+        axios.put(urlApagar, authHeader())
         .then(res =>{
             if(res.data.success){
                 alert('Audit log com ID: ' + {IDCATEGORIA} + ' apagado com sucesso');

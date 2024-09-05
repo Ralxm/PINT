@@ -5,6 +5,7 @@ import { Buffer } from 'buffer';
 import '../Universal/index.css';
 import axios from 'axios';
 import Profile from '../MainPageComponents/Profile'
+import authHeader from '../views/auth-header';
        
 export default function Post() {
     const { id } = useParams();
@@ -125,7 +126,7 @@ export default function Post() {
             }
         });
 
-        axios.get(`https://pint-backend-8vxk.onrender.com/subcategoria/listbyid/${id}`)
+        axios.get(`https://pint-backend-8vxk.onrender.com/subcategoria/listbyid/${id}`, authHeader())
             .then(res => {
                 if (res.data.success === true) {
                     const data = res.data.data;
@@ -155,7 +156,7 @@ export default function Post() {
             VIEWS: Publicacao[0].VIEWS + 1
         }
         try {
-            const res = await axios.put(urlview, viewdata);
+            const res = await axios.put(urlview, viewdata, authHeader());
             if (res.data.success === true) {          
             } else {
                 alert("Erro Web Service");
@@ -184,7 +185,7 @@ export default function Post() {
         let url = `${urlPost}get/${id}`;
         let t = false;
         try {
-            const res = await axios.get(url);
+            const res = await axios.get(url, authHeader());
             if (res.data.success === true) {
                 const data = res.data.data;
                 setPublicacao(data);
@@ -206,7 +207,7 @@ export default function Post() {
 
     async function loadComentarios(){ 
         let url = urlComentarios + 'listByPost/' + id;
-        await axios.get(url)
+        await axios.get(url, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -223,7 +224,7 @@ export default function Post() {
 
     async function loadQuestionario(){
         let url = urlQuestionario + 'get/' + QuestionarioString;
-        await axios.get(url)
+        await axios.get(url, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -240,7 +241,7 @@ export default function Post() {
 
     async function loadOpcoesEscolha(){
         let url = urlOpcoesEscolha + 'listByQuestionario/' + QuestionarioString;
-        await axios.get(url)
+        await axios.get(url, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -257,7 +258,7 @@ export default function Post() {
 
     async function loadVotos(){
         let url = urlVoto + 'list';
-        await axios.get(url)
+        await axios.get(url, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -278,7 +279,7 @@ export default function Post() {
             RATING: rating
         }
         try {
-            const res = await axios.put(urlRating, data);
+            const res = await axios.put(urlRating, data, authHeader());
             if (res.data.success === true) {          
             } else {
                 alert("Erro Web Service");
@@ -328,7 +329,7 @@ export default function Post() {
         }
         try {
             const url = urlPost + "adminUpdate/" + id;
-            const res = await axios.post(url, datapostUpdate);
+            const res = await axios.post(url, datapostUpdate, authHeader());
             if (res.data.success === true) { 
                 window.location.reload();         
             } else {
@@ -387,7 +388,7 @@ export default function Post() {
         }
         
         console.log(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO)
-        const res = await axios.post(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO , datapostEvento);
+        const res = await axios.post(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO , datapostEvento, authHeader());
         if (res.data.success) {
             setESTADO(1);
         } else {
@@ -402,7 +403,7 @@ export default function Post() {
         const datapostEvento = {
             ESTADO : 0,
         }
-        const res = await axios.post(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO , datapostEvento);
+        const res = await axios.post(urlEvento + 'updateEstado/' + Publicacao[0].EVENTO , datapostEvento, authHeader());
         if (res.data.success) {
             setESTADO(0);
         } else {
@@ -771,7 +772,7 @@ export default function Post() {
             DATAVOTO : today,
             IDOPCOESESCOLHA : props.IDOPCAO
         }
-        await axios.post(urlVoto + 'create', datapost)
+        await axios.post(urlVoto + 'create', datapost, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -800,7 +801,7 @@ export default function Post() {
             DATAULTIMAATIVIDADE : today
         }
 
-        const resPost = await axios.post(urlPost + 'ultimaAtividade/' + id, datapostAtividade);
+        const resPost = await axios.post(urlPost + 'ultimaAtividade/' + id, datapostAtividade, authHeader());
     }
 
     async function Comentar() {
@@ -853,7 +854,7 @@ export default function Post() {
         }
     
         try {
-            const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao);
+            const resAprovacao = await axios.post(urlCriarAprovacao, datapostAprovacao, authHeader());
     
             if (resAprovacao.data.success) {
                 idAprovacao = resAprovacao.data.data.IDAPROVACAO;
@@ -870,7 +871,7 @@ export default function Post() {
                 TEXTO: mensagem
             };
     
-            const resComentario = await axios.post(urlComentarios + 'create', datapost);
+            const resComentario = await axios.post(urlComentarios + 'create', datapost, authHeader());
     
             if (resComentario.data.success) {
                 const datapostAtividade = {
@@ -879,8 +880,8 @@ export default function Post() {
                 const viewdata = {
                     VIEWS: Publicacao[0].VIEWS
                 }
-                const resPost = await axios.post(urlPost + 'ultimaAtividade/' + id, datapostAtividade);
-                const resView = await axios.put(urlPost + 'view/' + id, viewdata)
+                const resPost = await axios.post(urlPost + 'ultimaAtividade/' + id, datapostAtividade, authHeader());
+                const resView = await axios.put(urlPost + 'view/' + id, viewdata, authHeader())
                 if(resPost.data.success && resView.data.success){
                     loadPost()
                 }
@@ -991,7 +992,7 @@ export default function Post() {
     }
 
     async function apagarComentario(props){
-        await axios.put(urlComentarios + 'delete/' + props.IDCOMENTARIO)
+        await axios.put(urlComentarios + 'delete/' + props.IDCOMENTARIO, authHeader())
             .then(function(data){
                 if(data.data.success === true){
                     loadComentarios()
@@ -1003,7 +1004,7 @@ export default function Post() {
                 console.log("Erro");
             })
 
-        await axios.put(urlAprovacao + 'delete/' + props.aprovacao.IDAPROVACAO)
+        await axios.put(urlAprovacao + 'delete/' + props.aprovacao.IDAPROVACAO, authHeader())
         .then(function(data){
             if(data.data.success === true){
             }
