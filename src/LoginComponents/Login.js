@@ -102,23 +102,6 @@ export default function LoginInput(){
                 <div className='login-button-div'>
                     <input type='submit' id='login' class='login-button' value="Entrar" onClick={HandleLogin}></input>
                 </div>
-                <div className='login-separador'>
-                    <div className='separador'>
-
-                    </div>
-                    <div className='separador-text'>
-                        <span>Ou continuar com</span>
-                    </div>
-                    <div className='separador'>
-
-                    </div>
-                </div>
-                <div className='google-login'>
-                    <input type='submit' id='login' class='login-button-exterior' value="Entrar com Google"></input>
-                </div>
-                <div className='facebook-login'>
-                    <input type='submit' id='login' class='login-button-exterior' value="Entrar com Facebook"></input>
-                </div>
             </div>
         )
 }
