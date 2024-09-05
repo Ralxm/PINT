@@ -70,7 +70,33 @@
         "texto21publicacao": "Adicionar opção",
         "texto22publicacao": "Removel última opção",
         "texto23publicacao": "Imagem",
-        "texto24publicacao": "ID Colaborador"
+        "texto24publicacao": "ID Colaborador",
+
+        "texto1colaborador": "ID Colaborador",
+        "texto2colaborador": "Email",
+        "texto3colaborador": "Nome",
+        "texto4colaborador": "Telemóvel",
+        "texto5colaborador": "Cargo",
+        "texto6colaborador": "Cidade",
+        "texto7colaborador": "Data de nascimento",
+        "texto8colaborador": "Data de registo",
+        "texto9colaborador": "Data do último login",
+        "texto10colaborador": "Ativo",
+
+        "texto1cargo": "ID Cargo",
+        "texto2cargo": "Nome",
+        "texto3cargo": "Descrição",
+
+        "texto1cidade": "ID Cidade",
+        "texto2cidade": "Nome",
+
+        "texto1categoria": "ID Categoria",
+        "texto2categoria": "Nome",
+        "texto3categoria": "Descrição",
+
+        "texto1subcategoria": "Categoria",
+        "texto2subcategoria": "Nome",
+        "texto3subcategoria": "Descrição"
 
     },
     "es": {
@@ -144,7 +170,33 @@
         "texto21publicacao": "Agregar opción",
         "texto22publicacao": "Eliminar última opción",
         "texto23publicacao": "Imagen",
-        "texto24publicacao": "ID Colaborador"
+        "texto24publicacao": "ID Colaborador",
+
+        "texto1colaborador": "ID Colaborador",
+        "texto2colaborador": "Correo electrónico",
+        "texto3colaborador": "Nombre",
+        "texto4colaborador": "Teléfono móvil",
+        "texto5colaborador": "Cargo",
+        "texto6colaborador": "Ciudad",
+        "texto7colaborador": "Fecha de nacimiento",
+        "texto8colaborador": "Fecha de registro",
+        "texto9colaborador": "Fecha del último inicio de sesión",
+        "texto10colaborador": "Activo",
+
+        "texto1cargo": "ID Cargo",
+        "texto2cargo": "Nombre",
+        "texto3cargo": "Descripción",
+
+        "texto1cidade": "ID Ciudad",
+        "texto2cidade": "Nombre",
+
+        "texto1categoria": "ID Categoría",
+        "texto2categoria": "Nombre",
+        "texto3categoria": "Descripción",
+
+        "texto1subcategoria": "Categoría",
+        "texto2subcategoria": "Nombre",
+        "texto3subcategoria": "Descripción"
     },
     "en": {
 	    "texto1login": "Login",
@@ -217,6 +269,32 @@
         "texto21publicacao": "Add Option",
         "texto22publicacao": "Remove Last Option",
         "texto23publicacao": "Image",
-        "texto24publicacao": "Collaborator ID"
+        "texto24publicacao": "Collaborator ID",
+
+        "texto1colaborador": "Collaborator ID",
+        "texto2colaborador": "Email",
+        "texto3colaborador": "Name",
+        "texto4colaborador": "Mobile Phone",
+        "texto5colaborador": "Role",
+        "texto6colaborador": "City",
+        "texto7colaborador": "Date of Birth",
+        "texto8colaborador": "Registration Date",
+        "texto9colaborador": "Last Login Date",
+        "texto10colaborador": "Active",
+
+        "texto1cargo": "Role ID",
+        "texto2cargo": "Name",
+        "texto3cargo": "Description",
+
+        "texto1cidade": "City ID",
+        "texto2cidade": "Name",
+
+        "texto1categoria": "Category ID",
+        "texto2categoria": "Name",
+        "texto3categoria": "Description",
+
+        "texto1subcategoria": "Category",
+        "texto2subcategoria": "Name",
+        "texto3subcategoria": "Description"
     }
 }

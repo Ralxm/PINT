@@ -1,8 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import '../Universal/index.css';
 import axios from 'axios';
+import * as lang from '../Universal/lang.json';
 
 export default function Cargo(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
 
     const url = "https://pint-backend-8vxk.onrender.com/cargo/list";
 
@@ -50,11 +57,11 @@ export default function Cargo(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto2cargo}</label>
                             <input id='contaid' onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Descrição</label>
+                            <label>{data.texto3cargo}</label>
                             <input id='contaid' onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div>
@@ -74,11 +81,11 @@ export default function Cargo(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                     <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto2cargo}</label>
                             <input id='contaid' value={NOME} onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Descrição</label>
+                            <label>{data.texto3cargo}</label>
                             <input id='contaid' value={DESCRICAO} onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div>
@@ -134,20 +141,20 @@ export default function Cargo(){
     }
 
     function ListTables(){
-        return Cargo.map((data, index) => {
+        return Cargo.map((cargo, index) => {
             return(
                 <div className='col-12 showTable'>
                     <div className='showTableText'>
-                        <a>ID Cargo: {data.IDCARGO}</a>
+                        <a>{data.texto1cargo}: {cargo.IDCARGO}</a>
                         <br></br>
-                        <a>Nome: {data.NOME}</a>
+                        <a>{data.texto2cargo}: {cargo.NOME}</a>
                         <br></br>
-                        <a>Descrição: {data.DESCRICAO}</a>
+                        <a>{data.texto3cargo}: {cargo.DESCRICAO}</a>
                     </div>
                     {(index >= 2) &&
                         <div className='showTableButtons'>
-                        <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                        <button className='btn btn-danger' onClick={() => ApagarColuna(data)}>Apagar</button>
+                        <button className='btn btn-info' onClick={() => inserirEditarColuna(cargo)}>Editar</button>
+                        <button className='btn btn-danger' onClick={() => ApagarColuna(cargo)}>Apagar</button>
                     </div>
                     }
                     

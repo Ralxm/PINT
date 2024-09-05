@@ -4,8 +4,16 @@ import axios from 'axios';
 import authHeader from '../views/auth-header';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import * as lang from '../Universal/lang.json';
 
 export default function Cidade(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
+    
     const url = "https://pint-backend-8vxk.onrender.com/colaborador/list";
     const urlColaborador = "https://pint-backend-8vxk.onrender.com/colaborador/";
 
@@ -183,7 +191,7 @@ export default function Cidade(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>Email</label>
+                            <label>{data.texto2colaborador}</label>
                             <input id='contaid' onChange={(value)=> setEMAIL(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
@@ -191,37 +199,37 @@ export default function Cidade(){
                             <input id='contaid' onChange={(value)=> setPASSWORDCOLABORADOR(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto3colaborador}</label>
                             <input id='contaid' onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Telemovel</label>
+                            <label>{data.texto4colaborador}</label>
                             <input id='contaid' onChange={(value)=> setTELEMOVEL(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Cargo</label>
+                            <label>{data.texto5colaborador}</label>
                             <select id="inputStateCargoCriar" className="input-group-select" value = {CARGO} onChange={(value) => setCARGO(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCargos></ListCargos>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Cidade</label>
+                            <label>{data.texto6colaborador}</label>
                             <select id="inputStateCidadeCriar" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCidades></ListCidades>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Data Nascimento</label>
+                            <label>{data.texto7colaborador}</label>
                             <input id='contaid' onChange={(value)=> setDATANASCIMENTO(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Data Registo</label>
+                            <label>{data.texto8colaborador}</label>
                             <input id='contaid' onChange={(value)=> setDATAREGISTO(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Ultimo Login</label>
+                            <label>{data.texto9colaborador}</label>
                             <input id='contaid' onChange={(value)=> setULTIMOLOGIN(value.target.value)} type={'date'}></input>
                         </div>
                         <div>
@@ -241,45 +249,41 @@ export default function Cidade(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                     <div className='input-group'>
-                            <label>Email</label>
+                            <label>{data.texto2colaborador}</label>
                             <input id='contaid' value={EMAIL} onChange={(value)=> setEMAIL(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Password</label>
-                            <input id='contaid' value={PASSWORDCOLABORADOR} onChange={(value)=> setPASSWORDCOLABORADOR(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto3colaborador}</label>
                             <input id='contaid' value={NOME} onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Telemovel</label>
+                            <label>{data.texto4colaborador}</label>
                             <input id='contaid' value={TELEMOVEL} onChange={(value)=> setTELEMOVEL(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Cargo</label>
+                            <label>{data.texto5colaborador}</label>
                             <select id="inputState" className="input-group-select" value = {CARGO} onChange={(value) => setCARGO(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCargos></ListCargos>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Cidade</label>
+                            <label>{data.texto6colaborador}</label>
                             <select id="inputState" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCidades></ListCidades>
                             </select>
                         </div>
                         <div className='input-group'>
-                            <label>Data Nascimento</label>
+                            <label>{data.texto7colaborador}</label>
                             <input id='contaid' value={DATANASCIMENTO} onChange={(value)=> setDATANASCIMENTO(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Data Registo</label>
+                            <label>{data.texto8colaborador}</label>
                             <input id='contaid' value={DATAREGISTO} onChange={(value)=> setDATAREGISTO(value.target.value)} type={'date'}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Ultimo Login</label>
+                            <label>{data.texto9colaborador}</label>
                             <input id='contaid' value={ULTIMOLOGIN} onChange={(value)=> setULTIMOLOGIN(value.target.value)} type={'date'}></input>
                         </div>
                         <div>
@@ -455,10 +459,10 @@ function ListTables() {
         }
     }, [Filtro, Colaborador]);
 
-    return filteredColaboradores.map((data, index) => {
+    return filteredColaboradores.map((col, index) => {
         let cargo;
         ColaboradorCargo.forEach((data2) => {
-            if (data2.IDCOLABORADOR === data.IDCOLABORADOR) {
+            if (data2.IDCOLABORADOR === col.IDCOLABORADOR) {
                 NomeCargo.forEach((data3) => {
                     if (data3.IDCARGO === data2.IDCARGO) {
                         cargo = data3.NOME;
@@ -469,7 +473,7 @@ function ListTables() {
 
         let cidade;
         NomeCidade.forEach((data2) => {
-            if (data2.IDCIDADE === data.CIDADE) {
+            if (data2.IDCIDADE === col.CIDADE) {
                 cidade = data2.NOME;
             }
         });
@@ -477,40 +481,40 @@ function ListTables() {
         return (
             <div key={index} className='col-12 showTable'>
                 <div className='showTableText'>
-                    <a>ID Colaborador: {data.IDCOLABORADOR}</a>
+                    <a>{data.texto1colaborador}: {col.IDCOLABORADOR}</a>
                     <br></br>
-                    <a>Email: {data.EMAIL}</a>
+                    <a>{data.texto2colaborador}: {col.EMAIL}</a>
                     <br></br>
-                    <a>Nome: {data.NOME}</a>
+                    <a>{data.texto3colaborador}: {col.NOME}</a>
                     <br></br>
-                    <a>Telemovel: {data.TELEMOVEL}</a>
+                    <a>{data.texto4colaborador}: {col.TELEMOVEL}</a>
                     <br></br>
-                    <a>Cargo: {cargo}</a>
+                    <a>{data.texto5colaborador}: {cargo}</a>
                     <br></br>
-                    <a>Cidade: {cidade}</a>
+                    <a>{data.texto6colaborador}: {cidade}</a>
                     <br></br>
-                    <a>Data de nascimento: {data.DATANASCIMENTO}</a>
+                    <a>{data.texto7colaborador}: {col.DATANASCIMENTO}</a>
                     <br></br>
-                    <a>Data de registo: {data.DATAREGISTO}</a>
+                    <a>{data.texto8colaborador}: {col.DATAREGISTO}</a>
                     <br></br>
-                    <a>Data do último login: {data.ULTIMOLOGIN}</a>
+                    <a>{data.texto9colaborador}: {col.ULTIMOLOGIN}</a>
                     <br></br>
-                    <a>Ativo: {data.ATIVO}</a>
+                    <a>{data.texto10colaborador}: {col.ATIVO}</a>
                 </div>
                 <div className='showTableButtons'>
-                    <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
-                    {data.ATIVO ? 
+                    <button className='btn btn-info' onClick={() => inserirEditarColuna(col)}>Editar</button>
+                    {col.ATIVO ? 
                         (
-                            <button className='btn btn-warning' onClick={() => desativarColaborador(data.IDCOLABORADOR)}>Desativar</button>
+                            <button className='btn btn-warning' onClick={() => desativarColaborador(col.IDCOLABORADOR)}>Desativar</button>
                         ) 
                         :
                         (
-                            <button className='btn btn-success' onClick={() => ativarColaborador(data.IDCOLABORADOR)}>Ativar</button>
+                            <button className='btn btn-success' onClick={() => ativarColaborador(col.IDCOLABORADOR)}>Ativar</button>
                         )
                     }
                     <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
                         <a>Confirmar apagar?</a>
-                        <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                        <button onClick={() => ApagarColuna(col)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
                     </Popup>
                     
                 </div>

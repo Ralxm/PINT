@@ -4,8 +4,15 @@ import axios from 'axios';
 import Categoria from './Categoria';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import * as lang from '../Universal/lang.json';
 
 export default function Subcategoria(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
 
     const url = "https://pint-backend-8vxk.onrender.com/subcategoria/list";
 
@@ -71,15 +78,15 @@ export default function Subcategoria(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto2subcategoria}</label>
                             <input id='contaid' onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Descrição</label>
+                            <label>{data.texto3subcategoria}</label>
                             <input id='contaid' onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Categoria</label>
+                            <label>{data.texto1subcategoria}</label>
                             <select id="inputState" className="input-group-select" value = {IDCATEGORIA} onChange={(value) => setIDCATEGORIA(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCategorias></ListCategorias>
@@ -101,15 +108,15 @@ export default function Subcategoria(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                     <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto2subcategoria}</label>
                             <input id='contaid' value={NOME} onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Descrição</label>
+                            <label>{data.texto3subcategoria}</label>
                             <input id='contaid' value={DESCRICAO}  onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Categoria</label>
+                            <label>{data.texto1subcategoria}</label>
                             <select id="inputState" className="input-group-select" value = {IDCATEGORIA} onChange={(value) => setIDCATEGORIA(value.target.value)}>
                                         <option defaultValue>Selecione</option>
                                         <ListCategorias></ListCategorias>
@@ -169,21 +176,21 @@ export default function Subcategoria(){
     }
 
     function ListTables(){
-        return Subcategoria.map((data, index) => {
+        return Subcategoria.map((subcategoria, index) => {
             return(
                 <div className='col-12 showTable'>
                     <div className='showTableText'>
-                        <a>Nome: {data.NOME}</a>
+                        <a>{data.texto2subcategoria}: {subcategoria.NOME}</a>
                         <br></br>
-                        <a>Descrição: {data.DESCRICAO}</a>
+                        <a>{data.texto3subcategoria}: {subcategoria.DESCRICAO}</a>
                         <br></br>
-                        <a>Categoria: {data.IDCATEGORIA}</a>
+                        <a>{data.texto1subcategoria}: {subcategoria.IDCATEGORIA}</a>
                     </div>
                     <div className='showTableButtons'>
-                        <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
+                        <button className='btn btn-info' onClick={() => inserirEditarColuna(subcategoria)}>Editar</button>
                         <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
                             <a>Confirmar apagar?</a>
-                            <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                            <button onClick={() => ApagarColuna(subcategoria)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
                         </Popup>
                     </div>
                 </div>

@@ -503,8 +503,6 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
     if (IMAGEM) {
         datapostPost.append('IMAGEM', IMAGEM);
     }
-    console.log(datapostPost)
-
     try {
         const res = await axios.post(urlCriarPost, datapostPost, { headers: { 'Content-Type': 'multipart/form-data' } });
         if (res.data.success) {

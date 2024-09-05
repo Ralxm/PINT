@@ -3,8 +3,15 @@ import '../Universal/index.css';
 import axios from 'axios';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import * as lang from '../Universal/lang.json';
 
 export default function Categoria(){
+    if(!JSON.parse(localStorage.getItem("lang"))){
+        localStorage.setItem("lang", "pt");
+    }
+    let stolang = JSON.parse(localStorage.getItem("lang"));
+    let data = JSON.parse(JSON.stringify(lang));
+    data = data[stolang];
 
     const url = "https://pint-backend-8vxk.onrender.com/categoria/list";
 
@@ -52,11 +59,11 @@ export default function Categoria(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>Nome</label>
+                            <label>{data.texto2categoria}</label>
                             <input id='contaid' onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Descrição</label>
+                            <label>{data.texto3categoria}</label>
                             <input id='contaid' onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div>
@@ -76,11 +83,11 @@ export default function Categoria(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                     <div className='input-group'>
-                            <label>Email</label>
+                            <label>{data.texto2categoria}</label>
                             <input id='contaid' value={NOME} onChange={(value)=> setNOME(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
-                            <label>Password</label>
+                            <label>{data.texto3categoria}</label>
                             <input id='contaid' value={DESCRICAO} onChange={(value)=> setDESCRICAO(value.target.value)}></input>
                         </div>
                         <div>
@@ -136,21 +143,21 @@ export default function Categoria(){
     }
 
     function ListTables(){
-        return Categoria.map((data, index) => {
+        return Categoria.map((categoria, index) => {
             return(
                 <div className='col-12 showTable'>
                     <div className='showTableText'>
-                        <a>ID Categoria: {data.IDCATEGORIA}</a>
+                        <a>{data.texto1categoria}: {categoria.IDCATEGORIA}</a>
                         <br></br>
-                        <a>Nome: {data.NOME}</a>
+                        <a>{data.texto2categoria}: {categoria.NOME}</a>
                         <br></br>
-                        <a>Descrição: {data.DESCRICAO}</a>
+                        <a>{data.texto3categoria}: {categoria.DESCRICAO}</a>
                     </div>
                     <div className='showTableButtons'>
-                        <button className='btn btn-info' onClick={() => inserirEditarColuna(data)}>Editar</button>
+                        <button className='btn btn-info' onClick={() => inserirEditarColuna(categoria)}>Editar</button>
                         <Popup trigger={<button className='btn btn-danger'>Apagar</button>}>
                             <a>Confirmar apagar?</a>
-                            <button onClick={() => ApagarColuna(data)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
+                            <button onClick={() => ApagarColuna(categoria)} className='btn btn-outline-danger' style={{marginLeft: "5px"}}>Sim</button>
                         </Popup>
                         
                     </div>
