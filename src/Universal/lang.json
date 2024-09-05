@@ -218,7 +218,7 @@
         "texto8backoffice": "Posts",
         "texto9backoffice": "Posts created in the last 30 days",
         "texto10backoffice": "Inactive collaborators",
-        "texto11backoffice": "Records in the last 30 days",
+        "texto11backoffice": "Sign ups in the last 30 days",
         "texto12backoffice": "Number of posts per collaborator",
         "texto13backoffice": "Top 5 posts with the most views of all time",
         "texto14backoffice": "Post with the most views in the last 30 days by category",
@@ -238,7 +238,7 @@
         "texto27backoffice": "Category",
         "texto28backoffice": "Subcategory",
         "texto29backoffice": "Total Posts",
-        "texto30backoffice": "Total Registers",
+        "texto30backoffice": "Total Sign Ups",
 
         "texto1auditlog": "Record ID",
         "texto2auditlog": "Collaborator ID",
