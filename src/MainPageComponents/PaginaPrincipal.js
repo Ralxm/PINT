@@ -3,11 +3,13 @@ import { Calendar, Badge, Tooltip, Whisper } from 'rsuite';
 import '../Universal/index.css'
 import axios from 'axios';
 import Profile from './Profile'
-import {Buffer} from 'buffer'
-import authService from '../views/auth-service';
 import "rsuite/dist/rsuite-no-reset.min.css"
 import * as lang from '../Universal/lang.json';
 import authHeader from '../views/auth-header';
+import ptBR from 'rsuite/locales/pt_BR';
+import enGB from 'rsuite/locales/en_GB';
+import eES from 'rsuite/locales/es_ES';
+import { esES } from 'rsuite/esm/locales';
 
 export default function Main(){
     let stolang = localStorage.getItem("lang");
@@ -261,9 +263,19 @@ export default function Main(){
     }
 
     function CalendarioBox(){
+        let locale;
+        if(stolang == "pt"){
+            locale = ptBR.Calendar;
+        }
+        else if(stolang == "es"){
+            locale = esES.Calendar;
+        }
+        else if(stolang == "en"){
+            locale = enGB.Calendar;
+        }
         return(
             <div className='calendario-box'>
-                <Calendar compact bordered renderCell={renderCell} />
+                <Calendar compact bordered renderCell={renderCell} locale={locale}/>
             </div>
         )
     }
