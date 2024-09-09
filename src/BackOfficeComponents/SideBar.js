@@ -87,6 +87,9 @@ export default function SideBar(){
             <div className='col-lg-12 backoffice-option' onClick={() => window.location= "#/backoffice/post"}>
                 {data.texto8backoffice}
             </div>
+            <div className='col-lg-12 backoffice-option' onClick={() => window.location= "#/backoffice/denuncias"}>
+                {data.texto31backoffice}
+            </div>
         </div>
     )
 }

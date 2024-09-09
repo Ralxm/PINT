@@ -40,6 +40,7 @@
         "texto28backoffice": "Subcategoria",
         "texto29backoffice": "Total de Publicações",
         "texto30backoffice": "Total de Registos",
+        "texto31backoffice": "Denúncias",
 
         "texto1auditlog": "ID Registo",
         "texto2auditlog": "ID Colaborador",
@@ -96,8 +97,13 @@
 
         "texto1subcategoria": "Categoria",
         "texto2subcategoria": "Nome",
-        "texto3subcategoria": "Descrição"
+        "texto3subcategoria": "Descrição",
 
+        "texto1denuncia": "ID Denúncia",
+        "texto2denuncia": "Colaborador",
+        "texto3denuncia": "Data da denúncia",
+        "texto4denuncia": "Motivo",
+        "texto5denuncia": "Comentario"
     },
     "es": {
 	    "texto1login": "Entrar",
