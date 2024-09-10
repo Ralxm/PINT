@@ -868,7 +868,8 @@ export default function Post() {
                 IDCOLABORADOR: JSON.parse(localStorage.getItem("id")),
                 DATACOMENTARIO: today,
                 AVALIACAO: rating,
-                TEXTO: mensagem
+                TEXTO: mensagem,
+                RATING: 0
             };
     
             const resComentario = await axios.post(urlComentarios + 'create', datapost, authHeader());
