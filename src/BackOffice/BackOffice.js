@@ -27,6 +27,9 @@ export default function BackOffice(){
         // Cleanup to remove the event listener when the component unmounts
         return () => {
             window.removeEventListener('load', handleLoad);
+            setTimeout(()=>{
+                changeTheme(1)
+            }, 300)
         };
     }, []);
 

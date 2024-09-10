@@ -62,18 +62,19 @@ export default function Denuncia(){
             )
         }
         return Denuncia.map((denuncia, index) => {
+            console.log(denuncia);
             return(
                 <div className='col-12 showTable'>
                     <div className='showTableText'>
                         <a>{data.texto1denuncia}: {denuncia.IDDENUNCIA}</a>
                         <br></br>
-                        <a>{data.texto2cargo}: {denuncia.colaborador.NOME}</a>
+                        <a>{data.texto2denuncia}: {denuncia.colaborador.NOME}</a>
                         <br></br>
-                        <a>{data.texto3cargo}: {denuncia.DATADENUNCIA}</a>
+                        <a>{data.texto3denuncia}: {denuncia.DATADENUNCIA}</a>
                         <br></br>
-                        <a>{data.texto4cargo}: {denuncia.MOTIVO}</a>
+                        <a>{data.texto4denuncia}: {denuncia.MOTIVO}</a>
                         <br></br>
-                        <a>{data.texto5cargo}: {denuncia.comentario.TEXTO}</a>
+                        <a>{data.texto5denuncia}: {denuncia.comentario.TEXTO}</a>
                     </div>
                     <div className='showTableButtons'>
                         <button className='btn btn-danger' onClick={() => ApagarColuna(denuncia)}>Apagar</button>

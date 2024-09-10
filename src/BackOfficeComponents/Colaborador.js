@@ -174,7 +174,7 @@ export default function Cidade(){
                     Listagem Colaboradores
                 </div>
                 <div className='col-lg-12 d-flex' style={{justifyContent: "center"}}>
-                    <nav class="navbar navbar-light bg-light">
+                    <nav class="navbar navbar-light bg-light searchBar">
                         <form class="form-inline d-flex">
                             <input onChange={(value) => setFiltro(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id='filtrarColaboradores'/>
                         </form>

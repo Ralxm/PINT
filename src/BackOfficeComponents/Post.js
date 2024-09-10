@@ -210,14 +210,14 @@ export default function Post(){
                 </div>
                 <div className='col-lg-12 d-flex'>
                     <div className='col-6 d-flex' style={{justifyContent: "center"}}>
-                        <nav className="navbar navbar-light bg-light">
+                        <nav className="navbar navbar-light bg-light searchBar">
                             <form className="form-inline d-flex">
                                 <input onChange={(value) => setFiltroColaborador(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Colaborador - ID ou Nome" aria-label="Search" id='filtrarColaboradores'/>
                             </form>
                         </nav>
                     </div>
                     <div className='col-6 d-flex' style={{justifyContent: "center"}}>
-                        <nav className="navbar navbar-light bg-light">
+                        <nav className="navbar navbar-light bg-light  searchBar">
                             <form className="form-inline d-flex">
                                 <input onChange={(value) => setFiltroPublicacao(value.target.value)} class="form-control mr-sm-2" type="search" placeholder="Publicação - ID ou Título" aria-label="Search" id='filtrarColaboradores'/>
                             </form>

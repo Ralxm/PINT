@@ -97,6 +97,9 @@ export default function Main(){
 
         return () => {
             window.removeEventListener('load', handleLoad);
+            setTimeout(()=>{
+                changeTheme(1)
+            }, 300)
         };
     }, [])
 
