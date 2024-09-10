@@ -99,7 +99,7 @@ export default function Main(){
             window.removeEventListener('load', handleLoad);
             setTimeout(()=>{
                 changeTheme(1)
-            }, 300)
+            }, 600)
         };
     }, [])
 
