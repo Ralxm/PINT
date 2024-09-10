@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { Calendar, Badge, Tooltip, Whisper } from 'rsuite';
 import '../Universal/index.css'
 import axios from 'axios';
@@ -10,6 +10,7 @@ import ptBR from 'rsuite/locales/pt_BR';
 import enGB from 'rsuite/locales/en_GB';
 import eES from 'rsuite/locales/es_ES';
 import { esES } from 'rsuite/esm/locales';
+import emailjs from 'emailjs-com' 
 
 export default function Main(){
     let stolang = localStorage.getItem("lang");
@@ -44,6 +45,8 @@ export default function Main(){
     const [Comentario, setComentario] = useState([]);
 
     const [Utilizador, setUtilizador] = useState([]);
+
+    const [EMAIL, setEMAIL] = useState("");
 
     const [Filtros, setFiltros] = useState([])
 
@@ -375,7 +378,7 @@ export default function Main(){
     }
 
     function Aprovar(props){
-        const { pub } = props;
+        const { pub, em, titulo } = props;
         const { aprovacao } = pub;
         let id = JSON.parse(localStorage.getItem('id'));
         const datapost = {
@@ -398,6 +401,41 @@ export default function Main(){
         .catch(err =>{
             console.log("Erro");
         })
+        if(em){
+            const template = {
+                titulo: titulo,
+                nome: pub.colaborador.NOME,
+                email: em
+            }
+            emailjs.send("service_0il108d", "template_sy7kq5a", template, "GFAId4ybD4lKabI4m")
+            .then((result) => {
+                console.log(result);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+        /*let transporter = nodemailer.createTransport({
+            service: "gmail",
+            auth: {
+                user: "pintsoftshares24@gmail.com",
+                pass: "atmf bhjb cels kcgp"
+            }
+        });
+        let mailOptions = {
+            from: "pintsoftshares24@gmail.com",
+            to: props.colaborador.EMAIL,
+            subject: "Comentário criado numa publicação",
+            text: "Foi criado um comentario na sua publicação com o titulo: " + props.TITULO + " por " + props.colaborador.NOME + "."
+        }
+        console.log(transporter)
+        console.log(mailOptions)
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error){
+                console.log("Erro a enviar o email")
+            }
+            console.log("Email enviado com sucesso")
+        })*/
         loadTables();
     }
 
@@ -497,10 +535,12 @@ export default function Main(){
         return Comentario.map((comment, index) => {
             let id = JSON.parse(localStorage.getItem('id'))
             let titulo;
+            let email;
             let nome;
             Publicacao.map((post) =>{
                 if(post.IDPUBLICACAO == comment.IDPOST){
                     titulo = post.TITULO
+                    email = post.colaborador.EMAIL
                 }
             })
             Colaborador.map((colaborador) => {
@@ -523,7 +563,7 @@ export default function Main(){
                             </div>
                         </a>
                         <div className='col-lg-12 notification-buttons'>
-                            <Aceitar pub={comment}></Aceitar>
+                            <Aceitar pub={comment} em={email} titulo={titulo}></Aceitar>
                             <Rejeitar pub={comment}></Rejeitar>
                         </div>
                     </div>

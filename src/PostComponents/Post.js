@@ -512,6 +512,9 @@ export default function Post() {
         
                                 {Publicacao[0].evento.IDEVENTO === 1 ? (
                                     <div>
+                                    <div className='post-subcategory-info col-12'>
+                                            <a style={{ color: "rgba(0,0,0,0.5)" }}>Preço médio: {Publicacao[0].espaco.PRECO}€</a>
+                                        </div>
                                         <div className='post-subcategory-info col-12'>
                                             <a style={{ color: "rgba(0,0,0,0.5)" }}>{'Localização: '}</a>
                                             <a style={{ color: "rgba(0,0,0,0.5)" }} href={'https://www.google.com/maps/place/' + Publicacao[0].espaco.COORDENADAS} target='_blank'>Abrir no mapa</a>
