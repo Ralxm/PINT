@@ -77,8 +77,8 @@ export default function Post(){
         .catch(error => {
             alert("Erro: fase1" + error)
         })
-
-        axios.get('https://pint-backend-8vxk.onrender.com/colaborador/list', authHeader())
+        let cidade = JSON.parse(localStorage.getItem("cidade"))
+        axios.get('https://pint-backend-8vxk.onrender.com/colaborador/listByCidade/' + cidade, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
@@ -235,20 +235,6 @@ export default function Post(){
                 <div className='col-lg-12 input-create-thing-big-box'>
                     <div className='input-create-thing'>
                         <div className='input-group'>
-                            <label>{data.texto15publicacao}</label>
-                            <select id="inputState" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
-                                        <option defaultValue>Selecione</option>
-                                        <ListCidades></ListCidades>
-                            </select>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto16publicacao}</label>
-                            <select id="inputState" className="input-group-select" value = {COLABORADOR} onChange={(value) => setCOLABORADOR(value.target.value)}>
-                                        <option defaultValue>Selecione</option>
-                                        <ListColaboradores></ListColaboradores>
-                            </select>
-                        </div>
-                        <div className='input-group'>
                             <label>{data.texto3publicacao}</label>
                             <select id="inputState" className="input-group-select" value={CATEGORIA} onChange={(value) => setCATEGORIA(value.target.value)}>
                                 <option defaultValue>Selecione</option>
@@ -313,10 +299,6 @@ export default function Post(){
                         <div className='input-group'>
                             <label>{data.texto10publicacao}</label>
                             <input id='descricao' onChange={(value)=> setTEXTO(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto11publicacao}</label>
-                            <input id='descricao' onChange={(value)=> setRATING(value.target.value)}></input>
                         </div>
                         <div className='input-group'>
                             <label>{data.texto23publicacao}</label>
@@ -486,11 +468,13 @@ async function criarAprovacao() {
 }
 
 async function criarPost(idEspaco, idEvento, idAprovacao) {
+    let cidade = JSON.parse(localStorage.getItem("cidade"))
+    let id = JSON.parse(localStorage.getItem("id"))
     const urlCriarPost = 'https://pint-backend-8vxk.onrender.com/post/create';
     const datapostPost = new FormData();
-    datapostPost.append('CIDADE', Cidade.find(data => data.NOME === CIDADE)?.IDCIDADE);
+    datapostPost.append('CIDADE', cidade);
     datapostPost.append('APROVACAO', idAprovacao);
-    datapostPost.append('COLABORADOR', Colaborador.find(data => data.NOME === COLABORADOR)?.IDCOLABORADOR);
+    datapostPost.append('COLABORADOR', id);
     datapostPost.append('CATEGORIA', Categoria.find(data => data.NOME === CATEGORIA)?.IDCATEGORIA);
     datapostPost.append('SUBCATEGORIA', Subcategoria.find(data => data.NOME === SUBCATEGORIA)?.IDSUBCATEGORIA);
     datapostPost.append('ESPACO', idEspaco);
@@ -499,7 +483,7 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
     datapostPost.append('DATAULTIMAATIVIDADE', DATAULTIMAATIVIDADE);
     datapostPost.append('TITULO', TITULO);
     datapostPost.append('TEXTO', TEXTO);
-    datapostPost.append('RATING', RATING);
+    datapostPost.append('RATING', 0);
     if (IMAGEM) {
         datapostPost.append('IMAGEM', IMAGEM);
     }

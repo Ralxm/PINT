@@ -115,16 +115,8 @@ export default function Cidade(){
     }
 
     function loadTables(){
-        let token;
-        try{
-            let user = localStorage.getItem('user');
-            let userData = JSON.parse(user);
-            token = userData.token;
-        }
-        catch{
-            console.log("Erro a ir buscar o token");
-        }
-        axios.get(url, authHeader())
+        let cidade = JSON.parse(localStorage.getItem("cidade"))
+        axios.get(url + "ByCidade/" + cidade, authHeader())
         .then(res => {
             if(res.data.success === true){
                 const data = res.data.data;
@@ -554,52 +546,38 @@ function ListTables() {
         });
     }
 
-    async function ApagarColuna(data){
-        try{
-            let token;
-            try{
-                let user = localStorage.getItem('user');
-                let userData = JSON.parse(user);
-                token = userData.token;
-            }
-            catch{
-                console.log("Erro a ir buscar o token");
-            }
+    async function ApagarColuna(data) {
+        try { 
             setIDCOLABORADOR(data.IDCOLABORADOR);
-
+    
             let colaboradorcargo;
             let colaborador;
-            ColaboradorCargo.map((data2) =>{
-                if(data2.IDCOLABORADOR == data.IDCOLABORADOR){
+            ColaboradorCargo.map((data2) => {
+                if (data2.IDCOLABORADOR == data.IDCOLABORADOR) {
                     colaboradorcargo = data2.IDCOLABORADORCARGO;
                     colaborador = data.IDCOLABORADOR;
                 }
-            })
+            });
     
-            const urlApagarColaboradorCargo = 'https://pint-backend-8vxk.onrender.com/colaborador_cargo/delete/' + colaboradorcargo;
-            await axios.put(urlApagarColaboradorCargo)
-            .then(res =>{
-                if(res.data.success){
-                    loadTables();
-                }
-            })
-            .catch(error => {
-                console.log("Erro asdasd" + error)
-            });
+            const urlApagarColaboradorCargo = `https://pint-backend-8vxk.onrender.com/colaborador_cargo/delete/${colaboradorcargo}`;
+            const urlApagar = `https://pint-backend-8vxk.onrender.com/colaborador/delete/${data.IDCOLABORADOR}`;
             
-            const urlApagar = 'https://pint-backend-8vxk.onrender.com/colaborador/delete/' + data.IDCOLABORADOR;
-            await axios.put(urlApagar, null, authHeader())
-            .then(res =>{
-                if(res.data.success){
-                    loadTables();
-                }
-            })
-            .catch(error => {
-                console.log("Erro a apagar o colaborador")
-            });
-        }
-        catch{
-            console.log('erro');
+            const [resColaboradorCargo, resColaborador] = await Promise.all([
+                axios.put(urlApagarColaboradorCargo),
+                axios.put(urlApagar, null, authHeader())
+            ]);
+    
+            if (resColaboradorCargo.data.success) {
+                console.log('ColaboradorCargo deleted successfully.');
+            }
+            if (resColaborador.data.success) {
+                console.log('Colaborador deleted successfully.');
+            }
+    
+            loadTables();
+    
+        } catch (error) {
+            console.log('Error in ApagarColuna:', error);
         }
     }
 

@@ -13,7 +13,6 @@ import Categoria from '../BackOfficeComponents/Categoria'
 import Subcategoria from '../BackOfficeComponents/Subcategoria';
 import Post from '../BackOfficeComponents/Post'
 import Estatistica from '../BackOfficeComponents/Estatisticas';
-import Denuncia from '../BackOfficeComponents/Denuncia';
 
 export default function BackOffice(){
     useEffect(() => {
@@ -101,8 +100,6 @@ export default function BackOffice(){
                     <Route path='post' element={<Post></Post>}>
                     </Route>
                     <Route path='estatistica' element={<Estatistica></Estatistica>}>
-                    </Route>
-                    <Route path='denuncias' element={<Denuncia></Denuncia>}>
                     </Route>
                 </Routes>
         </div>

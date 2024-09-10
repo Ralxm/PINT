@@ -10,7 +10,7 @@
         "texto6main": "Comentários por aprovar",
 
         "texto1backoffice": "Estatísticas",
-        "texto2backoffice": "Registos (Logs)",
+        "texto2backoffice": "Registos (Logs) e Denuncias",
         "texto3backoffice": "Colaboradores",
         "texto4backoffice": "Cargos",
         "texto5backoffice": "Cidades",
@@ -116,7 +116,7 @@
         "texto6main": "Comentarios por aprobar",
 
         "texto1backoffice": "Estadísticas",
-        "texto2backoffice": "Registros (Logs)",
+        "texto2backoffice": "Registros (Logs) y denuncias",
         "texto3backoffice": "Colaboradores",
         "texto4backoffice": "Cargos",
         "texto5backoffice": "Ciudades",
@@ -202,7 +202,13 @@
 
         "texto1subcategoria": "Categoría",
         "texto2subcategoria": "Nombre",
-        "texto3subcategoria": "Descripción"
+        "texto3subcategoria": "Descripción",
+
+        "texto1denuncia": "ID Denúncia",
+        "texto2denuncia": "Colaborador",
+        "texto3denuncia": "Fecha de denúncia",
+        "texto4denuncia": "Razón",
+        "texto5denuncia": "Comentario"
     },
     "en": {
 	    "texto1login": "Login",
@@ -215,7 +221,7 @@
         "texto6main": "Comments to be approved",
 
         "texto1backoffice": "Statistics",
-        "texto2backoffice": "Records (Logs)",
+        "texto2backoffice": "Records (Logs) and reports",
         "texto3backoffice": "Collaborators",
         "texto4backoffice": "Roles",
         "texto5backoffice": "Cities",
@@ -301,6 +307,12 @@
 
         "texto1subcategoria": "Category",
         "texto2subcategoria": "Name",
-        "texto3subcategoria": "Description"
+        "texto3subcategoria": "Description",
+
+        "texto1denuncia": "Report ID",
+        "texto2denuncia": "Colaborador",
+        "texto3denuncia": "Day of report",
+        "texto4denuncia": "Reason",
+        "texto5denuncia": "Comment"
     }
 }

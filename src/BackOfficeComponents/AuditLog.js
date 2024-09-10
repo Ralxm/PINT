@@ -11,8 +11,15 @@ export default function AuditLog(){
     let stolang = JSON.parse(localStorage.getItem("lang"));
     let data = JSON.parse(JSON.stringify(lang));
     data = data[stolang];
+    let cidade = JSON.parse(localStorage.getItem("cidade"))
 
     const url = "https://pint-backend-8vxk.onrender.com/auditlog/list";
+
+    const urlDenuncia = "https://pint-backend-8vxk.onrender.com/denuncia/listByCidade/";
+
+    const [Denuncia, setDenuncia] = useState([]);
+
+    const [IDDENUNCIA, setIDDENUNCIA] = useState("");
 
     const [AuditLog, setAuditLog] = useState([]);
     
@@ -41,6 +48,20 @@ export default function AuditLog(){
         .catch(error => {
             alert("Erro " + error);
         }); 
+
+        axios.get(urlDenuncia + cidade, authHeader())
+        .then(res => {
+            if(res.data.success === true){
+                const data = res.data.data;
+                setDenuncia(data);
+            }
+            else{
+                alert("Erro Web Service!");
+            }
+        })
+        .catch(error => {
+            alert("Erro " + error);
+        }); 
     }
 
     return(
@@ -53,61 +74,16 @@ export default function AuditLog(){
                     <ListAudit></ListAudit>
                 </div>
             </div>
-            <div className='side-bar col-4' style={{marginLeft: "10px"}} id={'insertColumn'}>
+            <div className='side-bar col-4' style={{marginLeft: "10px"}}>
                 <div className='col-lg-12 backoffice-option'>
-                    Inserir AuditLog
+                    Listagem Denuncias
                 </div>
-                <div className='col-lg-12 input-create-thing-big-box'>
-                    <div className='input-create-thing'>
-                        <div className='input-group'>
-                            <label>{data.texto2auditlog}</label>
-                            <input id='contaid' onChange={(value)=> setIDCONTA(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto3auditlog}</label>
-                            <input id='tipoatividade' onChange={(value)=> setTIPOATIVIDADE(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto4auditlog}</label>
-                            <input id='timestamp' onChange={(value)=> setDATA(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto5auditlog}</label>
-                            <input id='descricao' onChange={(value)=> setDESCRICAO(value.target.value)}></input>
-                        </div>
-                        <div>
-                            <button onClick={criarAuditLog} className='btn btn-info'>Inserir</button>
-                        </div>
-                    </div>
-                    
+                <div className='col-lg-12 showTable-list'>
+                    <ListTables></ListTables>
                 </div>
             </div>
         </div>
     )
-
-
-    function criarAuditLog(){
-        const urlCriar = 'https://pint-backend-8vxk.onrender.com/auditlog/create'
-        const datapost = {
-            IDCONTA: IDCONTA,
-            TIPOATIVIDADE: TIPOATIVIDADE,
-            DATA: DATA,
-            DESCRICAO: DESCRICAO
-        }
-        axios.post(urlCriar, datapost, authHeader())
-        .then(res => {
-            if(res.data.success === true){
-                alert(res.data.message);
-                loadAuditLog();
-            }
-            else{
-                alert(res.data.message);
-            }
-        })
-        .catch(error =>{
-            alert('Erro: ' + error);
-        })
-    }
 
     function ListAudit(){
         return AuditLog.map((audit, index) => {
@@ -129,6 +105,52 @@ export default function AuditLog(){
                 </div>
             )
         })
+    }
+
+    function ListTables(){
+        if(Denuncia.length == 0){
+            return(
+                <div className='col-12 showTable'>
+                    <span>Sem denúncias para mostrar</span>           
+                </div>
+            )
+        }
+        return Denuncia.map((denuncia, index) => {
+            console.log(denuncia);
+            return(
+                <div className='col-12 showTable'>
+                    <div className='showTableText'>
+                        <a>{data.texto1denuncia}: {denuncia.IDDENUNCIA}</a>
+                        <br></br>
+                        <a>{data.texto2denuncia}: {denuncia.colaborador.NOME}</a>
+                        <br></br>
+                        <a>{data.texto3denuncia}: {denuncia.DATADENUNCIA}</a>
+                        <br></br>
+                        <a>{data.texto4denuncia}: {denuncia.MOTIVO}</a>
+                        <br></br>
+                        <a>{data.texto5denuncia}: {denuncia.comentario.TEXTO}</a>
+                    </div>
+                    <div className='showTableButtons'>
+                        <button className='btn btn-danger' onClick={() => ApagarColuna(denuncia)}>Apagar</button>
+                    </div>                
+                </div>
+            )
+        })
+    }
+
+    function ApagarColuna(data){
+        setIDDENUNCIA(data.IDDENUNCIA);
+        const urlApagar = 'https://pint-backend-8vxk.onrender.com/denuncia/delete/' + data.IDDENUNCIA;
+        axios.put(urlApagar, authHeader())
+        .then(res =>{
+            if(res.data.success){
+                alert('Audit log com ID: ' + {IDDENUNCIA} + ' apagado com sucesso');
+                loadAuditLog();
+            }
+        })
+        .catch(error => {
+            alert("Erro " + error)
+        });
     }
 }
 
