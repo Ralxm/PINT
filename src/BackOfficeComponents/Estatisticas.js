@@ -123,7 +123,7 @@ export default function Estatistica(){
             alert("Erro: " + error)
         })
 
-        axios.get(urlPost + 'topViews', authHeader())
+        axios.get(urlPost + 'topViews/' + cidade, authHeader())
         .then(res => {
             if (res.data.success === true){
                 const data = res.data.data;
