@@ -459,15 +459,18 @@ export default function Estatistica(){
                 let numComs = 0;
                 Comentario.map((comentario) => {
                     let datacomentario = new Date(comentario.DATACOMENTARIO)
+                    console.log(datacomentario)
                     const diffTime = Math.abs(datacomentario - hoje);
                     let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-                    if(comentario.IDPOST == post.IDPUBLICACAO && diffDays <= 30){
+                    console.log(diffDays)
+                    if(comentario.IDPOST == post.IDPUBLICACAO){
                         numComs++;
                     }
                 })
                 postsFinal.push([post, numComs]);
             })
             postsFinal.sort((b, a) => a[1] - b[1]);
+            //console.log(postsFinal)
             return postsFinal.map((post, index) => {
                 if(index < 5 && post[1] > 0){
                     return(
