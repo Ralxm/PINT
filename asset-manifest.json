@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/PINT/static/css/main.441b137b.css",
-    "main.js": "/PINT/static/js/main.07d9fd3d.js",
+    "main.js": "/PINT/static/js/main.d0d47c82.js",
     "static/js/453.68693753.chunk.js": "/PINT/static/js/453.68693753.chunk.js",
-    "static/media/PINT.apk": "/PINT/static/media/PINT.a19eefec4fed8af39b45.apk",
+    "static/media/PINT.apk": "/PINT/static/media/PINT.92dc978380c563106f30.apk",
     "index.html": "/PINT/index.html",
     "main.441b137b.css.map": "/PINT/static/css/main.441b137b.css.map",
-    "main.07d9fd3d.js.map": "/PINT/static/js/main.07d9fd3d.js.map",
+    "main.d0d47c82.js.map": "/PINT/static/js/main.d0d47c82.js.map",
     "453.68693753.chunk.js.map": "/PINT/static/js/453.68693753.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.441b137b.css",
-    "static/js/main.07d9fd3d.js"
+    "static/js/main.d0d47c82.js"
   ]
 }
