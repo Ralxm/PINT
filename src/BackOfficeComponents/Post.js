@@ -71,11 +71,11 @@ export default function Post(){
                 setCidade(data);
             }
             else {
-                alert("Erro Web Service");
+                //alert("Erro Web Service");
             }
         })
         .catch(error => {
-            alert("Erro: fase1" + error)
+            //alert("Erro: fase1" + error)
         })
         let cidade = JSON.parse(localStorage.getItem("cidade"))
         axios.get('https://pint-backend-8vxk.onrender.com/colaborador/listByCidade/' + cidade, authHeader())
@@ -85,11 +85,11 @@ export default function Post(){
                 setColaborador(data);
             }
             else {
-                alert("Erro Web Service");
+                //alert("Erro Web Service");
             }
         })
         .catch(error => {
-            alert("Erro: fase2 " + error)
+            //alert("Erro: fase2 " + error)
         })
 
         axios.get('https://pint-backend-8vxk.onrender.com/categoria/list', authHeader())
@@ -99,11 +99,11 @@ export default function Post(){
                 setCategoria(data);
             }
             else {
-                alert("Erro Web Service");
+                //alert("Erro Web Service");
             }
         })
         .catch(error => {
-            alert("Erro: fase3" + error)
+            //alert("Erro: fase3" + error)
         }) 
 
         axios.get('https://pint-backend-8vxk.onrender.com/aprovacao/list', authHeader())
@@ -113,11 +113,11 @@ export default function Post(){
                     setAprovacao(data);
                 }
                 else{
-                    alert("Erro Web Service!");
+                    //alert("Erro Web Service!");
                 }
             })
             .catch(error => {
-                alert("Erro fase4" + error);
+                //alert("Erro fase4" + error);
             }); 
     }, []);
 
@@ -135,11 +135,11 @@ export default function Post(){
                         const data = res.data.data;
                         setSubcategoria(data);
                     } else {
-                        alert("Erro ao buscar subcategorias");
+                        //alert("Erro ao buscar subcategorias");
                     }
                 })
                 .catch(error => {
-                    alert("Erro ao buscar subcategorias: " + error);
+                    //alert("Erro ao buscar subcategorias: " + error);
                 });
         }
     }, [CATEGORIA]);
@@ -153,7 +153,7 @@ export default function Post(){
                     setPost(data);
                 }
                 else{
-                    alert("Erro Web Service!");
+                    //alert("Erro Web Service!");
                 }
             })
             .catch(error => {
@@ -172,11 +172,11 @@ export default function Post(){
                 setUtilizador(data);
             }
             else {
-                alert("Erro Web Service");
+                //alert("Erro Web Service");
             }
         })
         .catch(error => {
-            alert("Erro:asdfasdfasdfasdf " + error)
+            //alert("Erro:asdfasdfasdfasdf " + error)
         })
     }
 
@@ -357,7 +357,7 @@ async function criarColuna() {
         await criarPost(idEspaco, idEvento, idAprovacao);
         loadTables();
     } catch (error) {
-        alert('An error occurred');
+        //alert('An error occurred');
         console.error(error);
     }
 }
@@ -372,7 +372,7 @@ async function criarEspaco() {
             setEspaco(idEspaco);
             return idEspaco;
         } else {
-            alert(res.data.message);
+            //alert(res.data.message);
             return null;
         }
     } catch (error) {
@@ -391,7 +391,7 @@ async function criarQuestionario() {
             setIDQUESTIONARIO(idQuestionario);
             return idQuestionario;
         } else {
-            alert(res.data.message);
+            //alert(res.data.message);
             return null;
         }
     } catch (error) {
@@ -431,7 +431,7 @@ async function criarEvento(idQuestionario) {
             setESPACO(1)
             return idEvento;
         } else {
-            alert(res.data.message);
+            //alert(res.data.message);
             return null;
         }
     } catch (error) {
@@ -458,7 +458,7 @@ async function criarAprovacao() {
             setAprovacao(idAprovacao);
             return idAprovacao;
         } else {
-            alert(res.data.message);
+            //alert(res.data.message);
             return null;
         }
     } catch (error) {
@@ -622,12 +622,12 @@ async function criarPost(idEspaco, idEvento, idAprovacao) {
         axios.put(urlApagar, authHeader())
         .then(res =>{
             if(res.data.success){
-                alert('Publicação: ' + {IDPUBLICACAO} + ' apagado com sucesso');
+                //alert('Publicação: ' + {IDPUBLICACAO} + ' apagado com sucesso');
                 loadTables();
             }
         })
         .catch(error => {
-            alert("Erro fase9" + error)
+            //alert("Erro fase9" + error)
         });
     }
 

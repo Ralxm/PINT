@@ -176,61 +176,8 @@ export default function Cidade(){
                     <ListTables></ListTables>
                 </div>
             </div>
-            <div className='side-bar col-4' style={{marginLeft: "10px"}} id={'insertColumn'}>
-                <div className='col-lg-12 backoffice-option'>
-                    Inserir Colaborador
-                </div>
-                <div className='col-lg-12 input-create-thing-big-box'>
-                    <div className='input-create-thing'>
-                        <div className='input-group'>
-                            <label>{data.texto2colaborador}</label>
-                            <input id='contaid' onChange={(value)=> setEMAIL(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>Password</label>
-                            <input id='contaid' onChange={(value)=> setPASSWORDCOLABORADOR(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto3colaborador}</label>
-                            <input id='contaid' onChange={(value)=> setNOME(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto4colaborador}</label>
-                            <input id='contaid' onChange={(value)=> setTELEMOVEL(value.target.value)}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto5colaborador}</label>
-                            <select id="inputStateCargoCriar" className="input-group-select" value = {CARGO} onChange={(value) => setCARGO(value.target.value)}>
-                                        <option defaultValue>Selecione</option>
-                                        <ListCargos></ListCargos>
-                            </select>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto6colaborador}</label>
-                            <select id="inputStateCidadeCriar" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
-                                        <option defaultValue>Selecione</option>
-                                        <ListCidades></ListCidades>
-                            </select>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto7colaborador}</label>
-                            <input id='contaid' onChange={(value)=> setDATANASCIMENTO(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto8colaborador}</label>
-                            <input id='contaid' onChange={(value)=> setDATAREGISTO(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div className='input-group'>
-                            <label>{data.texto9colaborador}</label>
-                            <input id='contaid' onChange={(value)=> setULTIMOLOGIN(value.target.value)} type={'date'}></input>
-                        </div>
-                        <div>
-                            <button onClick={criarColuna} className='btn btn-info'>Inserir</button>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
+            
+            
             <div className='side-bar col-4' style={{marginLeft: "10px", display: 'none'}} id={'editColumn'}>
                 <div className='col-lg-12 backoffice-option'>
                     <div className='edit-header'>
@@ -287,6 +234,64 @@ export default function Cidade(){
             </div>
         </div>
     )
+
+    /*
+    <div className='side-bar col-4' style={{marginLeft: "10px"}} id={'insertColumn'}>
+                <div className='col-lg-12 backoffice-option'>
+                    Inserir Colaborador
+                </div>
+                <div className='col-lg-12 input-create-thing-big-box'>
+                    <div className='input-create-thing'>
+                        <div className='input-group'>
+                            <label>{data.texto2colaborador}</label>
+                            <input id='contaid' onChange={(value)=> setEMAIL(value.target.value)}></input>
+                        </div>
+                        <div className='input-group'>
+                            <label>Password</label>
+                            <input id='contaid' onChange={(value)=> setPASSWORDCOLABORADOR(value.target.value)}></input>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto3colaborador}</label>
+                            <input id='contaid' onChange={(value)=> setNOME(value.target.value)}></input>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto4colaborador}</label>
+                            <input id='contaid' onChange={(value)=> setTELEMOVEL(value.target.value)}></input>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto5colaborador}</label>
+                            <select id="inputStateCargoCriar" className="input-group-select" value = {CARGO} onChange={(value) => setCARGO(value.target.value)}>
+                                        <option defaultValue>Selecione</option>
+                                        <ListCargos></ListCargos>
+                            </select>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto6colaborador}</label>
+                            <select id="inputStateCidadeCriar" className="input-group-select" value = {CIDADE} onChange={(value) => setCIDADE(value.target.value)}>
+                                        <option defaultValue>Selecione</option>
+                                        <ListCidades></ListCidades>
+                            </select>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto7colaborador}</label>
+                            <input id='contaid' onChange={(value)=> setDATANASCIMENTO(value.target.value)} type={'date'}></input>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto8colaborador}</label>
+                            <input id='contaid' onChange={(value)=> setDATAREGISTO(value.target.value)} type={'date'}></input>
+                        </div>
+                        <div className='input-group'>
+                            <label>{data.texto9colaborador}</label>
+                            <input id='contaid' onChange={(value)=> setULTIMOLOGIN(value.target.value)} type={'date'}></input>
+                        </div>
+                        <div>
+                            <button onClick={criarColuna} className='btn btn-info'>Inserir</button>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+    */
 
     async function criarColuna(){
         if(document.getElementById("inputStateCargoCriar").value != "Selecione" && document.getElementById("inputStateCidadeCriar").value != "Selecione"){
@@ -604,12 +609,12 @@ function ListTables() {
         setULTIMOLOGIN(data.ULTIMOLOGIN)
 
         document.getElementById('editColumn').style.display = 'block';
-        document.getElementById('insertColumn').style.display = 'none';
+        //document.getElementById('insertColumn').style.display = 'none';
     }
 
     function FecharEditar(){ 
         document.getElementById('editColumn').style.display = 'none';
-        document.getElementById('insertColumn').style.display = 'block';
+        //document.getElementById('insertColumn').style.display = 'block';
     }
 }
 

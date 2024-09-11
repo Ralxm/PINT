@@ -368,7 +368,7 @@ export default function Main(){
                                                 <p className="card-text">{categorium.NOME + ' - ' + subcategorium.NOME}</p>
                                                 <p className="card-text">{data.TEXTO}</p>
                                             </div>
-                                            <a className="card-text post-website position-absolute bottom-0" style={{ marginLeft: '10px', marginTop: '10px' }} href={espaco.WEBSITE} target='_blank'>{espaco.WEBSITE}</a>
+                                            {data.EVENTO == 1 && <a className="card-text post-website position-absolute bottom-0" style={{ marginLeft: '10px', marginTop: '10px' }} href={espaco.WEBSITE} target='_blank'>{espaco.WEBSITE}</a>} 
                                         </div>
                                     </div>
                                 </div>

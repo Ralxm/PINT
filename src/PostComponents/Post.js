@@ -999,7 +999,17 @@ export default function Post() {
     }
 
     async function apagarComentario(props){
-        await axios.put(urlComentarios + 'delete/' + props.IDCOMENTARIO, authHeader())
+        await axios.put('https://pint-backend-8vxk.onrender.com/denuncia/deleteByComentario/' + props.IDCOMENTARIO)
+        .then(function(data){
+            if(data.data.success === true){
+            }
+            else{
+            }
+        })
+        .catch(err =>{
+            console.log("Erro");
+        })
+        await axios.put(urlComentarios + 'delete/' + props.IDCOMENTARIO)
             .then(function(data){
                 if(data.data.success === true){
                     loadComentarios()
@@ -1011,7 +1021,7 @@ export default function Post() {
                 console.log("Erro");
             })
 
-        await axios.put(urlAprovacao + 'delete/' + props.aprovacao.IDAPROVACAO, authHeader())
+        await axios.put(urlAprovacao + 'delete/' + props.aprovacao.IDAPROVACAO)
         .then(function(data){
             if(data.data.success === true){
             }
@@ -1021,6 +1031,7 @@ export default function Post() {
         .catch(err =>{
             console.log("Erro");
         })
+        
     }
 
     return(
