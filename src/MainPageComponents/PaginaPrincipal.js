@@ -540,10 +540,13 @@ export default function Main(){
             let titulo;
             let email;
             let nome;
+            let cidade;
+            let cidadeCol = JSON.parse(localStorage.getItem('cidade'))
             Publicacao.map((post) =>{
                 if(post.IDPUBLICACAO == comment.IDPOST){
                     titulo = post.TITULO
                     email = post.colaborador.EMAIL
+                    cidade = post.CIDADE
                 }
             })
             Colaborador.map((colaborador) => {
@@ -552,7 +555,7 @@ export default function Main(){
                 }
             })
             
-            if (comment.aprovacao.APROVADA == 0) {
+            if (comment.aprovacao.APROVADA == 0 && cidade == cidadeCol) {
                 return (
                     <div className='container-fluid col-lg-12 notification'>
                         <a href={window.location.pathname + '#/post/' + comment.IDPOST} target='_blank' style={{cursor: 'pointer', textDecoration: 'none', color: 'inherit'}}>
